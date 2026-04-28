@@ -58,7 +58,7 @@ export default function Creation() {
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6">
-        <a href="/" className="text-xl font-bold tracking-widest uppercase">E-Tario</a>
+        <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-6" />
         <div className="flex gap-8 text-sm text-zinc-400">
           <a href="/artist" className="hover:text-blue-400 transition-colors">ARTIST</a>
           <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
