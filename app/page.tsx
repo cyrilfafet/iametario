@@ -6,10 +6,10 @@ export default function Home() {
       <nav className="flex items-center justify-between px-8 py-6">
         <span className="text-xl font-bold tracking-widest uppercase">E-Tario</span>
         <div className="flex gap-8 text-sm text-zinc-400">
-          <a href="/artist" className="hover:text-white transition-colors">Artist</a>
-          <a href="/teaching" className="hover:text-white transition-colors">Teach</a>
-          <a href="/creation" className="hover:text-white transition-colors">Create</a>
-          <a href="/contact" className="hover:text-white transition-colors">Contact</a>
+          <a href="/artist" className="hover:text-blue-400 transition-colors"> ARTIST</a>
+          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
         </div>
       </nav>
 
