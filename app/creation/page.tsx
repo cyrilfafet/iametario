@@ -24,6 +24,7 @@ export default function Creation() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const togglePlay = (index: number) => {
     const audio = audioRefs.current[index];
@@ -56,16 +57,29 @@ export default function Creation() {
   return (
     <main className="min-h-screen bg-black text-white">
 
-      {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-6">
-        <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-6" />
-        <div className="flex gap-8 text-sm text-zinc-400">
-          <a href="/artist" className="hover:text-blue-400 transition-colors">ARTIST</a>
-          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-          <a href="/creation" className="text-blue-400">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
-        </div>
-      </nav>
+    <nav className="flex items-center justify-between px-8 py-6">
+  <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+  <div className="hidden md:flex gap-8 text-sm text-zinc-400">
+    <a href="/artist" className="hover:text-blue-400 transition-colors">ARTIST</a>
+    <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
+    <a href="/creation" className="text-blue-400">CREATE</a>
+    <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+  </div>
+  <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
+    <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+    <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
+    <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+  </button>
+</nav>
+
+{menuOpen && (
+  <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
+    <a href="/artist" className="hover:text-blue-400 transition-colors">ARTIST</a>
+    <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
+    <a href="/creation" className="text-blue-400">CREATE</a>
+    <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+  </div>
+)}
 
       {/* Hero */}
 <section className="relative text-center px-8 py-16 overflow-hidden min-h-[420px] flex flex-col items-center justify-center">
@@ -88,7 +102,7 @@ export default function Creation() {
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4">Services Audio</p>
     <h1 className="text-5xl font-bold mb-6">Create</h1>
     <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-      Du studio à la scène — montages audio sur mesure avec voix.<br />
+      Du studio à la scène — montages audio sur mesure.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
     <a href="#commander" className="inline-block mt-6 bg-blue-400 text-black px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors">
