@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const description = formData.get("description") as string;
   const fichier = formData.get("fichier") as File | null;
 
-  let attachments = [];
+  let attachments: { filename: string; content: Buffer }[] = [];
 
   if (fichier && fichier.size > 0) {
     const buffer = await fichier.arrayBuffer();
