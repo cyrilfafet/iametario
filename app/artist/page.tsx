@@ -18,15 +18,18 @@ export default function Artist() {
   <img src="/mainphoto.png" alt="E-Tario" className="w-50 md:w-130 -mt-20" />
   <img src="/Logo_2k26v2.png" alt="E-Tario" className="w-85 md:w-95 -mt-30" />
   <p className="text-zinc-400 text-base leading-loose max-w-3xl mt-8 text-center">
-  Depuis 2014, j'ai parcouru plus de 1500 scènes — des clubs aux festivals, d'Ibiza aux saisons en montagne, du Club Med aux mainstages français.
+  1500 scènes. Une décennie de vibrations.
   <br /><br />
-  Ce parcours, façonné par les clubs et nourri par la diversité des cultures rencontrées, m'a permis de forger une identité sonore ancrée dans la House, l'Electro et la French Touch. En chemin, l'affiche a été partagée avec INNA, Willy William, Djibril Cissé, Joachim Garraud et Sound Of Legend.
+    Depuis 2014, j’ai parcouru plus de 1500 scènes — des clubs français aux festivals, en passant par des hotels et privates en tous genres. Ce parcours, forgé sur le terrain, a défini mon ADN musical : un mix puissant entre House, Electro et French Touch.
+    <br /><br />
+    Partageant l’affiche avec des artistes comme Joachim Garraud ou Willy William, j'ai imposé ma signature jusque dans la production. Mon remix de Peggy Gou (+70k plays) a ainsi voyagé des ondes de ZuTv en Roumanie jusqu'en Inde, où il a résonné sur la scèhe du Sunburn Festival.
+    <br /><br />
+    L'art du set, l'expertise du son
+    <br /><br />
+    Aujourd'hui résident au Baltazar (Dijon), je mise sur l'instinct : mashups exclusifs, drops inattendus et lecture du public en temps réel. 
+    <br /><br />
+    Entre la préparation d'un 3ème single pour juin 2026 et mes services de création audio, mon prochain projet est de transmettre mon expérience via une formation dédiée aux futurs DJs résidents.
   <br /><br />
-  Au-delà des platines, la production occupe une place centrale. Mon remix de "Nanana" de Peggy Gou cumule aujourd'hui +70k plays et a traversé les frontières — du Sunburn Festival en Inde aux ondes de ZuTv en Roumanie. J'ai également sorti deux titres sur les plateformes, le 3ème étant en préparation pour Juin 2026.
-  <br /><br />
-  Aujourd'hui résident au Baltazar à Dijon, je partage mon temps entre les sets, la création musicale, les services audio sur mesure que je développe pour DJs, mariages et événements, ainsi que la création d'une formation pour devenir Dj Résident. 
-  <br /><br />
-  Sur scène, chaque set devient un voyage : mashups personnalisés, drops inattendus, souvenirs musicaux oubliés. Le dynamisme guide tout — jouer sur les contrastes, alterner breaks émotifs et montées énergiques, lire la foule en temps réel et créer ces moments où tout explose.
 </p>
 </section>
 

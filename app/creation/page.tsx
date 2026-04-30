@@ -60,7 +60,7 @@ export default function Creation() {
     <nav className="flex items-center justify-between px-8 py-6">
   <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
   <div className="hidden md:flex gap-8 text-sm text-zinc-400">
-    <a href="/artist" className="hover:text-blue-400 transition-colors">PERFORM</a>
+    <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
     <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
     <a href="/creation" className="text-blue-400">CREATE</a>
     <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
@@ -106,7 +106,7 @@ export default function Creation() {
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
     <a href="#commander" className="inline-block mt-6 bg-blue-400 text-black px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors">
-      Commander une création audio
+      Commander un montage audio
     </a>
   </div>
 
