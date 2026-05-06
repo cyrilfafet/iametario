@@ -57,13 +57,11 @@ export default function Artist() {
 </div>
 
   <p className="text-zinc-400 text-base leading-relaxed max-w-4xl mt-8 text-center">
-    <span style={{color: 'white', fontSize: '1.25rem', fontWeight: 800}}>1500 scènes. Une décennie de vibrations.</span>
+    <span style={{color: 'white', fontSize: '1.25rem', fontWeight: 800}}>Une décennie d'expériences, plus de 1500 sets.</span>
     <br /><br />
     Depuis <strong style={{color: 'white', fontWeight: 700}}>2014</strong>, j'ai parcouru plus de 1500 scènes — des clubs français aux festivals, d'Ibiza aux hôtels de renom, en passant par les saisons en montagne. Ce parcours, forgé sur le terrain, a défini mon ADN musical : un mix dynamique entre House, Electro et French Touch.
     <br /><br />
     Partageant l'affiche avec des artistes comme <strong className="text-white">Joachim Garraud</strong> ou <strong className="text-white">Willy William</strong>, j'ai imposé ma signature jusque dans la production. Mon remix de Peggy Gou (+70k plays) a ainsi voyagé des ondes de ZuTv en Roumanie jusqu'en Inde, où il a resonné lors du  <strong className="text-white">Sunburn Festival</strong>.
-    <br /><br />
-    <span className="text-white font-semibold">L'art du set, l'expertise du son</span>
     <br /><br />
     Aujourd'hui résident au <strong className="text-white">Bal'tazar</strong> (Dijon), je mise sur l'instinct : mashups exclusifs, drops inattendus et lecture du public en temps réel.
     <br /><br />

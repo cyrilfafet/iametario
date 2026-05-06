@@ -4,27 +4,51 @@ import { useState, useRef, useEffect } from "react";
 const demos = [
   {
     client: "Thomas R.",
-    brief: "Salut, j'aurais besoin d'une intro pour mes sets, quelque chose de techno, assez sombre, avec mon nom dedans. Style festival.",
-    title: "Movin' On — Techno Edit",
+    brief: "Salut, j'aurais besoin d'une version intro de la musique Movin' On de Starting Rock pour mes sets, quelque chose de techno, avec du suspense, assez sombre tout en étant orchestral et épique, style festival.",
+    title: "Movin' On — Orchestral Edit",
     file: "/Movin_On_Techno_DEMO.mp3",
-    tag: "Intro DJ",
-    price: "49€",
+    tag: "Intro Festival DJ",
+    price: "120€",
   },
   {
     client: "Karim B.",
     brief: "Salut E-Tario, j'aurais besoin d'un edit de 'Alors la Zone' de Jul pour mon intro de festival. Quelque chose d'épique qui monte, avec le vocal 'indépendance' qu'il dit dans un live Skyrock en boucle si possible. Merci !",
-    title: "Alors la Zone — Festival Edit",
+    title: "Alors la Zone — Festival intro",
     file: "/Alors_La_Zone_DEMO.mp3",
     tag: "Intro Festival",
-    price: "69€",
+    price: "75€",
+  },
+  {
+    client: "Discothèque la D****",
+    brief: "Bonjour, pouvez vous intégrer des voix dans vos intros ? Nous faisons une soirée 60-2010 en aferwork pour Halloween, et aimerions une voix qui introduit la soirée, dans le style Halloween, sur un fond musical adapté à l'ambiance. Merci.",
+    title: "Soirée 60-2010 — Halloween Intro",
+    file: "/Halloween_Soiree_60_2010_DEMO.mp3",
+    tag: "Intro Soirée",
+    price: "140€",
+  },
+  {
+    client: "Camille D.",
+    brief: "Bonjour ! Je suis témoin de mariage, on prépare une chorée surprise pour la mariée avec les autres témoins. Il nous faudrait un montage 3 titres : Women de Doja Cat depuis le début, ensuite Jatti De Nain de Millind Gaba à partir de 0:38 avec une transition fluide, et quand la musique finit, je voudrais le show Shakira & JLo Super Bowl 2020 entre 4:34 et 5:52. Pour la fin, carte blanche si vous arrivez à faire quelque chose de naturel !",
+    title: "Women × Jatti × Shakira — Wedding Mix",
+    file: "/Women_Jatti_Shakira_Wedding_Mix.mp3",
+    tag: "Chorée Mariage",
+    price: "90€",
   },
 ];
 
 export default function Creation() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
+  const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const fmt = (s: number) => {
+    if (!s || isNaN(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  };
 
   const togglePlay = (index: number) => {
     const audio = audioRefs.current[index];
@@ -131,11 +155,12 @@ export default function Creation() {
                 </div>
                 {/* Lecteur audio */}
                 <div className="ml-11 flex items-center gap-4">
-                  <div className="flex-1 border border-zinc-800 rounded-2xl px-5 py-4 hover:border-blue-400 transition-colors">
+                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-800 hover:border-blue-400" : "border-zinc-900 opacity-60"}`}>
                     <div className="flex items-center gap-4 mb-3">
                       <button
-                        onClick={() => togglePlay(index)}
-                        className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center hover:border-blue-400 transition-colors flex-shrink-0"
+                        onClick={() => demo.file && togglePlay(index)}
+                        disabled={!demo.file}
+                        className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center hover:border-blue-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {playing === index ? (
                           <span className="w-3 h-3 flex gap-0.5">
@@ -160,9 +185,17 @@ export default function Creation() {
                       onChange={(e) => handleSeek(index, e)}
                       className="w-full h-1 accent-blue-400 cursor-pointer"
                     />
+                    <div className="flex justify-between text-xs text-zinc-600 mt-1">
+                      <span>{fmt((progress[index] / 100) * durations[index])}</span>
+                      <span>{fmt(durations[index])}</span>
+                    </div>
                     <audio
                       ref={(el) => { audioRefs.current[index] = el; }}
                       src={demo.file}
+                      onLoadedMetadata={() => {
+                        const audio = audioRefs.current[index];
+                        if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
+                      }}
                       onTimeUpdate={() => handleTimeUpdate(index)}
                       onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
                     />
@@ -180,7 +213,7 @@ export default function Creation() {
   <div className="max-w-xl mx-auto">
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4 text-center">Contact</p>
     <h2 className="text-3xl font-bold mb-2 text-center">Un projet en tête ?</h2>
-    <p className="text-zinc-400 text-center mb-12">Dis-moi ce que tu cherches, je te réponds sous 48h avec un devis.</p>
+    <p className="text-zinc-400 text-center mb-12">Décrivez votre projet, je vous réponds sous 48h avec un devis.</p>
 
     <form
       onSubmit={async (e) => {
@@ -192,10 +225,10 @@ export default function Creation() {
         });
         const data = await res.json();
         if (data.success) {
-          alert("Message envoyé ! Je te réponds sous 48h.");
+          alert("Message envoyé ! Je vous réponds sous 48h.");
           (e.target as HTMLFormElement).reset();
         } else {
-          alert("Erreur lors de l'envoi. Réessaie ou contacte-moi directement.");
+          alert("Erreur lors de l'envoi. Réessayez ou contactez-moi directement.");
         }
       }}
       className="flex flex-col gap-4"
@@ -203,14 +236,14 @@ export default function Creation() {
       <input
         name="nom"
         type="text"
-        placeholder="Ton nom"
+        placeholder="Votre nom"
         required
         className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
       />
       <input
         name="email"
         type="email"
-        placeholder="Ton email"
+        placeholder="Votre email"
         required
         className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
       />
@@ -223,7 +256,7 @@ export default function Creation() {
       />
       <textarea
         name="description"
-        placeholder="Décris ton projet en détail — plus tu es précis, mieux je peux t'aider"
+        placeholder="Décrivez votre projet en détail — plus vous êtes précis, mieux je pourrai vous aider"
         rows={5}
         required
         className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors resize-none"
