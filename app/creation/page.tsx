@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 const demos = [
   {
@@ -24,7 +25,7 @@ const demos = [
     title: "Soirée 60-2010 — Halloween Intro",
     file: "/Halloween_Soiree_60_2010_DEMO.mp3",
     tag: "Intro Soirée",
-    price: "140€",
+    price: "130€",
   },
   {
     client: "Camille D.",
@@ -42,6 +43,16 @@ export default function Creation() {
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [preset, setPreset] = useState<string>("");
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showFaq, setShowFaq] = useState(false);
+  const [urgent, setUrgent] = useState(false);
+  const [voix, setVoix] = useState(false);
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const searchParams = useSearchParams();
+  const paymentSuccess = searchParams.get("payment") === "success";
 
   const fmt = (s: number) => {
     if (!s || isNaN(s)) return "0:00";
@@ -126,7 +137,7 @@ export default function Creation() {
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4">Services Audio</p>
     <h1 className="text-5xl font-bold mb-6">Create</h1>
     <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-      Du studio à la scène — montages audio sur mesure.<br />
+      Le bon son au bon moment. Sur mesure, toujours.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
     <a href="#commander" className="inline-block mt-6 bg-blue-400 text-black px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors">
@@ -208,12 +219,75 @@ export default function Creation() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="border-t border-zinc-900 px-8">
+        <div className="max-w-2xl mx-auto">
+          <button
+            onClick={() => setShowFaq(!showFaq)}
+            className="w-full flex items-center justify-between py-6 group"
+          >
+            <p className="text-zinc-500 text-sm tracking-widest uppercase">Questions fréquemment posées</p>
+            <span className={`text-zinc-500 group-hover:text-white transition-all duration-200 text-lg leading-none ${showFaq ? "rotate-45" : ""}`}>+</span>
+          </button>
+          {showFaq && <div className="flex flex-col divide-y divide-zinc-900 pb-10">
+            {[
+              {
+                q: "Comment se passe la livraison ?",
+                a: "Vos fichiers seront livrés par mail 10 jours maximum après validation de l'acompte, dans deux formats WAV (haute qualité) et MP3 (qualité standard plus légère). Vos fichiers resteront disponibles à vie et vous pourrez me les demander à tout moment en cas de perte.",
+              },
+              {
+                q: "Est-ce que je peux fournir mes propres musiques ?",
+                a: "Oui, la section « joindre un fichier » est prévue pour ça.",
+              },
+              {
+                q: "Combien de révisions sont incluses ?",
+                a: "3 révisions sont incluses par commande.",
+              },
+              {
+                q: "Et si je ne suis pas satisfait ?",
+                a: "Mon objectif est votre entière satisfaction. Si toutefois nous n'arrivons pas au résultat escompté après 3 révisions, la commande est close. L'acompte permet de couvrir l'expertise et le temps studio déjà engagés.",
+              },
+              {
+                q: "Tout est possible ?",
+                a: "Envoyez votre demande, les possibilités sont nombreuses mais pas infinies. Si la commande reçue est irréalisable pour diverses raisons, l'acompte sera immédiatement remboursé.",
+              },
+              {
+                q: "Quel forfait choisir ?",
+                a: "Un Edit Simple concerne le mélange de deux titres. Choisissez Création Avancée dès que votre projet nécessite une structure personnalisée ou plus de 3 titres.",
+              },
+              {
+                q: "Comment se passe le paiement ?",
+                a: "L'acompte de 30€ valide le lancement du projet. Le solde restant est réglé par lien sécurisé une fois que vous avez validé la commande.",
+              },
+              {
+                q: "Appliquez-vous une réduction pour plusieurs commandes ?",
+                a: "Oui bien sûr. Vous êtes Wedding Planner et souhaitez une collaboration long terme ? Un arrangement est possible, tout comme si vous êtes DJ et souhaitez différentes intros pour vos prestations.",
+              },
+            ].map(({ q, a }, i) => (
+              <div key={i}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between py-5 text-left gap-4 group"
+                >
+                  <span className={`text-sm font-medium transition-colors ${openFaq === i ? "text-white" : "text-zinc-300 group-hover:text-white"}`}>{q}</span>
+                  <span className={`text-zinc-500 transition-transform duration-200 text-lg leading-none ${openFaq === i ? "rotate-45" : ""}`}>+</span>
+                </button>
+                {openFaq === i && (
+                  <p className="text-sm text-zinc-400 leading-relaxed pb-5">{a}</p>
+                )}
+              </div>
+            ))}
+          </div>}
+        </div>
+      </section>
+
       {/* Formulaire */}
 <section id="commander" className="border-t border-zinc-900 px-8 py-24">
   <div className="max-w-xl mx-auto">
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4 text-center">Contact</p>
     <h2 className="text-3xl font-bold mb-2 text-center">Un projet en tête ?</h2>
-    <p className="text-zinc-400 text-center mb-12">Décrivez votre projet, je vous réponds sous 48h avec un devis.</p>
+    <p className="text-zinc-400 text-center mb-2">Décrivez votre projet, je valide la faisabilité sous 48h après réception de votre acompte.</p>
+    <p className="text-zinc-600 text-xs text-center mb-12">Livraison sous 10 jours · 3 révisions incluses</p>
 
     <form
       onSubmit={async (e) => {
@@ -238,6 +312,8 @@ export default function Creation() {
         type="text"
         placeholder="Votre nom"
         required
+        value={nom}
+        onChange={e => setNom(e.target.value)}
         className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
       />
       <input
@@ -245,15 +321,42 @@ export default function Creation() {
         type="email"
         placeholder="Votre email"
         required
+        value={email}
+        onChange={e => setEmail(e.target.value)}
         className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
       />
-      <input
-        name="prestation"
-        type="text"
-        placeholder="Type de prestation (intro DJ, mariage, spectacle...)"
-        required
-        className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
-      />
+      <div className="flex flex-col gap-2 border border-zinc-800 rounded-xl px-5 py-4">
+        <p className="text-xs text-zinc-500 uppercase tracking-widest text-center mb-1">Grille tarifaire</p>
+        {[
+          { id: "simple", label: "Edit Simple", desc: "Mashup, transition propre, montage court", prix: "50€" },
+          { id: "avance", label: "Création Avancée", desc: "Intro personnalisée, medley 3–5 titres", prix: "80€" },
+          { id: "performance", label: "Pack Performance", desc: "Intro épique, montage complexe + Sound Design", prix: "Sur mesure" },
+        ].map(({ id, label, desc, prix }) => (
+          <label
+            key={id}
+            className={`flex items-center justify-between gap-4 rounded-lg px-4 py-3 cursor-pointer transition-colors border ${preset === id ? "border-blue-400 bg-blue-400/5" : "border-transparent hover:bg-zinc-900"}`}
+          >
+            <div className="flex items-center gap-3">
+              <input type="radio" name="preset" value={id} checked={preset === id} onChange={() => setPreset(id)} className="accent-blue-400 w-4 h-4 cursor-pointer" />
+              <div>
+                <p className="text-sm font-medium text-zinc-200">{label}</p>
+                <p className="text-xs text-zinc-500">{desc}</p>
+              </div>
+            </div>
+            <span className="text-sm font-semibold text-zinc-300 shrink-0">{prix}</span>
+          </label>
+        ))}
+        <div className="flex gap-8 justify-center border-t border-zinc-800 pt-3 mt-1">
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-blue-400 cursor-pointer" />
+            <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Délai urgent <span className="text-zinc-500">(+30€)</span></span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-blue-400 cursor-pointer" />
+            <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Intégration de voix <span className="text-zinc-500">(+40€)</span></span>
+          </label>
+        </div>
+      </div>
       <textarea
         name="description"
         placeholder="Décrivez votre projet en détail — plus vous êtes précis, mieux je pourrai vous aider"
@@ -269,13 +372,39 @@ export default function Creation() {
           className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700"
         />
       </div>
-      <button
-        type="submit"
-        className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors mt-2"
-      >
-        Envoyer ma demande
-      </button>
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          disabled={loadingCheckout}
+          onClick={async () => {
+            setLoadingCheckout(true);
+            const res = await fetch("/api/checkout", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ nom, email, preset, urgent, voix }),
+            });
+            const data = await res.json();
+            if (data.url) window.location.href = data.url;
+            else setLoadingCheckout(false);
+          }}
+          className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loadingCheckout ? "Redirection…" : "Réserver avec un acompte de 30€"}
+        </button>
+        <p className="text-zinc-600 text-xs text-center">
+          Acompte déduit du montant final à régler à la livraison
+        </p>
+      </div>
+
     </form>
+
+    {paymentSuccess && (
+      <div className="mt-8 bg-zinc-900 border border-blue-400 rounded-2xl px-6 py-5 text-center">
+        <p className="text-blue-400 font-semibold mb-1">Acompte reçu ✓</p>
+        <p className="text-zinc-400 text-sm">Merci ! Je vous contacte sous 48h pour lancer votre projet.</p>
+      </div>
+    )}
+
   </div>
 </section>
 
