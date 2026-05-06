@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const demos = [
@@ -37,7 +37,7 @@ const demos = [
   },
 ];
 
-export default function Creation() {
+function CreationInner() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
@@ -414,5 +414,13 @@ export default function Creation() {
       </footer>
 
     </main>
+  );
+}
+
+export default function Creation() {
+  return (
+    <Suspense>
+      <CreationInner />
+    </Suspense>
   );
 }
