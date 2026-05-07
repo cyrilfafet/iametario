@@ -162,8 +162,13 @@ export default function Teaching() {
           <div className="flex flex-col items-center gap-3">
             <p className="text-xs text-zinc-500 uppercase tracking-widest">Formation Mashup</p>
             <div
-              className="w-[280px] h-[280px] rounded-full border border-zinc-700 flex flex-col items-center justify-center text-center px-10 hover:border-zinc-500 transition-colors"
-              style={{ background: "radial-gradient(circle at center, #1a1a1a, #0a0a0a)" }}
+              className="w-[280px] h-[280px] rounded-full flex flex-col items-center justify-center text-center px-10 transition-all"
+              style={{
+                background: "radial-gradient(circle at center, #1a2035, #0a0a0a)",
+                border: "1.5px solid transparent",
+                backgroundClip: "padding-box",
+                boxShadow: "0 0 0 1.5px #3b82f640, inset 0 0 40px #3b82f608",
+              }}
             >
               <p className="text-white font-bold text-sm mb-2">FL Studio</p>
               <p className="text-zinc-400 text-xs leading-relaxed">
