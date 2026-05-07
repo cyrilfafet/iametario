@@ -17,24 +17,24 @@ const pillars: Pillar[] = [
     label: "Technique",
     color: "#60a5fa",
     description: "Animer une soirée, de la préparation au set final. Chaque chapitre inclut une vidéo explicative + une vidéo exercice.",
-    path: "M 100 100 L 100 18 A 82 82 0 0 1 171.04 141 Z",
-    tx: 143, ty: 72,
+    path: "M 100 100 L 100 6 A 94 94 0 0 1 181.41 147 Z",
+    tx: 150, ty: 70,
   },
   {
     id: 1,
     label: "Psychologie",
     color: "#818cf8",
     description: "La mentalité pour faire danser les gens et décrocher une résidence.",
-    path: "M 100 100 L 171.04 141 A 82 82 0 0 1 28.96 141 Z",
-    tx: 100, ty: 149,
+    path: "M 100 100 L 181.41 147 A 94 94 0 0 1 18.59 147 Z",
+    tx: 100, ty: 158,
   },
   {
     id: 2,
     label: "Social",
     color: "#a78bfa",
     description: "Comment entrer en contact avec les pros et être pris au sérieux.",
-    path: "M 100 100 L 28.96 141 A 82 82 0 0 1 100 18 Z",
-    tx: 57, ty: 72,
+    path: "M 100 100 L 18.59 147 A 94 94 0 0 1 100 6 Z",
+    tx: 50, ty: 70,
   },
 ];
 
@@ -104,8 +104,8 @@ export default function Teaching() {
             <p className="text-xs text-zinc-500 uppercase tracking-widest">Formation DJ Résident</p>
             <svg
               viewBox="0 0 200 200"
-              width="220"
-              height="220"
+              width="280"
+              height="280"
               className="drop-shadow-md"
             >
               {pillars.map(p => (
@@ -114,14 +114,14 @@ export default function Teaching() {
                   d={p.path}
                   fill={p.color}
                   stroke="#000"
-                  strokeWidth="3"
+                  strokeWidth="2.5"
                   opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
                   className="cursor-pointer transition-opacity duration-200"
                   onClick={() => togglePillar(p.id)}
                 />
               ))}
               {/* Centre */}
-              <circle cx="100" cy="100" r="30" fill="#0a0a0a" stroke="#27272a" strokeWidth="1.5" />
+              <circle cx="100" cy="100" r="32" fill="#0a0a0a" stroke="#27272a" strokeWidth="1.5" />
               <text x="100" y="97" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" letterSpacing="1.5">DJ</text>
               <text x="100" y="109" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" letterSpacing="1.5">RÉSIDENT</text>
               {/* Labels sections */}
@@ -158,7 +158,7 @@ export default function Teaching() {
           <div className="flex flex-col items-center gap-3">
             <p className="text-xs text-zinc-500 uppercase tracking-widest">Formation Mashup</p>
             <div
-              className="w-[220px] h-[220px] rounded-full border border-zinc-700 flex flex-col items-center justify-center text-center px-8 hover:border-zinc-500 transition-colors"
+              className="w-[280px] h-[280px] rounded-full border border-zinc-700 flex flex-col items-center justify-center text-center px-10 hover:border-zinc-500 transition-colors"
               style={{ background: "radial-gradient(circle at center, #1a1a1a, #0a0a0a)" }}
             >
               <p className="text-white font-bold text-sm mb-2">FL Studio</p>
