@@ -141,7 +141,6 @@ export default function Teaching() {
                 </text>
               ))}
             </svg>
-            <p className="text-zinc-600 text-xs">Clique sur un pilier</p>
           </div>
 
           {/* Pack connector */}
@@ -168,6 +167,8 @@ export default function Teaching() {
             </div>
           </div>
         </div>
+
+        <p className="text-zinc-700 text-xs text-center mb-6">Clique sur un pilier pour en savoir plus</p>
 
         {/* Description pilier actif */}
         <div className="min-h-[56px] mb-6">
