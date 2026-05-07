@@ -287,7 +287,7 @@ function CreationInner() {
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4 text-center">Contact</p>
     <h2 className="text-3xl font-bold mb-2 text-center">Un projet en tête ?</h2>
     <p className="text-zinc-400 text-center mb-2">Décrivez votre projet, je valide la faisabilité sous 48h après réception de votre acompte.</p>
-    <p className="text-zinc-600 text-xs text-center mb-12">Livraison sous 10 jours · 3 révisions incluses</p>
+    <p className="text-zinc-500 text-sm text-center mb-12">Livraison sous 10 jours · 3 révisions incluses</p>
 
     <form
       onSubmit={async (e) => {
@@ -307,6 +307,7 @@ function CreationInner() {
       }}
       className="flex flex-col gap-4"
     >
+      <input type="hidden" name="source" value="creation" />
       <input
         name="nom"
         type="text"
@@ -356,6 +357,7 @@ function CreationInner() {
             <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Intégration de voix <span className="text-zinc-500">(+40€)</span></span>
           </label>
         </div>
+        <p className="text-zinc-600 text-xs text-center pt-1">Un devis personnalisé vous sera envoyé si votre projet nécessite un ajustement tarifaire.</p>
       </div>
       <textarea
         name="description"
@@ -391,7 +393,7 @@ function CreationInner() {
         >
           {loadingCheckout ? "Redirection…" : "Réserver avec un acompte de 30€"}
         </button>
-        <p className="text-zinc-600 text-xs text-center">
+        <p className="text-zinc-500 text-sm text-center">
           Acompte déduit du montant final à régler à la livraison
         </p>
       </div>

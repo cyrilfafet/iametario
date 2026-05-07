@@ -59,23 +59,31 @@ export default function Artist() {
   <p className="text-zinc-400 text-base leading-relaxed max-w-4xl mt-8 text-center">
     <span style={{color: 'white', fontSize: '1.25rem', fontWeight: 800}}>Une décennie d'expériences, plus de 1500 sets.</span>
     <br /><br />
-    Depuis <strong style={{color: 'white', fontWeight: 700}}>2014</strong>, j'ai parcouru plus de 1500 scènes — des clubs français aux festivals, d'Ibiza aux hôtels de renom, en passant par les saisons en montagne. Ce parcours, forgé sur le terrain, a défini mon ADN musical : un mix dynamique entre House, Electro et French Touch.
+    Depuis <strong style={{color: 'white', fontWeight: 700}}>2014</strong>, j'ai réalisé plus de 1500 dj sets — des clubs français aux festivals, d'Ibiza aux hôtels de renom, en passant par les saisons en montagne. Ce parcours, forgé sur le terrain, a défini mon ADN musical : un mix dynamique entre House, Electro et French Touch.
     <br /><br />
     Partageant l'affiche avec des artistes comme <strong className="text-white">Joachim Garraud</strong> ou <strong className="text-white">Willy William</strong>, j'ai imposé ma signature jusque dans la production. Mon remix de Peggy Gou (+70k plays) a ainsi voyagé des ondes de ZuTv en Roumanie jusqu'en Inde, où il a resonné lors du  <strong className="text-white">Sunburn Festival</strong>.
     <br /><br />
-    Aujourd'hui résident au <strong className="text-white">Bal'tazar</strong> (Dijon), je mise sur l'instinct : mashups exclusifs, drops inattendus et lecture du public en temps réel.
+    Aujourd'hui résident au <strong className="text-white">Bal'tazar</strong> (Dijon), je joue à l'instinct — mashups exclusifs, transitions techniques et sets qui s'adaptent à chaque nuit.
     <br /><br />
     Entre la préparation de mon <strong className="text-white">troisième single</strong> pour juin 2026 et mes services de création audio, je prépare également une formation dédiée aux futurs DJs résidents.
   </p>
-  {/* Lecteur Soundcloud */}
-<div className="w-full max-w-3xl mt-12">
+  {/* Lecteurs Soundcloud */}
+<div className="w-full max-w-4xl mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
   <iframe
     width="100%"
-    height="300"
+    height="166"
     scrolling="no"
     frameBorder="no"
     allow="autoplay"
-    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%232c2a32&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%232c2a32&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"
+  />
+  <iframe
+    width="100%"
+    height="166"
+    scrolling="no"
+    frameBorder="no"
+    allow="autoplay"
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%232c2a32&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"
   />
 </div>
 </section>
