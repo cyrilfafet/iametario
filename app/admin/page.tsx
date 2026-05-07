@@ -173,23 +173,22 @@ export default function Admin() {
             {/* Dropdown clients */}
             {clients.length > 0 && (
               <div>
-                <label className="text-xs text-zinc-500 uppercase tracking-widest block mb-2">Client</label>
-                <div className="grid gap-2 max-h-40 overflow-y-auto pr-1">
+                <label className="text-xs text-zinc-500 uppercase tracking-widest block mb-2">Sélectionner un client</label>
+                <select
+                  onChange={e => {
+                    const c = clients.find(c => c.email === e.target.value);
+                    if (c) selectClient(c);
+                  }}
+                  defaultValue=""
+                  className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:border-blue-400 transition-colors w-full cursor-pointer"
+                >
+                  <option value="" disabled className="text-zinc-600">— Choisir un client —</option>
                   {clients.map((c, i) => (
-                    <button
-                      key={i}
-                      onClick={() => selectClient(c)}
-                      className={`text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
-                        email === c.email
-                          ? "border-blue-400 text-white bg-blue-400/10"
-                          : "border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white"
-                      }`}
-                    >
-                      <span className="font-medium">{c.nom}</span>
-                      <span className="text-zinc-600 ml-2 text-xs">{c.email}</span>
-                    </button>
+                    <option key={i} value={c.email}>
+                      {c.nom} — {c.email}
+                    </option>
                   ))}
-                </div>
+                </select>
                 <p className="text-zinc-700 text-xs mt-2">Ou saisissez manuellement ci-dessous</p>
               </div>
             )}
