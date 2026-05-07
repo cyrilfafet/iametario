@@ -44,11 +44,11 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: "E-Tario <contact@iametario.com>",
         to: email,
-        subject: `Ta livraison est prête — ${nom_projet}`,
+        subject: `Votre livraison audio est prête — ${nom_projet}`,
         html: `
           <div style="font-family: sans-serif; max-width: 520px; margin: auto; color: #111;">
             <h2 style="margin-bottom: 4px;">Bonjour ${prenom} 👋</h2>
-            <p style="color: #555;">Ton projet <strong>${nom_projet}</strong> est prêt.</p>
+            <p style="color: #555;">Votre projet <strong>${nom_projet}</strong> est prêt.</p>
             ${message ? `<p style="color: #555;">${message}</p>` : ""}
             ${soldeLine}
             <a href="${deliveryUrl}" style="display:inline-block; margin-top: 20px; background:#0074d4; color:#fff; padding:14px 28px; border-radius:10px; text-decoration:none; font-weight:600;">
