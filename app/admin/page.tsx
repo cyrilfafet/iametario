@@ -142,7 +142,9 @@ export default function Admin() {
     <main className="min-h-screen bg-black text-white px-6 py-12">
       <div className="max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-12">
-          <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-5" />
+          <a href="https://www.iametario.com" target="_blank" rel="noopener noreferrer">
+            <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-5 hover:opacity-70 transition-opacity" />
+          </a>
           <span className="text-zinc-600 text-xs uppercase tracking-widest">Back-office</span>
         </div>
 
