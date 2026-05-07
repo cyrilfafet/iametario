@@ -31,7 +31,22 @@ function LivraisonInner() {
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [pollCount, setPollCount] = useState(0);
+  const [wavSize, setWavSize] = useState("");
+  const [mp3Size, setMp3Size] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const fmtSize = (bytes: number) => {
+    if (bytes > 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    return `${(bytes / 1024).toFixed(0)} KB`;
+  };
+
+  const fetchSize = async (url: string, set: (s: string) => void) => {
+    try {
+      const res = await fetch(url, { method: "HEAD" });
+      const len = res.headers.get("content-length");
+      if (len) set(fmtSize(parseInt(len)));
+    } catch { /* silencieux */ }
+  };
 
   useEffect(() => {
     if (searchParams.get("payment") === "success") {
@@ -52,6 +67,12 @@ function LivraisonInner() {
   useEffect(() => {
     fetchLivraison();
   }, [code]);
+
+  useEffect(() => {
+    if (!livraison) return;
+    fetchSize(livraison.fichier_wav_url, setWavSize);
+    fetchSize(livraison.fichier_mp3_url, setMp3Size);
+  }, [livraison?.fichier_wav_url]);
 
   // Polling après paiement — toutes les 3s jusqu'à confirmation (max 20 essais)
   useEffect(() => {
@@ -197,14 +218,14 @@ function LivraisonInner() {
               className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
             >
               <span>↓ WAV</span>
-              <span className="text-zinc-600 text-xs">Haute qualité</span>
+              <span className="text-zinc-600 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
             </button>
             <button
               onClick={() => download(livraison.fichier_mp3_url, `${livraison.nom_projet}.mp3`)}
               className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
             >
               <span>↓ MP3</span>
-              <span className="text-zinc-600 text-xs">Standard</span>
+              <span className="text-zinc-600 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>
             </button>
           </div>
         ) : (
