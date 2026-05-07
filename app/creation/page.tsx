@@ -350,7 +350,7 @@ function CreationInner() {
         <div className="flex gap-8 justify-center border-t border-zinc-800 pt-3 mt-1">
           <label className="flex items-center gap-2 cursor-pointer group">
             <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-blue-400 cursor-pointer" />
-            <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Délai urgent <span className="text-zinc-500">(+30€)</span></span>
+            <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Délai urgent <span className="text-zinc-500">(−4 jours, +30€)</span></span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer group">
             <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-blue-400 cursor-pointer" />
