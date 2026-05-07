@@ -10,6 +10,8 @@ export default function Admin() {
   const [prenom, setPrenom] = useState("");
   const [nomProjet, setNomProjet] = useState("");
   const [message, setMessage] = useState("");
+  const [solde, setSolde] = useState("");
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
   const [wavFile, setWavFile] = useState<File | null>(null);
   const [mp3File, setMp3File] = useState<File | null>(null);
 
@@ -25,11 +27,16 @@ export default function Admin() {
       body: JSON.stringify({ password }),
     });
     if (res.ok) setAuthenticated(true);
-    else { setAuthError(true); }
+    else setAuthError(true);
   };
 
-  const uploadFile = async (file: File, code: string, type: "wav" | "mp3") => {
-    setProgressLabel(`Upload ${type.toUpperCase()}…`);
+  const uploadFile = async (file: File, code: string, type: "preview" | "wav" | "mp3") => {
+    const labels: Record<string, string> = {
+      preview: "Upload aperçu MP3…",
+      wav: "Upload WAV final…",
+      mp3: "Upload MP3 final…",
+    };
+    setProgressLabel(labels[type]);
     const urlRes = await fetch("/api/livraison/upload-url", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -39,21 +46,29 @@ export default function Admin() {
     const { error } = await supabase.storage
       .from("Livraison")
       .uploadToSignedUrl(path, token, file, { contentType: file.type || "application/octet-stream" });
-    if (error) throw new Error(`Upload ${type.toUpperCase()} échoué : ${error.message}`);
+    if (error) throw new Error(`Upload ${type} échoué : ${error.message}`);
   };
 
   const createDelivery = async () => {
-    if (!wavFile || !mp3File || !prenom || !nomProjet) return;
+    if (!previewFile || !wavFile || !mp3File || !prenom || !nomProjet) return;
     setLoading(true);
     const code = Math.random().toString(36).slice(2, 10);
     try {
+      await uploadFile(previewFile, code, "preview");
       await uploadFile(wavFile, code, "wav");
       await uploadFile(mp3File, code, "mp3");
       setProgressLabel("Création de la livraison…");
       const res = await fetch("/api/livraison", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, code, prenom, nom_projet: nomProjet, message }),
+        body: JSON.stringify({
+          password,
+          code,
+          prenom,
+          nom_projet: nomProjet,
+          message,
+          solde: solde ? parseInt(solde) : 0,
+        }),
       });
       if (res.ok) {
         setDeliveryUrl(`${window.location.origin}/livraison/${code}`);
@@ -69,8 +84,8 @@ export default function Admin() {
   };
 
   const reset = () => {
-    setDeliveryUrl(""); setPrenom(""); setNomProjet(""); setMessage("");
-    setWavFile(null); setMp3File(null); setCopied(false);
+    setDeliveryUrl(""); setPrenom(""); setNomProjet(""); setMessage(""); setSolde("");
+    setPreviewFile(null); setWavFile(null); setMp3File(null); setCopied(false);
   };
 
   const inputClass = "bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors w-full";
@@ -138,22 +153,40 @@ export default function Admin() {
               placeholder="Message personnalisé (optionnel)"
               value={message}
               onChange={e => setMessage(e.target.value)}
-              rows={4}
+              rows={3}
               className={`${inputClass} resize-none`}
             />
+            <input
+              type="number"
+              placeholder="Solde à régler (€) — laisser vide si tout est payé"
+              value={solde}
+              onChange={e => setSolde(e.target.value)}
+              min={0}
+              className={inputClass}
+            />
+
+            {/* Séparateur fichiers */}
+            <p className="text-zinc-600 text-xs uppercase tracking-widest pt-2">Fichiers audio</p>
+
             <div className="border border-zinc-800 rounded-xl px-5 py-4">
-              <label className="text-sm text-zinc-500 block mb-2">Fichier WAV</label>
+              <label className="text-sm text-zinc-400 block mb-1">Aperçu MP3 <span className="text-zinc-600">(basse qualité / watermarked)</span></label>
+              <input type="file" accept=".mp3,audio/mpeg" onChange={e => setPreviewFile(e.target.files?.[0] || null)}
+                className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 w-full" />
+            </div>
+            <div className="border border-zinc-800 rounded-xl px-5 py-4">
+              <label className="text-sm text-zinc-400 block mb-1">WAV final <span className="text-zinc-600">(haute qualité — déverrouillé après paiement)</span></label>
               <input type="file" accept=".wav,audio/wav" onChange={e => setWavFile(e.target.files?.[0] || null)}
                 className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 w-full" />
             </div>
             <div className="border border-zinc-800 rounded-xl px-5 py-4">
-              <label className="text-sm text-zinc-500 block mb-2">Fichier MP3</label>
+              <label className="text-sm text-zinc-400 block mb-1">MP3 final <span className="text-zinc-600">(standard — déverrouillé après paiement)</span></label>
               <input type="file" accept=".mp3,audio/mpeg" onChange={e => setMp3File(e.target.files?.[0] || null)}
                 className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 w-full" />
             </div>
+
             <button
               onClick={createDelivery}
-              disabled={loading || !prenom || !nomProjet || !wavFile || !mp3File}
+              disabled={loading || !prenom || !nomProjet || !previewFile || !wavFile || !mp3File}
               className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors mt-2 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading ? progressLabel || "Chargement…" : "Créer la livraison"}

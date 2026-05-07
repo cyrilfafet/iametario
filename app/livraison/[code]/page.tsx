@@ -1,18 +1,23 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 type Livraison = {
   code: string;
   prenom: string;
   nom_projet: string;
   message: string;
+  fichier_preview_url: string;
   fichier_wav_url: string;
   fichier_mp3_url: string;
+  solde: number;
+  paiement_solde: boolean;
 };
 
-export default function LivraisonPage() {
+function LivraisonInner() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const code = params.code as string;
 
   const [livraison, setLivraison] = useState<Livraison | null>(null);
@@ -23,16 +28,36 @@ export default function LivraisonPage() {
   const [showRevision, setShowRevision] = useState(false);
   const [revisionMsg, setRevisionMsg] = useState("");
   const [revisionSent, setRevisionSent] = useState(false);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
+    if (searchParams.get("payment") === "success") {
+      setPaymentSuccess(true);
+    }
+  }, [searchParams]);
+
+  const fetchLivraison = () => {
     fetch(`/api/livraison/${code}`)
       .then(r => r.json())
       .then(data => {
         if (data.error) setNotFound(true);
         else setLivraison(data);
       });
+  };
+
+  useEffect(() => {
+    fetchLivraison();
   }, [code]);
+
+  // Re-fetch after payment success to get updated paiement_solde
+  useEffect(() => {
+    if (paymentSuccess && livraison && !livraison.paiement_solde) {
+      const timer = setTimeout(fetchLivraison, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [paymentSuccess, livraison]);
 
   const download = async (url: string, filename: string) => {
     const res = await fetch(url);
@@ -72,6 +97,23 @@ export default function LivraisonPage() {
     if (data.success) setRevisionSent(true);
   };
 
+  const paySolde = async () => {
+    if (!livraison) return;
+    setLoadingCheckout(true);
+    const res = await fetch("/api/livraison/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: livraison.code }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert(data.error || "Erreur lors du paiement");
+      setLoadingCheckout(false);
+    }
+  };
+
   if (notFound) return (
     <main className="min-h-screen bg-black text-white flex items-center justify-center">
       <p className="text-zinc-500">Livraison introuvable.</p>
@@ -84,6 +126,8 @@ export default function LivraisonPage() {
     </main>
   );
 
+  const isUnlocked = livraison.paiement_solde || !livraison.solde;
+
   return (
     <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-16">
       <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-5 mb-16" />
@@ -93,7 +137,14 @@ export default function LivraisonPage() {
         <h1 className="text-3xl font-bold mb-1">Bonjour {livraison.prenom}</h1>
         <p className="text-zinc-400 text-lg mb-10">{livraison.nom_projet}</p>
 
-        {/* Player */}
+        {/* Bandeau paiement success */}
+        {paymentSuccess && (
+          <div className="border border-blue-400 rounded-2xl px-5 py-4 mb-6 text-center">
+            <p className="text-blue-400 text-sm font-semibold">Paiement reçu — vos fichiers sont déverrouillés ✓</p>
+          </div>
+        )}
+
+        {/* Player aperçu */}
         <div className="border border-zinc-800 rounded-2xl px-6 py-5 mb-4">
           <div className="flex items-center gap-4 mb-4">
             <button
@@ -111,7 +162,7 @@ export default function LivraisonPage() {
             </button>
             <div className="flex-1">
               <p className="text-sm font-medium">{livraison.nom_projet}</p>
-              <p className="text-xs text-zinc-500">Aperçu MP3</p>
+              <p className="text-xs text-zinc-500">Aperçu</p>
             </div>
           </div>
           <input
@@ -131,7 +182,7 @@ export default function LivraisonPage() {
           </div>
           <audio
             ref={audioRef}
-            src={livraison.fichier_mp3_url}
+            src={livraison.fichier_preview_url || livraison.fichier_mp3_url}
             onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)}
             onTimeUpdate={() => {
               const audio = audioRef.current;
@@ -142,22 +193,50 @@ export default function LivraisonPage() {
         </div>
 
         {/* Téléchargements */}
-        <div className="grid grid-cols-2 gap-3 mb-8">
-          <button
-            onClick={() => download(livraison.fichier_wav_url, `${livraison.nom_projet}.wav`)}
-            className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
-          >
-            <span>↓ WAV</span>
-            <span className="text-zinc-600 text-xs">Haute qualité</span>
-          </button>
-          <button
-            onClick={() => download(livraison.fichier_mp3_url, `${livraison.nom_projet}.mp3`)}
-            className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
-          >
-            <span>↓ MP3</span>
-            <span className="text-zinc-600 text-xs">Standard</span>
-          </button>
-        </div>
+        {isUnlocked ? (
+          <div className="grid grid-cols-2 gap-3 mb-8">
+            <button
+              onClick={() => download(livraison.fichier_wav_url, `${livraison.nom_projet}.wav`)}
+              className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
+            >
+              <span>↓ WAV</span>
+              <span className="text-zinc-600 text-xs">Haute qualité</span>
+            </button>
+            <button
+              onClick={() => download(livraison.fichier_mp3_url, `${livraison.nom_projet}.mp3`)}
+              className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
+            >
+              <span>↓ MP3</span>
+              <span className="text-zinc-600 text-xs">Standard</span>
+            </button>
+          </div>
+        ) : (
+          <div className="mb-8">
+            <div className="grid grid-cols-2 gap-3 mb-4 opacity-40 pointer-events-none select-none">
+              <div className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-500">
+                <span>🔒 WAV</span>
+                <span className="text-zinc-700 text-xs">Haute qualité</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-500">
+                <span>🔒 MP3</span>
+                <span className="text-zinc-700 text-xs">Standard</span>
+              </div>
+            </div>
+            <div className="border border-zinc-800 rounded-xl px-5 py-4 text-center">
+              <p className="text-zinc-400 text-sm mb-1">
+                Solde restant : <span className="text-white font-semibold">{livraison.solde} €</span>
+              </p>
+              <p className="text-zinc-600 text-xs mb-4">Les fichiers finaux seront déverrouillés automatiquement après paiement.</p>
+              <button
+                onClick={paySolde}
+                disabled={loadingCheckout}
+                className="bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50"
+              >
+                {loadingCheckout ? "Redirection…" : `Payer ${livraison.solde} €`}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Message perso */}
         {livraison.message && (
@@ -207,5 +286,17 @@ export default function LivraisonPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LivraisonPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+        <p className="text-zinc-600 text-sm animate-pulse">Chargement…</p>
+      </main>
+    }>
+      <LivraisonInner />
+    </Suspense>
   );
 }

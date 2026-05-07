@@ -8,7 +8,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const path = `${code}/${type === "wav" ? "fichier.wav" : "fichier.mp3"}`;
+  const fileMap: Record<string, string> = {
+    wav: "final.wav",
+    mp3: "final.mp3",
+    preview: "preview.mp3",
+  };
+  const filename = fileMap[type] ?? "fichier";
+  const path = `${code}/${filename}`;
   const { data, error } = await supabaseAdmin.storage
     .from("Livraison")
     .createSignedUploadUrl(path);
