@@ -21,9 +21,10 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const code = session.metadata?.code;
+    const { code, nom, email, options } = session.metadata || {};
 
     if (code) {
+      // Paiement du solde livraison → déverrouiller les téléchargements
       const { error } = await supabaseAdmin
         .from("livraisons")
         .update({ paiement_solde: true })
@@ -32,6 +33,19 @@ export async function POST(req: NextRequest) {
       if (error) {
         console.error("Supabase update error:", error.message);
         return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+    } else {
+      // Acompte création → enregistrer le client
+      const clientEmail = email || session.customer_details?.email;
+      if (clientEmail) {
+        await supabaseAdmin
+          .from("commandes")
+          .insert({
+            nom: nom || session.customer_details?.name || "",
+            email: clientEmail,
+            options: options || "",
+          })
+          .select();
       }
     }
   }

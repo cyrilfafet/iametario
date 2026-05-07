@@ -1,13 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase-client";
+
+type Client = { nom: string; email: string };
 
 export default function Admin() {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [authError, setAuthError] = useState(false);
 
+  const [clients, setClients] = useState<Client[]>([]);
   const [prenom, setPrenom] = useState("");
+  const [email, setEmail] = useState("");
   const [nomProjet, setNomProjet] = useState("");
   const [message, setMessage] = useState("");
   const [solde, setSolde] = useState("");
@@ -26,8 +30,23 @@ export default function Admin() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
-    if (res.ok) setAuthenticated(true);
-    else setAuthError(true);
+    if (res.ok) {
+      setAuthenticated(true);
+    } else {
+      setAuthError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!authenticated) return;
+    fetch(`/api/admin/clients?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setClients(data); });
+  }, [authenticated]);
+
+  const selectClient = (client: Client) => {
+    setEmail(client.email);
+    if (!prenom) setPrenom(client.nom.split(" ")[0]);
   };
 
   const uploadFile = async (file: File, code: string, type: "preview" | "wav" | "mp3") => {
@@ -67,6 +86,7 @@ export default function Admin() {
           prenom,
           nom_projet: nomProjet,
           message,
+          email: email || null,
           solde: solde ? parseInt(solde) : 0,
         }),
       });
@@ -84,7 +104,8 @@ export default function Admin() {
   };
 
   const reset = () => {
-    setDeliveryUrl(""); setPrenom(""); setNomProjet(""); setMessage(""); setSolde("");
+    setDeliveryUrl(""); setPrenom(""); setEmail(""); setNomProjet("");
+    setMessage(""); setSolde("");
     setPreviewFile(null); setWavFile(null); setMp3File(null); setCopied(false);
   };
 
@@ -129,6 +150,7 @@ export default function Admin() {
           <div className="flex flex-col gap-6">
             <div className="border border-blue-400 rounded-2xl px-6 py-8 text-center flex flex-col gap-4">
               <p className="text-blue-400 font-semibold">Livraison créée ✓</p>
+              {email && <p className="text-zinc-500 text-xs">Mail envoyé à {email}</p>}
               <p className="text-zinc-300 text-sm break-all">{deliveryUrl}</p>
               <button
                 onClick={() => { navigator.clipboard.writeText(deliveryUrl); setCopied(true); }}
@@ -147,7 +169,33 @@ export default function Admin() {
         ) : (
           <div className="flex flex-col gap-4">
             <p className="text-zinc-500 text-xs tracking-widest uppercase mb-2">Nouvelle livraison</p>
+
+            {/* Dropdown clients */}
+            {clients.length > 0 && (
+              <div>
+                <label className="text-xs text-zinc-500 uppercase tracking-widest block mb-2">Client</label>
+                <div className="grid gap-2 max-h-40 overflow-y-auto pr-1">
+                  {clients.map((c, i) => (
+                    <button
+                      key={i}
+                      onClick={() => selectClient(c)}
+                      className={`text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
+                        email === c.email
+                          ? "border-blue-400 text-white bg-blue-400/10"
+                          : "border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white"
+                      }`}
+                    >
+                      <span className="font-medium">{c.nom}</span>
+                      <span className="text-zinc-600 ml-2 text-xs">{c.email}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-zinc-700 text-xs mt-2">Ou saisissez manuellement ci-dessous</p>
+              </div>
+            )}
+
             <input type="text" placeholder="Prénom du client" value={prenom} onChange={e => setPrenom(e.target.value)} className={inputClass} />
+            <input type="email" placeholder="Email du client (pour envoi automatique)" value={email} onChange={e => setEmail(e.target.value)} className={inputClass} />
             <input type="text" placeholder="Nom du projet" value={nomProjet} onChange={e => setNomProjet(e.target.value)} className={inputClass} />
             <textarea
               placeholder="Message personnalisé (optionnel)"
@@ -165,7 +213,6 @@ export default function Admin() {
               className={inputClass}
             />
 
-            {/* Séparateur fichiers */}
             <p className="text-zinc-600 text-xs uppercase tracking-widest pt-2">Fichiers audio</p>
 
             <div className="border border-zinc-800 rounded-xl px-5 py-4">

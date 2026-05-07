@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       },
     ],
-    metadata: { nom: nom || "", options: options || "aucune" },
+    metadata: { nom: nom || "", email: email || "", options: options || "aucune" },
     success_url: `${process.env.NEXT_PUBLIC_URL || "https://www.iametario.com"}/creation?payment=success`,
     cancel_url: `${process.env.NEXT_PUBLIC_URL || "https://www.iametario.com"}/creation`,
   });
