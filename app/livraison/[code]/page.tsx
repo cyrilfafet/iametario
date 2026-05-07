@@ -233,11 +233,11 @@ function LivraisonInner() {
             <div className="grid grid-cols-2 gap-3 mb-4 opacity-40 pointer-events-none select-none">
               <div className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-500">
                 <span>🔒 WAV</span>
-                <span className="text-zinc-700 text-xs">Haute qualité</span>
+                <span className="text-zinc-700 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
               </div>
               <div className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-500">
                 <span>🔒 MP3</span>
-                <span className="text-zinc-700 text-xs">Standard</span>
+                <span className="text-zinc-700 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>
               </div>
             </div>
             {paymentSuccess ? (
