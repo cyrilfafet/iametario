@@ -30,6 +30,7 @@ function LivraisonInner() {
   const [revisionSent, setRevisionSent] = useState(false);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [pollCount, setPollCount] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -39,11 +40,12 @@ function LivraisonInner() {
   }, [searchParams]);
 
   const fetchLivraison = () => {
-    fetch(`/api/livraison/${code}`)
+    return fetch(`/api/livraison/${code}`)
       .then(r => r.json())
       .then(data => {
         if (data.error) setNotFound(true);
         else setLivraison(data);
+        return data;
       });
   };
 
@@ -51,13 +53,15 @@ function LivraisonInner() {
     fetchLivraison();
   }, [code]);
 
-  // Re-fetch after payment success to get updated paiement_solde
+  // Polling après paiement — toutes les 3s jusqu'à confirmation (max 20 essais)
   useEffect(() => {
-    if (paymentSuccess && livraison && !livraison.paiement_solde) {
-      const timer = setTimeout(fetchLivraison, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [paymentSuccess, livraison]);
+    if (!paymentSuccess || !livraison || livraison.paiement_solde || pollCount >= 20) return;
+    const timer = setTimeout(async () => {
+      const data = await fetchLivraison();
+      if (!data.paiement_solde) setPollCount(c => c + 1);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [paymentSuccess, livraison, pollCount]);
 
   const download = async (url: string, filename: string) => {
     const res = await fetch(url);
@@ -137,13 +141,6 @@ function LivraisonInner() {
         <h1 className="text-3xl font-bold mb-1">Bonjour {livraison.prenom}</h1>
         <p className="text-zinc-400 text-lg mb-10">{livraison.nom_projet}</p>
 
-        {/* Bandeau paiement success */}
-        {paymentSuccess && (
-          <div className="border border-blue-400 rounded-2xl px-5 py-4 mb-6 text-center">
-            <p className="text-blue-400 text-sm font-semibold">Paiement reçu — vos fichiers sont déverrouillés ✓</p>
-          </div>
-        )}
-
         {/* Player aperçu */}
         <div className="border border-zinc-800 rounded-2xl px-6 py-5 mb-4">
           <div className="flex items-center gap-4 mb-4">
@@ -222,19 +219,26 @@ function LivraisonInner() {
                 <span className="text-zinc-700 text-xs">Standard</span>
               </div>
             </div>
-            <div className="border border-zinc-800 rounded-xl px-5 py-4 text-center">
-              <p className="text-zinc-400 text-sm mb-1">
-                Solde restant : <span className="text-white font-semibold">{livraison.solde} €</span>
-              </p>
-              <p className="text-zinc-600 text-xs mb-4">Les fichiers finaux seront déverrouillés automatiquement après paiement.</p>
-              <button
-                onClick={paySolde}
-                disabled={loadingCheckout}
-                className="bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50"
-              >
-                {loadingCheckout ? "Redirection…" : `Payer ${livraison.solde} €`}
-              </button>
-            </div>
+            {paymentSuccess ? (
+              <div className="border border-blue-400/40 rounded-xl px-5 py-4 text-center">
+                <p className="text-blue-400 text-sm font-semibold mb-1">Paiement reçu ✓</p>
+                <p className="text-zinc-500 text-xs animate-pulse">Déverrouillage en cours…</p>
+              </div>
+            ) : (
+              <div className="border border-zinc-800 rounded-xl px-5 py-4 text-center">
+                <p className="text-zinc-400 text-sm mb-1">
+                  Solde restant : <span className="text-white font-semibold">{livraison.solde} €</span>
+                </p>
+                <p className="text-zinc-600 text-xs mb-4">Les fichiers finaux seront déverrouillés automatiquement après paiement.</p>
+                <button
+                  onClick={paySolde}
+                  disabled={loadingCheckout}
+                  className="bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50"
+                >
+                  {loadingCheckout ? "Redirection…" : `Payer ${livraison.solde} €`}
+                </button>
+              </div>
+            )}
           </div>
         )}
 
