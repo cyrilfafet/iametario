@@ -1,17 +1,34 @@
+"use client";
+import { useState } from "react";
+
 export default function Artist() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
-        <div className="flex gap-8 text-sm text-zinc-400">
+        <div className="hidden md:flex gap-8 text-sm text-zinc-400">
           <a href="/" className="text-blue-400">PERFORM</a>
           <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
           <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
           <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
         </div>
+        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
+          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+        </button>
       </nav>
+      {menuOpen && (
+        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
+          <a href="/" className="text-blue-400">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        </div>
+      )}
 
       {/* Hero */}
 <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">

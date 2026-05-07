@@ -31,6 +31,7 @@ function LivraisonInner() {
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [pollCount, setPollCount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [wavSize, setWavSize] = useState("");
   const [mp3Size, setMp3Size] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -154,8 +155,30 @@ function LivraisonInner() {
   const isUnlocked = livraison.paiement_solde || !livraison.solde;
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 py-16">
-      <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-5 mb-16" />
+    <main className="min-h-screen bg-black text-white flex flex-col">
+      <nav className="flex items-center justify-between px-8 py-6">
+        <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+        <div className="hidden md:flex gap-8 text-sm text-zinc-400">
+          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        </div>
+        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
+          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+        </button>
+      </nav>
+      {menuOpen && (
+        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
+          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        </div>
+      )}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
 
       <div className="w-full max-w-lg">
         <p className="text-zinc-500 text-xs tracking-widest uppercase mb-3">Livraison privée</p>
@@ -309,6 +332,7 @@ function LivraisonInner() {
             </button>
           )}
         </div>
+      </div>
       </div>
     </main>
   );
