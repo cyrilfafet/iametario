@@ -23,6 +23,7 @@ export default function Admin() {
   const [progressLabel, setProgressLabel] = useState("");
   const [deliveryUrl, setDeliveryUrl] = useState("");
   const [copied, setCopied] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const login = async () => {
     const res = await fetch("/api/admin-auth", {
@@ -137,8 +138,6 @@ export default function Admin() {
       </main>
     );
   }
-
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <main className="min-h-screen bg-black text-white">
