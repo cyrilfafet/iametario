@@ -84,17 +84,22 @@ export default function Teaching() {
         {/* Hero */}
         <div className="mb-16 text-center">
           <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">
-            "Devenir DJ résident ne s'apprend pas qu'aux platines."
+            Devenir Dj résident.
           </h1>
           <p className="text-zinc-400 text-base leading-relaxed">
-            La formation qui t'apprend la technique, la mentalité et le réseau pour décrocher ta première résidence.
+            Ici je ne te vends pas de jets privés et paillettes, je te propose la stabilité. Une formation qui t'apprend la technique, la mentalité et le réseau pour décrocher ta première résidence.
           </p>
         </div>
 
         {/* Intro */}
-        <p className="text-zinc-500 text-sm leading-relaxed text-center max-w-md mx-auto mb-20">
-          La plupart des formations DJ t'apprennent à mixer. Celle-ci va plus loin : comment penser comme un professionnel, comment te comporter avec les acteurs du milieu, et comment animer une vraie soirée du début à la fin.
-        </p>
+        <div className="text-center mb-20">
+          <a
+            href="/"
+            className="inline-block bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors"
+          >
+            Qui suis-je ?
+          </a>
+        </div>
 
         {/* Deux cercles + Pack */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
@@ -190,8 +195,8 @@ export default function Teaching() {
         {/* Description Mashup */}
         <div className="border border-zinc-800 rounded-xl px-5 py-4 mb-20 text-center">
           <p className="text-zinc-400 text-sm leading-relaxed">
-            <span className="text-white font-semibold">Formation Mashup</span> — Crée tes propres mashups de A à Z sur FL Studio.
-            Idéal pour te démarquer dès tes premiers sets. S'adresse aux débutants complets, aucun prérequis logiciel.
+            <span className="text-white font-semibold">Formation Mashup</span> — La création de mashups, une des compétences les plus sous-estimées.
+            Les mashups peuvent te permettre de te démarquer dès tes premiers sets en club, mais aussi sur les réseaux. Prêt à montrer qui tu es ?
           </p>
         </div>
 
