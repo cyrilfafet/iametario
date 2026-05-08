@@ -43,6 +43,21 @@ function CreationInner() {
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollProgress = Math.min(1, scrollY / 350);
+  const imgStyle = (x: number, y: number, rot: number) => ({
+    transform: `translateX(${scrollProgress * x}px) translateY(${scrollProgress * y}px) rotate(${scrollProgress * rot}deg)`,
+    opacity: 0.5 * (1 - scrollProgress),
+    filter: `grayscale(1) blur(${scrollProgress * 10}px)`,
+    transition: "none",
+  });
   const [preset, setPreset] = useState<string>("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showFaq, setShowFaq] = useState(false);
@@ -121,15 +136,15 @@ function CreationInner() {
 
   {/* Images gauche */}
 <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
-  <img src="/radio.png" className="w-70 grayscale opacity-50 mt-0 ml-0" />
-  <img src="/Mariage.png" className="w-80 grayscale opacity-50 mt-6 -ml-55" />
-  <img src="/club.png" className="w-80 grayscale opacity-50 -mt-0 -ml-23" />
+  <img src="/radio.png" className="w-70 mt-0 ml-0" style={imgStyle(-60, -15, -5)} />
+  <img src="/Mariage.png" className="w-80 mt-6 -ml-55" style={imgStyle(-85, 20, 7)} />
+  <img src="/club.png" className="w-80 -mt-0 -ml-23" style={imgStyle(-50, -10, -9)} />
 </div>
 
 {/* Images droite */}
 <div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
-  <img src="/danse.png" className="w-80 grayscale opacity-50 mt-25 -mr-20" />
-  <img src="/feu_artifice.png" className="w-80 grayscale opacity-50 -mt-4 mr-15" />
+  <img src="/danse.png" className="w-80 mt-25 -mr-20" style={imgStyle(65, -20, 6)} />
+  <img src="/feu_artifice.png" className="w-80 -mt-4 mr-15" style={imgStyle(45, 15, -5)} />
 </div>
 
   {/* Contenu centré */}
