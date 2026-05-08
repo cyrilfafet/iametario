@@ -180,7 +180,7 @@ export default function Artist() {
             <a
               href="/presskit.pdf"
               target="_blank"
-              className="inline-flex items-center gap-2 border border-zinc-200 rounded-xl px-5 py-3 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
+              className="inline-flex items-center gap-3 bg-zinc-900 text-white px-6 py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
