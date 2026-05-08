@@ -37,6 +37,44 @@ const demos = [
   },
 ];
 
+type Avis = { stars: number; nom: string | null; created_at: string };
+
+function timeAgo(dateStr: string): string {
+  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  if (diff < 3600) return `il y a ${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `il y a ${Math.floor(diff / 3600)} h`;
+  if (diff < 86400 * 7) return `il y a ${Math.floor(diff / 86400)} jour${Math.floor(diff / 86400) > 1 ? "s" : ""}`;
+  if (diff < 86400 * 30) return `il y a ${Math.floor(diff / (86400 * 7))} semaine${Math.floor(diff / (86400 * 7)) > 1 ? "s" : ""}`;
+  return `il y a ${Math.floor(diff / (86400 * 30))} mois`;
+}
+
+function RatingsTicker({ avis }: { avis: Avis[] }) {
+  if (!avis.length) return null;
+  const items = [...avis, ...avis]; // duplicate for seamless loop
+
+  return (
+    <div className="overflow-hidden border-y border-zinc-100 py-3 mb-0" style={{ maskImage: "linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)" }}>
+      <div
+        className="flex gap-10 whitespace-nowrap"
+        style={{
+          animation: "ticker 18s linear infinite",
+          width: "max-content",
+        }}
+      >
+        {items.map((a, i) => (
+          <span key={i} className="text-sm text-zinc-500 flex items-center gap-2 shrink-0">
+            <span>{"⭐".repeat(a.stars)}</span>
+            <span className="text-zinc-400">—</span>
+            <span>{a.nom || "Anonyme"}</span>
+            <span className="text-zinc-300">·</span>
+            <span className="text-zinc-400">{timeAgo(a.created_at)}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function CreationInner() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
@@ -44,11 +82,19 @@ function CreationInner() {
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [avis, setAvis] = useState<Avis[]>([]);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/avis")
+      .then(r => r.json())
+      .then(data => { if (data.avis) setAvis(data.avis); })
+      .catch(() => {});
   }, []);
 
   const scrollProgress = Math.min(1, scrollY / 350);
@@ -149,7 +195,7 @@ function CreationInner() {
 
   {/* Contenu centré */}
   <div className="relative z-10">
-    <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">Services Audio.</h1>
+    <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">Services Audio</h1>
     <p className="text-zinc-500 text-lg max-w-xl mx-auto">
       Le bon son au bon moment. Sur mesure, toujours.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
@@ -294,6 +340,9 @@ function CreationInner() {
           </div>}
         </div>
       </section>
+
+      {/* Ticker avis */}
+      {avis.length > 0 && <RatingsTicker avis={avis} />}
 
       {/* Formulaire */}
 <section id="commander" className="border-t border-zinc-100 px-8 py-24">

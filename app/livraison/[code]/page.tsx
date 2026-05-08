@@ -34,6 +34,11 @@ function LivraisonInner() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [wavSize, setWavSize] = useState("");
   const [mp3Size, setMp3Size] = useState("");
+  const [hoverStar, setHoverStar] = useState(0);
+  const [selectedStar, setSelectedStar] = useState(0);
+  const [avisNom, setAvisNom] = useState("");
+  const [avisSubmitted, setAvisSubmitted] = useState(false);
+  const [avisLoading, setAvisLoading] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const fmtSize = (bytes: number) => {
@@ -105,6 +110,18 @@ function LivraisonInner() {
     if (!audio) return;
     if (playing) { audio.pause(); setPlaying(false); }
     else { audio.play(); setPlaying(true); }
+  };
+
+  const sendAvis = async () => {
+    if (!livraison || !selectedStar) return;
+    setAvisLoading(true);
+    await fetch("/api/avis", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: livraison.code, stars: selectedStar, nom: avisNom }),
+    });
+    setAvisSubmitted(true);
+    setAvisLoading(false);
   };
 
   const sendRevision = async () => {
@@ -282,6 +299,50 @@ function LivraisonInner() {
                   {loadingCheckout ? "Redirection…" : `Payer ${livraison.solde} €`}
                 </button>
               </div>
+            )}
+          </div>
+        )}
+
+        {/* Notation — visible seulement après paiement */}
+        {isUnlocked && (
+          <div className="border-t border-zinc-100 pt-6 mb-8">
+            {avisSubmitted ? (
+              <p className="text-blue-500 text-sm text-center">Merci pour votre avis ✓</p>
+            ) : (
+              <>
+                <p className="text-xs text-zinc-500 uppercase tracking-widest mb-3 text-center">Laisser un avis</p>
+                <div className="flex justify-center gap-2 mb-4">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      onClick={() => setSelectedStar(star)}
+                      onMouseEnter={() => setHoverStar(star)}
+                      onMouseLeave={() => setHoverStar(0)}
+                      className="text-2xl transition-transform hover:scale-110"
+                    >
+                      {star <= (hoverStar || selectedStar) ? "⭐" : "☆"}
+                    </button>
+                  ))}
+                </div>
+                {selectedStar > 0 && (
+                  <div className="flex flex-col gap-3">
+                    <input
+                      type="text"
+                      placeholder="Votre nom (optionnel)"
+                      value={avisNom}
+                      onChange={e => setAvisNom(e.target.value)}
+                      className="bg-white border border-zinc-200 rounded-xl px-5 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+                    />
+                    <button
+                      onClick={sendAvis}
+                      disabled={avisLoading}
+                      className="bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
+                    >
+                      {avisLoading ? "…" : "Laisser mon avis"}
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

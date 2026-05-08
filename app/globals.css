@@ -31,3 +31,8 @@ nav a {
   font-family: var(--font-syne), sans-serif;
 }
 
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
