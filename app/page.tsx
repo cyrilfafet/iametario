@@ -4,12 +4,32 @@ import { useState, useEffect } from "react";
 export default function Artist() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [bookingNom, setBookingNom] = useState("");
+  const [bookingEmail, setBookingEmail] = useState("");
+  const [bookingType, setBookingType] = useState("");
+  const [bookingDate, setBookingDate] = useState("");
+  const [bookingBudget, setBookingBudget] = useState("");
+  const [bookingMessage, setBookingMessage] = useState("");
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const handleBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookingLoading(true);
+    await fetch("/api/booking", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nom: bookingNom, email: bookingEmail, type: bookingType, date: bookingDate, budget: bookingBudget, message: bookingMessage }),
+    });
+    setBookingSubmitted(true);
+    setBookingLoading(false);
+  };
 
   const progress = Math.min(1, scrollY / 350);
   const opacity = 0.5 * (1 - progress);
@@ -124,6 +144,120 @@ export default function Artist() {
   />
 </div>
 </section>
+
+      {/* Booking */}
+      <section className="px-6 py-24 max-w-2xl mx-auto w-full">
+        <div className="border-t border-zinc-200 pt-16">
+
+          {/* Titre */}
+          <div className="text-center mb-14">
+            <p className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Booking</p>
+            <h2 className="text-3xl font-bold mb-3">Travaillons ensemble.</h2>
+            <p className="text-zinc-500 text-base">Disponible pour clubs, festivals et événements privés.</p>
+          </div>
+
+          {/* 3 blocs */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+            <div className="border border-zinc-200 rounded-2xl px-5 py-6">
+              <p className="text-zinc-900 font-semibold mb-2">Clubs & Résidences</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Sets House/Electro, lecture de foule en temps réel, mashups exclusifs.</p>
+            </div>
+            <div className="border border-zinc-200 rounded-2xl px-5 py-6">
+              <p className="text-zinc-900 font-semibold mb-2">Festivals & Événements</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Énergie scène, adaptabilité, expérience grandes salles.</p>
+            </div>
+            <div className="border border-zinc-200 rounded-2xl px-5 py-6">
+              <p className="text-zinc-900 font-semibold mb-2">Événements Privés</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Soirées entreprise, mariages, hôtels. Adaptable tous styles.</p>
+            </div>
+          </div>
+
+          {/* Presskit */}
+          <div className="text-center mb-10">
+            <a
+              href="/presskit.pdf"
+              target="_blank"
+              className="inline-flex items-center gap-2 border border-zinc-200 rounded-xl px-5 py-3 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger mon presskit
+            </a>
+          </div>
+
+          {/* Formulaire */}
+          {bookingSubmitted ? (
+            <div className="border border-blue-500/40 rounded-2xl px-6 py-10 text-center">
+              <p className="text-blue-500 font-semibold mb-1">Demande envoyée ✓</p>
+              <p className="text-zinc-500 text-sm">Je reviens vers toi rapidement.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleBooking} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  placeholder="Nom / Structure"
+                  value={bookingNom}
+                  onChange={e => setBookingNom(e.target.value)}
+                  required
+                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={bookingEmail}
+                  onChange={e => setBookingEmail(e.target.value)}
+                  required
+                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <select
+                  value={bookingType}
+                  onChange={e => setBookingType(e.target.value)}
+                  required
+                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
+                >
+                  <option value="" disabled>Type d'événement</option>
+                  <option value="Club">Club</option>
+                  <option value="Festival">Festival</option>
+                  <option value="Événement privé">Événement privé</option>
+                  <option value="Autre">Autre</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Date envisagée"
+                  value={bookingDate}
+                  onChange={e => setBookingDate(e.target.value)}
+                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
+              <input
+                type="text"
+                placeholder="Budget approximatif (optionnel)"
+                value={bookingBudget}
+                onChange={e => setBookingBudget(e.target.value)}
+                className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+              <textarea
+                placeholder="Message"
+                value={bookingMessage}
+                onChange={e => setBookingMessage(e.target.value)}
+                rows={4}
+                className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+              />
+              <button
+                type="submit"
+                disabled={bookingLoading}
+                className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
+              >
+                {bookingLoading ? "Envoi…" : "Envoyer ma demande"}
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
 
     </main>
   );
