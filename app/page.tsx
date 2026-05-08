@@ -45,10 +45,9 @@ export default function Artist() {
   });
 
   const LangToggle = () => (
-    <div className="flex items-center gap-1 text-xs font-semibold">
-      <button onClick={() => setLang("fr")} className={`transition-colors ${lang === "fr" ? "text-blue-500" : "text-zinc-400 hover:text-zinc-600"}`}>FR</button>
-      <span className="text-zinc-300">/</span>
-      <button onClick={() => setLang("en")} className={`transition-colors ${lang === "en" ? "text-blue-500" : "text-zinc-400 hover:text-zinc-600"}`}>EN</button>
+    <div className="flex items-center gap-2">
+      <button onClick={() => setLang("fr")} className={`text-lg transition-opacity ${lang === "fr" ? "opacity-100" : "opacity-30 hover:opacity-60"}`}>🇫🇷</button>
+      <button onClick={() => setLang("en")} className={`text-lg transition-opacity ${lang === "en" ? "opacity-100" : "opacity-30 hover:opacity-60"}`}>🇬🇧</button>
     </div>
   );
 
