@@ -12,10 +12,13 @@ export default function Artist() {
   }, []);
 
   const progress = Math.min(1, scrollY / 350);
-  const sideStyle = (dir: "left" | "right") => ({
-    transform: `translateX(${dir === "left" ? -progress * 80 : progress * 80}px)`,
-    opacity: 1 - progress,
-    filter: `blur(${progress * 10}px)`,
+  const opacity = 1 - progress;
+  const blur = `blur(${progress * 10}px)`;
+
+  const imgStyle = (x: number, y: number, rot: number) => ({
+    transform: `translateX(${progress * x}px) translateY(${progress * y}px) rotate(${progress * rot}deg)`,
+    opacity,
+    filter: blur,
     transition: "none",
   });
 
@@ -50,16 +53,16 @@ export default function Artist() {
 <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
 
   {/* Images gauche */}
-<div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none" style={sideStyle("left")}>
-  <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" />
-  <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" />
-  <img src="/baltazar.png" className="w-80 grayscale opacity-50 -mt-10 -ml-19" />
+<div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
+  <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" style={imgStyle(-55, -20, -4)} />
+  <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" style={imgStyle(-90, 15, 6)} />
+  <img src="/baltazar.png" className="w-80 grayscale opacity-50 -mt-10 -ml-19" style={imgStyle(-65, -10, -8)} />
 </div>
 
 {/* Images droite */}
-<div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none" style={sideStyle("right")}>
-  <img src="/montagne.png" className="w-88 grayscale opacity-50 -mt-25 -mr-18" />
-  <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" />
+<div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
+  <img src="/montagne.png" className="w-88 grayscale opacity-50 -mt-25 -mr-18" style={imgStyle(70, -15, 5)} />
+  <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" style={imgStyle(45, 20, -6)} />
 </div>
 
   {/* Photo + Logo - centre */}
