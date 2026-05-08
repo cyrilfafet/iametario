@@ -37,7 +37,7 @@ const demos = [
   },
 ];
 
-type Avis = { stars: number; nom: string | null; created_at: string };
+type Avis = { stars: number; nom: string | null; montant: number | null; created_at: string };
 
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -77,6 +77,7 @@ function RatingsTicker({ avis }: { avis: Avis[] }) {
               <span>{"⭐".repeat(a.stars)}</span>
               <span className="text-zinc-400">—</span>
               <span>{a.nom || "Anonyme"}</span>
+              {a.montant && <><span className="text-zinc-300">·</span><span className="text-zinc-400">{a.montant} €</span></>}
               <span className="text-zinc-300">·</span>
               <span className="text-zinc-400">{timeAgo(a.created_at)}</span>
             </span>

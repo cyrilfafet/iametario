@@ -2,7 +2,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const { code, stars, nom } = await request.json();
+  const { code, stars, nom, montant } = await request.json();
 
   if (!code || !stars || stars < 1 || stars > 5) {
     return Response.json({ error: "Paramètres invalides" }, { status: 400 });
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
   const { error } = await supabaseAdmin
     .from("avis")
-    .insert({ code, stars, nom: nom?.trim() || null });
+    .insert({ code, stars, nom: nom?.trim() || null, montant: montant || null });
 
   if (error) {
     console.error("Supabase error:", error);
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from("avis")
-    .select("stars, nom, created_at")
+    .select("stars, nom, montant, created_at")
     .order("created_at", { ascending: false })
     .limit(5);
 

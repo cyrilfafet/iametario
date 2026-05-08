@@ -118,7 +118,7 @@ function LivraisonInner() {
     await fetch("/api/avis", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: livraison.code, stars: selectedStar, nom: avisNom }),
+      body: JSON.stringify({ code: livraison.code, stars: selectedStar, nom: avisNom, montant: 30 + (livraison.solde || 0) }),
     });
     setAvisSubmitted(true);
     setAvisLoading(false);
