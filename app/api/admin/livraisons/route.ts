@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabaseAdmin
     .from("livraisons")
     .select("code, prenom, nom_projet, solde, paiement_solde, created_at")
+    .or("paiement_solde.eq.true,solde.eq.0")
     .order("created_at", { ascending: false })
     .limit(15);
 

@@ -274,7 +274,7 @@ export default function Admin() {
           {/* Colonne droite — récap livraisons */}
           <div className="hidden lg:block w-72 flex-shrink-0">
             <div className="sticky top-28">
-              <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Livraisons récentes</p>
+              <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Commandes payées</p>
               {livraisons.length === 0 ? (
                 <p className="text-zinc-400 text-sm">Aucune livraison.</p>
               ) : (
@@ -282,7 +282,6 @@ export default function Admin() {
                   {livraisons.map(l => {
                     const date = new Date(l.created_at);
                     const dateStr = date.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
-                    const isPaid = l.paiement_solde || !l.solde;
                     return (
                       <a
                         key={l.code}
@@ -293,9 +292,6 @@ export default function Admin() {
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-sm font-medium text-zinc-900 truncate group-hover:text-blue-500 transition-colors">{l.nom_projet}</span>
-                          <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${isPaid ? "bg-green-50 text-green-600" : "bg-amber-50 text-amber-600"}`}>
-                            {isPaid ? "Payé" : `${l.solde} €`}
-                          </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-zinc-400">{l.prenom}</span>
