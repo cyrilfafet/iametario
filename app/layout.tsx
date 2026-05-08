@@ -41,7 +41,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <div aria-hidden="true" style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,opacity:0.12}}>
+        <div aria-hidden="true" style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,opacity:0.35}}>
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <filter id="grain">
               <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" result="noise"/>
