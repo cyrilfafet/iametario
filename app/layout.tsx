@@ -41,13 +41,14 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <div aria-hidden="true" style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,opacity:0.35}}>
+        <div aria-hidden="true" style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,opacity:0.18}}>
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <filter id="grain">
-              <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" result="noise"/>
-              <feColorMatrix type="saturate" values="0" in="noise"/>
-            </filter>
-            <rect width="100%" height="100%" filter="url(#grain)"/>
+            <defs>
+              <pattern id="waves" x="0" y="0" width="200" height="28" patternUnits="userSpaceOnUse">
+                <path d="M 0,14 C 25,4 50,24 100,14 C 150,4 175,24 200,14" stroke="#444" strokeWidth="0.7" fill="none"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#waves)"/>
           </svg>
         </div>
       </body>
