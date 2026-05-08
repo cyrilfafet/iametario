@@ -1,8 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Artist() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const progress = Math.min(1, scrollY / 350);
+  const sideStyle = (dir: "left" | "right") => ({
+    transform: `translateX(${dir === "left" ? -progress * 80 : progress * 80}px)`,
+    opacity: 1 - progress,
+    filter: `blur(${progress * 10}px)`,
+    transition: "none",
+  });
+
   return (
     <main className="min-h-screen text-zinc-900 flex flex-col">
 
@@ -31,20 +47,21 @@ export default function Artist() {
       )}
 
       {/* Hero */}
-<section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
+<section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative">
 
   {/* Images gauche */}
-<div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
+<div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none" style={sideStyle("left")}>
   <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" />
   <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" />
   <img src="/baltazar.png" className="w-80 grayscale opacity-50 -mt-10 -ml-19" />
 </div>
 
 {/* Images droite */}
-<div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
+<div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none" style={sideStyle("right")}>
   <img src="/montagne.png" className="w-88 grayscale opacity-50 -mt-25 -mr-18" />
   <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" />
 </div>
+
   {/* Photo + Logo - centre */}
 <div className="flex flex-col items-center">
   <img src="/DSC_1607.png" alt="E-Tario" className="w-50 md:w-130 -mt-20" />
