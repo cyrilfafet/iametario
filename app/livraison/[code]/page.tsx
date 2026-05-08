@@ -141,13 +141,13 @@ function LivraisonInner() {
   };
 
   if (notFound) return (
-    <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center">
+    <main className="min-h-screen text-zinc-900 flex items-center justify-center">
       <p className="text-zinc-500">Livraison introuvable.</p>
     </main>
   );
 
   if (!livraison) return (
-    <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center">
+    <main className="min-h-screen text-zinc-900 flex items-center justify-center">
       <p className="text-zinc-400 text-sm animate-pulse">Chargement…</p>
     </main>
   );
@@ -155,7 +155,7 @@ function LivraisonInner() {
   const isUnlocked = livraison.paiement_solde || !livraison.solde;
 
   return (
-    <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
+    <main className="min-h-screen text-zinc-900 flex flex-col">
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
@@ -341,7 +341,7 @@ function LivraisonInner() {
 export default function LivraisonPage() {
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center">
+      <main className="min-h-screen text-zinc-900 flex items-center justify-center">
         <p className="text-zinc-400 text-sm animate-pulse">Chargement…</p>
       </main>
     }>

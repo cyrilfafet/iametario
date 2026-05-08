@@ -114,7 +114,7 @@ export default function Admin() {
 
   if (!authenticated) {
     return (
-      <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center px-6">
+      <main className="min-h-screen text-zinc-900 flex items-center justify-center px-6">
         <div className="w-full max-w-sm">
           <img src="/Logo _V1_black.png" alt="E-Tario" className="h-5 mx-auto mb-12" />
           <div className="flex flex-col gap-4">
@@ -140,7 +140,7 @@ export default function Admin() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-zinc-900">
+    <main className="min-h-screen text-zinc-900">
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6 hover:opacity-70 transition-opacity" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">

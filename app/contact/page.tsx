@@ -18,7 +18,7 @@ export default function Contact() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
+    <main className="min-h-screen text-zinc-900 flex flex-col">
 
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>

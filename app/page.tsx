@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function Artist() {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
+    <main className="min-h-screen text-zinc-900 flex flex-col">
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6">
