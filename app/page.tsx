@@ -12,7 +12,7 @@ export default function Artist() {
   }, []);
 
   const progress = Math.min(1, scrollY / 350);
-  const opacity = 1 - progress;
+  const opacity = 0.5 * (1 - progress);
   const blur = `blur(${progress * 10}px)`;
 
   const imgStyle = (x: number, y: number, rot: number) => ({
