@@ -151,114 +151,67 @@ export default function Artist() {
 
           {/* Titre */}
           <div className="text-center mb-14">
-            <p className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Booking</p>
-            <h2 className="text-3xl font-bold mb-3">Travaillons ensemble.</h2>
-            <p className="text-zinc-500 text-base">Disponible pour clubs, festivals et événements privés.</p>
+            <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Booking</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Donnez une vraie signature à votre soirée.</h2>
+            <p className="text-zinc-400 text-xs tracking-wide mb-4">+1500 sets · Clubs · Festivals · Ibiza · Sunburn Festival</p>
+            <p className="text-zinc-500 text-base mb-7">Disponible pour clubs, festivals et événements privés.</p>
+            <a href="#booking-form" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
+              Booker une date
+            </a>
           </div>
 
           {/* 3 blocs */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
             <div className="border border-zinc-200 rounded-2xl px-7 py-8">
-              <p className="text-zinc-900 font-semibold mb-1">Clubs & Résidences</p>
-              <p className="text-zinc-400 text-xs mb-4 italic">L'expertise du clubbing.</p>
-              <p className="text-zinc-500 text-sm leading-relaxed">Sets House / Electro, lecture de foule en temps réel et mashups exclusifs. Résidence actuelle au Bal'tazar.</p>
+              <p className="text-zinc-900 font-semibold mb-3">Clubs & Résidences</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">L'expertise du clubbing. Lecture de foule en temps réel et mashups exclusifs. Résident au Baltazar.</p>
             </div>
             <div className="border border-zinc-200 rounded-2xl px-7 py-8">
-              <p className="text-zinc-900 font-semibold mb-1">Festivals & Open-Air</p>
-              <p className="text-zinc-400 text-xs mb-4 italic">Énergie et performance.</p>
-              <p className="text-zinc-500 text-sm leading-relaxed">Maîtrise des grands espaces et des programmations festives. Une expérience forgée sur scène pour un impact maximal.</p>
+              <p className="text-zinc-900 font-semibold mb-3">Festivals & Open-Air</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Format grande scène. Adaptabilité et énergie pour vos événements extérieurs et programmations festives.</p>
             </div>
             <div className="border border-zinc-200 rounded-2xl px-7 py-8">
-              <p className="text-zinc-900 font-semibold mb-1">Événements Privés & Corporate</p>
-              <p className="text-zinc-400 text-xs mb-4 italic">L'élégance sur-mesure.</p>
-              <p className="text-zinc-500 text-sm leading-relaxed">Mariages premium, lancements de marque et soirées d'entreprise. Une culture musicale élargie pour une prestation haut de gamme et personnalisée.</p>
+              <p className="text-zinc-900 font-semibold mb-3">Privé & Corporate</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">L'élégance musicale. Une sélection pointue et une technique irréprochable pour vos événements d'exception et soirées privées.</p>
             </div>
-          </div>
-
-          {/* Presskit */}
-          <div className="text-center mb-10">
-            <a
-              href="/presskit.pdf"
-              target="_blank"
-              className="inline-flex items-center gap-3 bg-zinc-900 text-white px-6 py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Télécharger mon presskit
-            </a>
           </div>
 
           {/* Formulaire */}
-          {bookingSubmitted ? (
-            <div className="border border-blue-500/40 rounded-2xl px-6 py-10 text-center">
-              <p className="text-blue-500 font-semibold mb-1">Demande envoyée ✓</p>
-              <p className="text-zinc-500 text-sm">Je reviens vers toi rapidement.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleBooking} className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="Nom / Structure"
-                  value={bookingNom}
-                  onChange={e => setBookingNom(e.target.value)}
-                  required
-                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={bookingEmail}
-                  onChange={e => setBookingEmail(e.target.value)}
-                  required
-                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
-                />
+          <div id="booking-form">
+            {bookingSubmitted ? (
+              <div className="border border-blue-500/40 rounded-2xl px-6 py-10 text-center">
+                <p className="text-blue-500 font-semibold mb-1">Demande envoyée ✓</p>
+                <p className="text-zinc-500 text-sm">Je reviens vers toi rapidement.</p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <select
-                  value={bookingType}
-                  onChange={e => setBookingType(e.target.value)}
-                  required
-                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
-                >
-                  <option value="" disabled>Type d'événement</option>
-                  <option value="Club">Club</option>
-                  <option value="Festival">Festival</option>
-                  <option value="Événement privé">Événement privé</option>
-                  <option value="Autre">Autre</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder="Date envisagée"
-                  value={bookingDate}
-                  onChange={e => setBookingDate(e.target.value)}
-                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Budget approximatif (optionnel)"
-                value={bookingBudget}
-                onChange={e => setBookingBudget(e.target.value)}
-                className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
-              />
-              <textarea
-                placeholder="Message"
-                value={bookingMessage}
-                onChange={e => setBookingMessage(e.target.value)}
-                rows={4}
-                className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
-              />
-              <button
-                type="submit"
-                disabled={bookingLoading}
-                className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
-              >
-                {bookingLoading ? "Envoi…" : "Envoyer ma demande"}
-              </button>
-            </form>
-          )}
+            ) : (
+              <form onSubmit={handleBooking} className="flex flex-col gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <input type="text" placeholder="Nom / Structure" value={bookingNom} onChange={e => setBookingNom(e.target.value)} required className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
+                  <input type="email" placeholder="Email" value={bookingEmail} onChange={e => setBookingEmail(e.target.value)} required className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <select value={bookingType} onChange={e => setBookingType(e.target.value)} required className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 focus:outline-none focus:border-blue-500 transition-colors cursor-pointer">
+                    <option value="" disabled>Type d'événement</option>
+                    <option value="Club">Club</option>
+                    <option value="Festival">Festival</option>
+                    <option value="Événement privé & Corporate">Événement privé & Corporate</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                  <input type="text" placeholder="Date envisagée" value={bookingDate} onChange={e => setBookingDate(e.target.value)} className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
+                </div>
+                <input type="text" placeholder="Budget approximatif (optionnel)" value={bookingBudget} onChange={e => setBookingBudget(e.target.value)} className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
+                <textarea placeholder="Message" value={bookingMessage} onChange={e => setBookingMessage(e.target.value)} rows={4} className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none" />
+                <button type="submit" disabled={bookingLoading} className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50">
+                  {bookingLoading ? "Envoi…" : "Envoyer ma demande"}
+                </button>
+                <p className="text-center mt-1">
+                  <a href="/presskit.pdf" target="_blank" className="text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
+                    Télécharger mon presskit →
+                  </a>
+                </p>
+              </form>
+            )}
+          </div>
         </div>
       </section>
 
