@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Syne } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,6 +49,18 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <I18nProvider>{children}</I18nProvider>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-CRY48CC6X0"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-CRY48CC6X0');
+          `}
+        </Script>
       </body>
     </html>
   );
