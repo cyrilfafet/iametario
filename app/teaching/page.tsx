@@ -92,9 +92,10 @@ export default function Teaching() {
 
         {/* Hero */}
         <div className="mb-16 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">
+          <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-3">
             Devenir DJ résident.
           </h1>
+          <p className="text-zinc-400 text-sm mb-5">Formation disponible en septembre 2026.</p>
           <p className="text-zinc-500 text-base leading-relaxed">
             La plupart te vendent du rêve. Moi je te propose la stabilité. Une formation complète pour devenir DJ résident : la technique, la mentalité et le réseau.
           </p>
