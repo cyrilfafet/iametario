@@ -41,20 +41,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <div aria-hidden="true" style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,opacity:0.22}}>
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="topo">
-                <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="4" seed="5" result="turb"/>
-                <feDisplacementMap in="SourceGraphic" in2="turb" scale="55" xChannelSelector="R" yChannelSelector="G"/>
-              </filter>
-              <pattern id="hlines" x="0" y="0" width="100%" height="22" patternUnits="userSpaceOnUse">
-                <line x1="0" y1="11" x2="10000" y2="11" stroke="#333" strokeWidth="0.65" fill="none"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#hlines)" filter="url(#topo)"/>
-          </svg>
-        </div>
       </body>
     </html>
   );
