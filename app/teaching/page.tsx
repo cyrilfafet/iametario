@@ -69,27 +69,27 @@ export default function Teaching() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col">
+    <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
-        <div className="hidden md:flex gap-8 text-sm text-zinc-400">
-          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-          <a href="/teaching" className="text-blue-400">TEACH</a>
-          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        <div className="hidden md:flex gap-8 text-sm text-zinc-500">
+          <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+          <a href="/teaching" className="text-blue-500">TEACH</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
       </nav>
       {menuOpen && (
-        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
-          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-          <a href="/teaching" className="text-blue-400">TEACH</a>
-          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
+          <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+          <a href="/teaching" className="text-blue-500">TEACH</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
 
@@ -100,7 +100,7 @@ export default function Teaching() {
           <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">
             Devenir Dj résident.
           </h1>
-          <p className="text-zinc-400 text-base leading-relaxed">
+          <p className="text-zinc-500 text-base leading-relaxed">
             Ici je ne te vends pas de jets privés et paillettes, je te propose la stabilité. Une formation qui t'apprend la technique, la mentalité et le réseau pour décrocher ta première résidence.
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function Teaching() {
         <div className="text-center mb-20">
           <a
             href="/"
-            className="inline-block bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors"
+            className="inline-block bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors"
           >
             Qui suis-je ?
           </a>
@@ -132,7 +132,7 @@ export default function Teaching() {
                   key={p.id}
                   d={p.path}
                   fill={p.color}
-                  stroke="#000"
+                  stroke="#ffffff"
                   strokeWidth="2.5"
                   opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
                   className="cursor-pointer transition-opacity duration-200"
@@ -140,9 +140,9 @@ export default function Teaching() {
                 />
               ))}
               {/* Centre */}
-              <circle cx="100" cy="100" r="32" fill="#0a0a0a" stroke="#27272a" strokeWidth="1.5" />
-              <text x="100" y="97" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" letterSpacing="1.5">DJ</text>
-              <text x="100" y="109" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" letterSpacing="1.5">RÉSIDENT</text>
+              <circle cx="100" cy="100" r="32" fill="#ffffff" stroke="#e4e4e7" strokeWidth="1.5" />
+              <text x="100" y="97" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">DJ</text>
+              <text x="100" y="109" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">RÉSIDENT</text>
               {/* Labels sections */}
               {pillars.map(p => (
                 <text
@@ -164,12 +164,12 @@ export default function Teaching() {
 
           {/* Pack connector */}
           <div className="flex md:flex-col items-center gap-2">
-            <div className="w-8 h-px md:w-px md:h-8 bg-zinc-700" />
-            <div className="border border-zinc-700 rounded-xl px-3 py-2 text-center">
-              <p className="text-zinc-400 text-xs font-semibold uppercase tracking-widest">Pack</p>
-              <p className="text-blue-400 text-xs mt-0.5">Prix réduit</p>
+            <div className="w-8 h-px md:w-px md:h-8 bg-zinc-300" />
+            <div className="border border-zinc-300 rounded-xl px-3 py-2 text-center">
+              <p className="text-zinc-500 text-xs font-semibold uppercase tracking-widest">Pack</p>
+              <p className="text-blue-500 text-xs mt-0.5">Prix réduit</p>
             </div>
-            <div className="w-8 h-px md:w-px md:h-8 bg-zinc-700" />
+            <div className="w-8 h-px md:w-px md:h-8 bg-zinc-300" />
           </div>
 
           {/* Cercle 2 — Mashup */}
@@ -178,21 +178,21 @@ export default function Teaching() {
             <div
               className="w-[280px] h-[280px] rounded-full flex flex-col items-center justify-center text-center px-10 transition-all"
               style={{
-                background: "radial-gradient(circle at center, #1a2035, #0a0a0a)",
+                background: "radial-gradient(circle at center, #e8f0fe, #f8faff)",
                 border: "1.5px solid transparent",
                 backgroundClip: "padding-box",
-                boxShadow: "0 0 0 1.5px #3b82f640, inset 0 0 40px #3b82f608",
+                boxShadow: "0 0 0 1.5px #3b82f660, inset 0 0 40px #3b82f610",
               }}
             >
-              <p className="text-white font-bold text-sm mb-2">FL Studio</p>
-              <p className="text-zinc-400 text-xs leading-relaxed">
+              <p className="text-zinc-900 font-bold text-sm mb-2">FL Studio</p>
+              <p className="text-zinc-500 text-xs leading-relaxed">
                 Crée tes propres mashups de A à Z. Aucun prérequis logiciel.
               </p>
             </div>
           </div>
         </div>
 
-        <p className="text-zinc-700 text-xs text-center mb-6">Clique sur un pilier pour en savoir plus</p>
+        <p className="text-zinc-400 text-xs text-center mb-6">Clique sur un pilier pour en savoir plus</p>
 
         {/* Description pilier actif */}
         <div className="min-h-[56px] mb-6">
@@ -204,7 +204,7 @@ export default function Teaching() {
               <p className="text-xs uppercase tracking-widest mb-1" style={{ color: pillars[activePillar].color }}>
                 {pillars[activePillar].label}
               </p>
-              <p className="text-zinc-300 text-sm leading-relaxed">
+              <p className="text-zinc-500 text-sm leading-relaxed">
                 {pillars[activePillar].description}
               </p>
             </div>
@@ -212,19 +212,19 @@ export default function Teaching() {
         </div>
 
         {/* Description Mashup */}
-        <div className="border border-zinc-800 rounded-xl px-5 py-4 mb-20 text-center">
-          <p className="text-zinc-400 text-sm leading-relaxed">
-            <span className="text-white font-semibold">Formation Mashup</span> — La création de mashups, une des compétences les plus sous-estimées.
+        <div className="border border-zinc-200 rounded-xl px-5 py-4 mb-20 text-center">
+          <p className="text-zinc-500 text-sm leading-relaxed">
+            <span className="text-zinc-900 font-semibold">Formation Mashup</span> — La création de mashups, une des compétences les plus sous-estimées.
             Les mashups peuvent te permettre de te démarquer dès tes premiers sets en club, mais aussi sur les réseaux. Prêt à montrer qui tu es ?
           </p>
         </div>
 
         {/* Sondage pricing */}
-        <div className="border-t border-zinc-800 pt-14 mb-20">
+        <div className="border-t border-zinc-200 pt-14 mb-20">
           <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Sondage</p>
           <h2 className="text-xl font-bold mb-1">La formation est prévue pour septembre 2026.</h2>
           <p className="text-zinc-500 text-sm mb-8">Aide-moi à la calibrer.</p>
-          <p className="text-zinc-300 text-sm mb-5">
+          <p className="text-zinc-500 text-sm mb-5">
             Pour une formation complète (technique + psychologie + réseau) pour devenir DJ résident, tu mettrais...
           </p>
           <div className="grid grid-cols-2 gap-3">
@@ -233,8 +233,8 @@ export default function Teaching() {
                 key={opt.value}
                 className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-colors ${
                   price === opt.value
-                    ? "border-blue-400 bg-blue-400/10 text-white"
-                    : "border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white"
+                    ? "border-blue-500 bg-blue-500/10 text-zinc-900"
+                    : "border-zinc-200 text-zinc-500 hover:border-zinc-400 hover:text-zinc-900"
                 }`}
               >
                 <input
@@ -243,7 +243,7 @@ export default function Teaching() {
                   value={opt.value}
                   checked={price === opt.value}
                   onChange={() => setPrice(opt.value)}
-                  className="accent-blue-400"
+                  className="accent-blue-500"
                 />
                 <span className="text-sm">{opt.label}</span>
               </label>
@@ -252,12 +252,12 @@ export default function Teaching() {
         </div>
 
         {/* Email */}
-        <div className="border-t border-zinc-800 pt-14 pb-8">
+        <div className="border-t border-zinc-200 pt-14 pb-8">
           {submitted ? (
-            <p className="text-blue-400 text-sm text-center">Tu seras prévenu en avant-première ✓</p>
+            <p className="text-blue-500 text-sm text-center">Tu seras prévenu en avant-première ✓</p>
           ) : (
             <>
-              <p className="text-zinc-300 text-sm text-center mb-6">Je veux être notifié en avant-première</p>
+              <p className="text-zinc-500 text-sm text-center mb-6">Je veux être notifié en avant-première</p>
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
@@ -265,17 +265,17 @@ export default function Teaching() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
+                  className="flex-1 bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50 whitespace-nowrap"
+                  className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
                   {loading ? "…" : "Me prévenir"}
                 </button>
               </form>
-              <p className="text-zinc-700 text-xs text-center mt-3">Aucun spam. Un seul email à la sortie.</p>
+              <p className="text-zinc-400 text-xs text-center mt-3">Aucun spam. Un seul email à la sortie.</p>
             </>
           )}
         </div>

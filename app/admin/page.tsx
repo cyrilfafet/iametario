@@ -110,11 +110,11 @@ export default function Admin() {
     setPreviewFile(null); setWavFile(null); setMp3File(null); setCopied(false);
   };
 
-  const inputClass = "bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors w-full";
+  const inputClass = "bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors w-full";
 
   if (!authenticated) {
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+      <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center px-6">
         <div className="w-full max-w-sm">
           <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-5 mx-auto mb-12" />
           <div className="flex flex-col gap-4">
@@ -129,7 +129,7 @@ export default function Admin() {
             {authError && <p className="text-red-400 text-xs text-center">Mot de passe incorrect</p>}
             <button
               onClick={login}
-              className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors"
+              className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors"
             >
               Accéder
             </button>
@@ -140,50 +140,50 @@ export default function Admin() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-white text-zinc-900">
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6 hover:opacity-70 transition-opacity" /></a>
-        <div className="hidden md:flex gap-8 text-sm text-zinc-400">
-          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        <div className="hidden md:flex gap-8 text-sm text-zinc-500">
+          <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
       </nav>
       {menuOpen && (
-        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
-          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
+          <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
       <div className="max-w-lg mx-auto px-6 pb-12">
         <div className="flex items-center justify-end mb-12">
-          <span className="text-zinc-600 text-xs uppercase tracking-widest">Back-office</span>
+          <span className="text-zinc-400 text-xs uppercase tracking-widest">Back-office</span>
         </div>
 
         {deliveryUrl ? (
           <div className="flex flex-col gap-6">
-            <div className="border border-blue-400 rounded-2xl px-6 py-8 text-center flex flex-col gap-4">
-              <p className="text-blue-400 font-semibold">Livraison créée ✓</p>
+            <div className="border border-blue-500 rounded-2xl px-6 py-8 text-center flex flex-col gap-4">
+              <p className="text-blue-500 font-semibold">Livraison créée ✓</p>
               {email && <p className="text-zinc-500 text-xs">Mail envoyé à {email}</p>}
-              <p className="text-zinc-300 text-sm break-all">{deliveryUrl}</p>
+              <p className="text-zinc-500 text-sm break-all">{deliveryUrl}</p>
               <button
                 onClick={() => { navigator.clipboard.writeText(deliveryUrl); setCopied(true); }}
-                className="bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors mx-auto"
+                className="bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors mx-auto"
               >
                 {copied ? "Copié ✓" : "Copier le lien"}
               </button>
             </div>
             <button
               onClick={reset}
-              className="text-zinc-500 text-sm text-center hover:text-white transition-colors"
+              className="text-zinc-500 text-sm text-center hover:text-zinc-900 transition-colors"
             >
               Créer une autre livraison
             </button>
@@ -202,16 +202,16 @@ export default function Admin() {
                     if (c) selectClient(c);
                   }}
                   defaultValue=""
-                  className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:border-blue-400 transition-colors w-full cursor-pointer"
+                  className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 focus:outline-none focus:border-blue-500 transition-colors w-full cursor-pointer"
                 >
-                  <option value="" disabled className="text-zinc-600">— Choisir un client —</option>
+                  <option value="" disabled className="text-zinc-400">— Choisir un client —</option>
                   {clients.map((c, i) => (
                     <option key={i} value={c.email}>
                       {c.nom} — {c.email}
                     </option>
                   ))}
                 </select>
-                <p className="text-zinc-700 text-xs mt-2">Ou saisissez manuellement ci-dessous</p>
+                <p className="text-zinc-400 text-xs mt-2">Ou saisissez manuellement ci-dessous</p>
               </div>
             )}
 
@@ -234,28 +234,28 @@ export default function Admin() {
               className={inputClass}
             />
 
-            <p className="text-zinc-600 text-xs uppercase tracking-widest pt-2">Fichiers audio</p>
+            <p className="text-zinc-400 text-xs uppercase tracking-widest pt-2">Fichiers audio</p>
 
-            <div className="border border-zinc-800 rounded-xl px-5 py-4">
-              <label className="text-sm text-zinc-400 block mb-1">Aperçu MP3 <span className="text-zinc-600">(basse qualité / watermarked)</span></label>
+            <div className="border border-zinc-200 rounded-xl px-5 py-4">
+              <label className="text-sm text-zinc-500 block mb-1">Aperçu MP3 <span className="text-zinc-400">(basse qualité / watermarked)</span></label>
               <input type="file" accept=".mp3,audio/mpeg" onChange={e => setPreviewFile(e.target.files?.[0] || null)}
-                className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 w-full" />
+                className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
             </div>
-            <div className="border border-zinc-800 rounded-xl px-5 py-4">
-              <label className="text-sm text-zinc-400 block mb-1">WAV final <span className="text-zinc-600">(haute qualité — déverrouillé après paiement)</span></label>
+            <div className="border border-zinc-200 rounded-xl px-5 py-4">
+              <label className="text-sm text-zinc-500 block mb-1">WAV final <span className="text-zinc-400">(haute qualité — déverrouillé après paiement)</span></label>
               <input type="file" accept=".wav,audio/wav" onChange={e => setWavFile(e.target.files?.[0] || null)}
-                className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 w-full" />
+                className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
             </div>
-            <div className="border border-zinc-800 rounded-xl px-5 py-4">
-              <label className="text-sm text-zinc-400 block mb-1">MP3 final <span className="text-zinc-600">(standard — déverrouillé après paiement)</span></label>
+            <div className="border border-zinc-200 rounded-xl px-5 py-4">
+              <label className="text-sm text-zinc-500 block mb-1">MP3 final <span className="text-zinc-400">(standard — déverrouillé après paiement)</span></label>
               <input type="file" accept=".mp3,audio/mpeg" onChange={e => setMp3File(e.target.files?.[0] || null)}
-                className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 w-full" />
+                className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
             </div>
 
             <button
               onClick={createDelivery}
               disabled={loading || !prenom || !nomProjet || !previewFile || !wavFile || !mp3File}
-              className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors mt-2 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors mt-2 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading ? progressLabel || "Chargement…" : "Créer la livraison"}
             </button>

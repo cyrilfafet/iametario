@@ -90,35 +90,35 @@ function CreationInner() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-white text-zinc-900">
 
     <nav className="flex items-center justify-between px-8 py-6">
   <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
-  <div className="hidden md:flex gap-8 text-sm text-zinc-400">
-    <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-    <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-    <a href="/creation" className="text-blue-400">CREATE</a>
-    <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+  <div className="hidden md:flex gap-8 text-sm text-zinc-500">
+    <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+    <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+    <a href="/creation" className="text-blue-500">CREATE</a>
+    <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
   <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
-    <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-    <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
-    <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+    <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+    <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
+    <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
   </button>
 </nav>
 
 {menuOpen && (
-  <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
-    <a href="/artist" className="hover:text-blue-400 transition-colors">ARTIST</a>
-    <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-    <a href="/creation" className="text-blue-400">CREATE</a>
-    <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+  <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
+    <a href="/artist" className="hover:text-blue-500 transition-colors">ARTIST</a>
+    <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+    <a href="/creation" className="text-blue-500">CREATE</a>
+    <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
 )}
 
       {/* Hero */}
 <section className="relative text-center px-8 py-16 overflow-hidden min-h-[420px] flex flex-col items-center justify-center">
-  
+
   {/* Images gauche */}
 <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
   <img src="/radio.png" className="w-70 grayscale opacity-50 mt-0 ml-0" />
@@ -136,11 +136,11 @@ function CreationInner() {
   <div className="relative z-10">
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4">Services Audio</p>
     <h1 className="text-5xl font-bold mb-6">Create</h1>
-    <p className="text-zinc-400 text-lg max-w-xl mx-auto">
+    <p className="text-zinc-500 text-lg max-w-xl mx-auto">
       Le bon son au bon moment. Sur mesure, toujours.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
-    <a href="#commander" className="inline-block mt-6 bg-blue-400 text-black px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors">
+    <a href="#commander" className="inline-block mt-6 bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
       Commander un montage audio
     </a>
   </div>
@@ -148,7 +148,7 @@ function CreationInner() {
 </section>
 
       {/* Démos */}
-      <section className="border-t border-zinc-900 px-8 py-12">
+      <section className="border-t border-zinc-100 px-8 py-12">
         <div className="max-w-4xl mx-auto">
           <p className="text-zinc-500 text-sm tracking-widest uppercase mb-12 text-center">Ils m'ont demandé, j'ai livré</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -156,35 +156,35 @@ function CreationInner() {
               <div key={demo.title} className="flex flex-col gap-3">
                 {/* Bulle client */}
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs text-zinc-400 flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center text-xs text-zinc-500 flex-shrink-0">
                     {demo.client[0]}
                   </div>
-                  <div className="bg-zinc-900 rounded-2xl rounded-tl-sm px-4 py-3">
+                  <div className="bg-zinc-50 rounded-2xl rounded-tl-sm px-4 py-3">
                     <p className="text-xs text-zinc-500 mb-1">{demo.client}</p>
-                    <p className="text-sm text-zinc-200 leading-relaxed">{demo.brief}</p>
+                    <p className="text-sm text-zinc-700 leading-relaxed">{demo.brief}</p>
                   </div>
                 </div>
                 {/* Lecteur audio */}
                 <div className="ml-11 flex items-center gap-4">
-                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-800 hover:border-blue-400" : "border-zinc-900 opacity-60"}`}>
+                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-blue-500" : "border-zinc-100 opacity-60"}`}>
                     <div className="flex items-center gap-4 mb-3">
                       <button
                         onClick={() => demo.file && togglePlay(index)}
                         disabled={!demo.file}
-                        className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center hover:border-blue-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {playing === index ? (
                           <span className="w-3 h-3 flex gap-0.5">
-                            <span className="w-1 h-full bg-white rounded-sm" />
-                            <span className="w-1 h-full bg-white rounded-sm" />
+                            <span className="w-1 h-full bg-zinc-900 rounded-sm" />
+                            <span className="w-1 h-full bg-zinc-900 rounded-sm" />
                           </span>
                         ) : (
-                          <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent border-l-white ml-0.5" />
+                          <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent border-l-zinc-900 ml-0.5" />
                         )}
                       </button>
                       <div className="flex-1">
                         <p className="text-sm font-medium mb-1">{demo.title}</p>
-                        <span className="text-xs text-blue-400 border border-blue-400 rounded-full px-2.5 py-0.5">{demo.tag}</span>
+                        <span className="text-xs text-blue-500 border border-blue-500 rounded-full px-2.5 py-0.5">{demo.tag}</span>
                       </div>
                     </div>
                     {/* Barre de progression */}
@@ -194,9 +194,9 @@ function CreationInner() {
                       max={100}
                       value={progress[index]}
                       onChange={(e) => handleSeek(index, e)}
-                      className="w-full h-1 accent-blue-400 cursor-pointer"
+                      className="w-full h-1 accent-blue-500 cursor-pointer"
                     />
-                    <div className="flex justify-between text-xs text-zinc-600 mt-1">
+                    <div className="flex justify-between text-xs text-zinc-400 mt-1">
                       <span>{fmt((progress[index] / 100) * durations[index])}</span>
                       <span>{fmt(durations[index])}</span>
                     </div>
@@ -211,7 +211,7 @@ function CreationInner() {
                       onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
                     />
                   </div>
-                  <span className="text-base font-semibold text-zinc-300 border border-zinc-700 rounded-full px-3 py-1 flex-shrink-0">{demo.price}</span>
+                  <span className="text-base font-semibold text-zinc-500 border border-zinc-300 rounded-full px-3 py-1 flex-shrink-0">{demo.price}</span>
                 </div>
               </div>
             ))}
@@ -220,16 +220,16 @@ function CreationInner() {
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-zinc-900 px-8">
+      <section className="border-t border-zinc-100 px-8">
         <div className="max-w-2xl mx-auto">
           <button
             onClick={() => setShowFaq(!showFaq)}
             className="w-full flex items-center justify-between py-6 group"
           >
             <p className="text-zinc-500 text-sm tracking-widest uppercase">Questions fréquemment posées</p>
-            <span className={`text-zinc-500 group-hover:text-white transition-all duration-200 text-lg leading-none ${showFaq ? "rotate-45" : ""}`}>+</span>
+            <span className={`text-zinc-500 group-hover:text-zinc-900 transition-all duration-200 text-lg leading-none ${showFaq ? "rotate-45" : ""}`}>+</span>
           </button>
-          {showFaq && <div className="flex flex-col divide-y divide-zinc-900 pb-10">
+          {showFaq && <div className="flex flex-col divide-y divide-zinc-100 pb-10">
             {[
               {
                 q: "Comment se passe la livraison ?",
@@ -269,11 +269,11 @@ function CreationInner() {
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between py-5 text-left gap-4 group"
                 >
-                  <span className={`text-sm font-medium transition-colors ${openFaq === i ? "text-white" : "text-zinc-300 group-hover:text-white"}`}>{q}</span>
+                  <span className={`text-sm font-medium transition-colors ${openFaq === i ? "text-zinc-900" : "text-zinc-500 group-hover:text-zinc-900"}`}>{q}</span>
                   <span className={`text-zinc-500 transition-transform duration-200 text-lg leading-none ${openFaq === i ? "rotate-45" : ""}`}>+</span>
                 </button>
                 {openFaq === i && (
-                  <p className="text-sm text-zinc-400 leading-relaxed pb-5">{a}</p>
+                  <p className="text-sm text-zinc-500 leading-relaxed pb-5">{a}</p>
                 )}
               </div>
             ))}
@@ -282,11 +282,11 @@ function CreationInner() {
       </section>
 
       {/* Formulaire */}
-<section id="commander" className="border-t border-zinc-900 px-8 py-24">
+<section id="commander" className="border-t border-zinc-100 px-8 py-24">
   <div className="max-w-xl mx-auto">
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4 text-center">Contact</p>
     <h2 className="text-3xl font-bold mb-2 text-center">Un projet en tête ?</h2>
-    <p className="text-zinc-400 text-center mb-2">Décrivez votre projet, je valide la faisabilité sous 48h après réception de votre acompte.</p>
+    <p className="text-zinc-500 text-center mb-2">Décrivez votre projet, je valide la faisabilité sous 48h après réception de votre acompte.</p>
     <p className="text-zinc-500 text-sm text-center mb-12">Livraison sous 10 jours · 3 révisions incluses</p>
 
     <form
@@ -315,7 +315,7 @@ function CreationInner() {
         required
         value={nom}
         onChange={e => setNom(e.target.value)}
-        className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
+        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
       />
       <input
         name="email"
@@ -324,9 +324,9 @@ function CreationInner() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors"
+        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
       />
-      <div className="flex flex-col gap-2 border border-zinc-800 rounded-xl px-5 py-4">
+      <div className="flex flex-col gap-2 border border-zinc-200 rounded-xl px-5 py-4">
         <p className="text-xs text-zinc-500 uppercase tracking-widest text-center mb-1">Grille tarifaire</p>
         {[
           { id: "simple", label: "Edit Simple", desc: "Mashup, transition propre, montage court", prix: "50€" },
@@ -335,43 +335,43 @@ function CreationInner() {
         ].map(({ id, label, desc, prix }) => (
           <label
             key={id}
-            className={`flex items-center justify-between gap-4 rounded-lg px-4 py-3 cursor-pointer transition-colors border ${preset === id ? "border-blue-400 bg-blue-400/5" : "border-transparent hover:bg-zinc-900"}`}
+            className={`flex items-center justify-between gap-4 rounded-lg px-4 py-3 cursor-pointer transition-colors border ${preset === id ? "border-blue-500 bg-blue-500/5" : "border-transparent hover:bg-zinc-50"}`}
           >
             <div className="flex items-center gap-3">
-              <input type="radio" name="preset" value={id} checked={preset === id} onChange={() => setPreset(id)} className="accent-blue-400 w-4 h-4 cursor-pointer" />
+              <input type="radio" name="preset" value={id} checked={preset === id} onChange={() => setPreset(id)} className="accent-blue-500 w-4 h-4 cursor-pointer" />
               <div>
-                <p className="text-sm font-medium text-zinc-200">{label}</p>
+                <p className="text-sm font-medium text-zinc-700">{label}</p>
                 <p className="text-xs text-zinc-500">{desc}</p>
               </div>
             </div>
-            <span className="text-sm font-semibold text-zinc-300 shrink-0">{prix}</span>
+            <span className="text-sm font-semibold text-zinc-500 shrink-0">{prix}</span>
           </label>
         ))}
-        <div className="flex gap-8 justify-center border-t border-zinc-800 pt-3 mt-1">
+        <div className="flex gap-8 justify-center border-t border-zinc-200 pt-3 mt-1">
           <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-blue-400 cursor-pointer" />
-            <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Délai urgent <span className="text-zinc-500">(−4 jours, +30€)</span></span>
+            <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-blue-500 cursor-pointer" />
+            <span className="text-sm text-zinc-500 group-hover:text-zinc-900 transition-colors">Délai urgent <span className="text-zinc-400">(−4 jours, +30€)</span></span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-blue-400 cursor-pointer" />
-            <span className="text-sm text-zinc-300 group-hover:text-white transition-colors">Intégration de voix <span className="text-zinc-500">(+40€)</span></span>
+            <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-blue-500 cursor-pointer" />
+            <span className="text-sm text-zinc-500 group-hover:text-zinc-900 transition-colors">Intégration de voix <span className="text-zinc-400">(+40€)</span></span>
           </label>
         </div>
-        <p className="text-zinc-600 text-xs text-center pt-1">Un devis personnalisé vous sera envoyé si votre projet nécessite un ajustement tarifaire.</p>
+        <p className="text-zinc-400 text-xs text-center pt-1">Un devis personnalisé vous sera envoyé si votre projet nécessite un ajustement tarifaire.</p>
       </div>
       <textarea
         name="description"
         placeholder="Décrivez votre projet en détail — plus vous êtes précis, mieux je pourrai vous aider"
         rows={5}
         required
-        className="bg-zinc-900 border border-zinc-800 rounded-xl px-5 py-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors resize-none"
+        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
       />
-      <div className="border border-zinc-800 rounded-xl px-5 py-4 hover:border-zinc-600 transition-colors">
+      <div className="border border-zinc-200 rounded-xl px-5 py-4 hover:border-zinc-400 transition-colors">
         <label className="text-sm text-zinc-500 block mb-2">Joindre un fichier (optionnel)</label>
         <input
           name="fichier"
           type="file"
-          className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700"
+          className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300"
         />
       </div>
       <div className="flex flex-col gap-3">
@@ -389,7 +389,7 @@ function CreationInner() {
             if (data.url) window.location.href = data.url;
             else setLoadingCheckout(false);
           }}
-          className="bg-blue-400 text-black px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loadingCheckout ? "Redirection…" : "Réserver avec un acompte de 30€"}
         </button>
@@ -401,9 +401,9 @@ function CreationInner() {
     </form>
 
     {paymentSuccess && (
-      <div className="mt-8 bg-zinc-900 border border-blue-400 rounded-2xl px-6 py-5 text-center">
-        <p className="text-blue-400 font-semibold mb-1">Acompte reçu ✓</p>
-        <p className="text-zinc-400 text-sm">Merci ! Je vous contacte sous 48h pour lancer votre projet.</p>
+      <div className="mt-8 bg-zinc-50 border border-blue-500 rounded-2xl px-6 py-5 text-center">
+        <p className="text-blue-500 font-semibold mb-1">Acompte reçu ✓</p>
+        <p className="text-zinc-500 text-sm">Merci ! Je vous contacte sous 48h pour lancer votre projet.</p>
       </div>
     )}
 
@@ -411,7 +411,7 @@ function CreationInner() {
 </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 px-8 py-8 text-center text-zinc-600 text-sm">
+      <footer className="border-t border-zinc-100 px-8 py-8 text-center text-zinc-400 text-sm">
         © 2026 E-Tario. Tous droits réservés.
       </footer>
 

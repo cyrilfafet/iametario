@@ -141,41 +141,41 @@ function LivraisonInner() {
   };
 
   if (notFound) return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center">
+    <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center">
       <p className="text-zinc-500">Livraison introuvable.</p>
     </main>
   );
 
   if (!livraison) return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center">
-      <p className="text-zinc-600 text-sm animate-pulse">Chargement…</p>
+    <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center">
+      <p className="text-zinc-400 text-sm animate-pulse">Chargement…</p>
     </main>
   );
 
   const isUnlocked = livraison.paiement_solde || !livraison.solde;
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col">
+    <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
       <nav className="flex items-center justify-between px-8 py-6">
         <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
-        <div className="hidden md:flex gap-8 text-sm text-zinc-400">
-          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        <div className="hidden md:flex gap-8 text-sm text-zinc-500">
+          <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`w-6 h-px bg-white transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
       </nav>
       {menuOpen && (
-        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-900 text-sm text-zinc-400">
-          <a href="/" className="hover:text-blue-400 transition-colors">PERFORM</a>
-          <a href="/teaching" className="hover:text-blue-400 transition-colors">TEACH</a>
-          <a href="/creation" className="hover:text-blue-400 transition-colors">CREATE</a>
-          <a href="/contact" className="hover:text-blue-400 transition-colors">CONTACT</a>
+        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
+          <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+          <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
@@ -183,22 +183,22 @@ function LivraisonInner() {
       <div className="w-full max-w-lg">
         <p className="text-zinc-500 text-xs tracking-widest uppercase mb-3">Livraison privée</p>
         <h1 className="text-3xl font-bold mb-1">Bonjour {livraison.prenom}</h1>
-        <p className="text-zinc-400 text-lg mb-10">{livraison.nom_projet}</p>
+        <p className="text-zinc-500 text-lg mb-10">{livraison.nom_projet}</p>
 
         {/* Player aperçu */}
-        <div className="border border-zinc-800 rounded-2xl px-6 py-5 mb-4">
+        <div className="border border-zinc-200 rounded-2xl px-6 py-5 mb-4">
           <div className="flex items-center gap-4 mb-4">
             <button
               onClick={togglePlay}
-              className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center hover:border-blue-400 transition-colors flex-shrink-0"
+              className="w-10 h-10 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0"
             >
               {playing ? (
                 <span className="w-3 h-3 flex gap-0.5">
-                  <span className="w-1 h-full bg-white rounded-sm" />
-                  <span className="w-1 h-full bg-white rounded-sm" />
+                  <span className="w-1 h-full bg-zinc-900 rounded-sm" />
+                  <span className="w-1 h-full bg-zinc-900 rounded-sm" />
                 </span>
               ) : (
-                <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-white ml-0.5" />
+                <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-900 ml-0.5" />
               )}
             </button>
             <div className="flex-1">
@@ -215,9 +215,9 @@ function LivraisonInner() {
               audio.currentTime = (v / 100) * audio.duration;
               setProgress(v);
             }}
-            className="w-full h-1 accent-blue-400 cursor-pointer"
+            className="w-full h-1 accent-blue-500 cursor-pointer"
           />
-          <div className="flex justify-between text-xs text-zinc-600 mt-1">
+          <div className="flex justify-between text-xs text-zinc-400 mt-1">
             <span>{fmt((progress / 100) * duration)}</span>
             <span>{fmt(duration)}</span>
           </div>
@@ -238,46 +238,46 @@ function LivraisonInner() {
           <div className="grid grid-cols-2 gap-3 mb-8">
             <button
               onClick={() => download(livraison.fichier_wav_url, `${livraison.nom_projet}.wav`)}
-              className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
+              className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
             >
               <span>↓ WAV</span>
-              <span className="text-zinc-600 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
+              <span className="text-zinc-400 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
             </button>
             <button
               onClick={() => download(livraison.fichier_mp3_url, `${livraison.nom_projet}.mp3`)}
-              className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-300 hover:border-blue-400 hover:text-white transition-colors"
+              className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
             >
               <span>↓ MP3</span>
-              <span className="text-zinc-600 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>
+              <span className="text-zinc-400 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>
             </button>
           </div>
         ) : (
           <div className="mb-8">
             <div className="grid grid-cols-2 gap-3 mb-4 opacity-40 pointer-events-none select-none">
-              <div className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-500">
+              <div className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500">
                 <span>🔒 WAV</span>
-                <span className="text-zinc-700 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
+                <span className="text-zinc-300 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
               </div>
-              <div className="flex flex-col items-center gap-1 border border-zinc-800 rounded-xl px-4 py-4 text-sm text-zinc-500">
+              <div className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500">
                 <span>🔒 MP3</span>
-                <span className="text-zinc-700 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>
+                <span className="text-zinc-300 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>
               </div>
             </div>
             {paymentSuccess ? (
-              <div className="border border-blue-400/40 rounded-xl px-5 py-4 text-center">
-                <p className="text-blue-400 text-sm font-semibold mb-1">Paiement reçu ✓</p>
+              <div className="border border-blue-500/40 rounded-xl px-5 py-4 text-center">
+                <p className="text-blue-500 text-sm font-semibold mb-1">Paiement reçu ✓</p>
                 <p className="text-zinc-500 text-xs animate-pulse">Déverrouillage en cours…</p>
               </div>
             ) : (
-              <div className="border border-zinc-800 rounded-xl px-5 py-4 text-center">
-                <p className="text-zinc-400 text-sm mb-1">
-                  Solde restant : <span className="text-white font-semibold">{livraison.solde} €</span>
+              <div className="border border-zinc-200 rounded-xl px-5 py-4 text-center">
+                <p className="text-zinc-500 text-sm mb-1">
+                  Solde restant : <span className="text-zinc-900 font-semibold">{livraison.solde} €</span>
                 </p>
-                <p className="text-zinc-600 text-xs mb-4">Les fichiers finaux seront déverrouillés automatiquement après paiement.</p>
+                <p className="text-zinc-400 text-xs mb-4">Les fichiers finaux seront déverrouillés automatiquement après paiement.</p>
                 <button
                   onClick={paySolde}
                   disabled={loadingCheckout}
-                  className="bg-blue-400 text-black px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-50"
+                  className="bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
                 >
                   {loadingCheckout ? "Redirection…" : `Payer ${livraison.solde} €`}
                 </button>
@@ -288,16 +288,16 @@ function LivraisonInner() {
 
         {/* Message perso */}
         {livraison.message && (
-          <div className="border-l-2 border-blue-400 pl-4 mb-8">
+          <div className="border-l-2 border-blue-500 pl-4 mb-8">
             <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Message</p>
-            <p className="text-zinc-300 text-sm leading-relaxed">{livraison.message}</p>
+            <p className="text-zinc-500 text-sm leading-relaxed">{livraison.message}</p>
           </div>
         )}
 
         {/* Révision */}
-        <div className="border-t border-zinc-900 pt-6">
+        <div className="border-t border-zinc-100 pt-6">
           {revisionSent ? (
-            <p className="text-blue-400 text-sm text-center">Demande de révision envoyée ✓</p>
+            <p className="text-blue-500 text-sm text-center">Demande de révision envoyée ✓</p>
           ) : showRevision ? (
             <div className="flex flex-col gap-3">
               <textarea
@@ -305,19 +305,19 @@ function LivraisonInner() {
                 onChange={e => setRevisionMsg(e.target.value)}
                 placeholder="Décrivez les modifications souhaitées…"
                 rows={4}
-                className="bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-blue-400 transition-colors resize-none"
+                className="bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
               />
               <div className="flex gap-3">
                 <button
                   onClick={sendRevision}
                   disabled={!revisionMsg.trim()}
-                  className="flex-1 bg-blue-400 text-black px-4 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-300 transition-colors disabled:opacity-40"
+                  className="flex-1 bg-blue-500 text-white px-4 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-40"
                 >
                   Envoyer
                 </button>
                 <button
                   onClick={() => setShowRevision(false)}
-                  className="px-4 py-3 border border-zinc-800 rounded-xl text-xs text-zinc-500 hover:border-zinc-600 transition-colors"
+                  className="px-4 py-3 border border-zinc-200 rounded-xl text-xs text-zinc-500 hover:border-zinc-400 transition-colors"
                 >
                   Annuler
                 </button>
@@ -326,7 +326,7 @@ function LivraisonInner() {
           ) : (
             <button
               onClick={() => setShowRevision(true)}
-              className="w-full border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-400 hover:border-blue-400 hover:text-white transition-colors"
+              className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
             >
               Demander une révision
             </button>
@@ -341,8 +341,8 @@ function LivraisonInner() {
 export default function LivraisonPage() {
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-zinc-600 text-sm animate-pulse">Chargement…</p>
+      <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center">
+        <p className="text-zinc-400 text-sm animate-pulse">Chargement…</p>
       </main>
     }>
       <LivraisonInner />
