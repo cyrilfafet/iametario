@@ -73,7 +73,7 @@ function RatingsTicker({ avis }: { avis: Avis[] }) {
           }}
         >
           {items.map((a, i) => (
-            <span key={i} className="text-sm text-zinc-500 flex items-center gap-2 shrink-0">
+            <span key={i} className="flex items-center gap-2 shrink-0 border border-zinc-200 rounded-full px-4 py-1.5 text-sm text-zinc-500">
               <span>{"⭐".repeat(a.stars)}</span>
               <span className="text-zinc-400">—</span>
               <span>{a.nom || "Anonyme"}</span>
