@@ -159,16 +159,19 @@ export default function Artist() {
           {/* 3 blocs */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
             <div className="border border-zinc-200 rounded-2xl px-5 py-6">
-              <p className="text-zinc-900 font-semibold mb-2">Clubs & Résidences</p>
-              <p className="text-zinc-500 text-sm leading-relaxed">Sets House/Electro, lecture de foule en temps réel, mashups exclusifs.</p>
+              <p className="text-zinc-900 font-semibold mb-1">Clubs & Résidences</p>
+              <p className="text-zinc-400 text-xs mb-3 italic">L'expertise du clubbing.</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Sets House / Electro, lecture de foule en temps réel et mashups exclusifs. Résidence actuelle au Bal'tazar.</p>
             </div>
             <div className="border border-zinc-200 rounded-2xl px-5 py-6">
-              <p className="text-zinc-900 font-semibold mb-2">Festivals & Événements</p>
-              <p className="text-zinc-500 text-sm leading-relaxed">Énergie scène, adaptabilité, expérience grandes salles.</p>
+              <p className="text-zinc-900 font-semibold mb-1">Festivals & Open-Air</p>
+              <p className="text-zinc-400 text-xs mb-3 italic">Énergie et performance.</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Maîtrise des grands espaces et des programmations festives. Une expérience forgée sur scène pour un impact maximal.</p>
             </div>
             <div className="border border-zinc-200 rounded-2xl px-5 py-6">
-              <p className="text-zinc-900 font-semibold mb-2">Événements Privés</p>
-              <p className="text-zinc-500 text-sm leading-relaxed">Soirées entreprise, mariages, hôtels. Adaptable tous styles.</p>
+              <p className="text-zinc-900 font-semibold mb-1">Événements Privés & Corporate</p>
+              <p className="text-zinc-400 text-xs mb-3 italic">L'élégance sur-mesure.</p>
+              <p className="text-zinc-500 text-sm leading-relaxed">Mariages premium, lancements de marque et soirées d'entreprise. Une culture musicale élargie pour une prestation haut de gamme et personnalisée.</p>
             </div>
           </div>
 
