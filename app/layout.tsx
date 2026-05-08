@@ -20,11 +20,11 @@ const syne = Syne({
 });
 
 export const metadata = {
-  title: "E-Tario — DJ & Services Audio",
-  description: "Résident Baltazar Dijon. Dj & Producer - Formations DJ - Edition Audio sur mesure.",
+  title: "E-Tario — DJ House & Electro · Résident Baltazar Dijon",
+  description: "DJ professionnel depuis 2014. 1500+ sets en clubs, festivals et événements. Résident au Baltazar Dijon. Disponible pour booking.",
   openGraph: {
-    title: "E-Tario",
-    description: "Résident Baltazar Dijon. Dj & Producer - Formations DJ - Edition Audio sur mesure.",
+    title: "E-Tario — DJ House & Electro · Résident Baltazar Dijon",
+    description: "DJ professionnel depuis 2014. 1500+ sets en clubs, festivals et événements. Résident au Baltazar Dijon. Disponible pour booking.",
     url: "https://www.iametario.com",
     images: [
       {
