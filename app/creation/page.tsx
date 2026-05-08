@@ -149,8 +149,7 @@ function CreationInner() {
 
   {/* Contenu centré */}
   <div className="relative z-10">
-    <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4">Services Audio</p>
-    <h1 className="text-5xl font-bold mb-6">Create</h1>
+    <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">Services Audio.</h1>
     <p className="text-zinc-500 text-lg max-w-xl mx-auto">
       Le bon son au bon moment. Sur mesure, toujours.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
