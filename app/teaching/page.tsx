@@ -4,6 +4,7 @@ import { useState } from "react";
 type Pillar = {
   id: number;
   label: string;
+  label2?: string;
   color: string;
   description: string;
   path: string;
@@ -14,41 +15,35 @@ type Pillar = {
 const pillars: Pillar[] = [
   {
     id: 0,
-    label: "Technique",
+    label: "Mixer",
     color: "#60a5fa",
-    description: "Animer une soirée, de la préparation au set final. Près de 10 chapitres incluant chacun une vidéo explicative + une vidéo exercice.",
+    description: "Les bases du mixage jusqu'au set complet. Vidéo explicative + vidéo exercice par chapitre.",
     path: "M 100 100 L 100 6 A 94 94 0 0 1 181.41 147 Z",
-    tx: 150, ty: 70,
+    tx: 152, ty: 72,
   },
   {
     id: 1,
     label: "Psychologie",
+    label2: "& Réseau",
     color: "#818cf8",
-    description: "La mentalité pour faire danser les gens, évoluer dans le milieu et décrocher une résidence.",
+    description: "La mentalité pour faire danser, évoluer dans le milieu et décrocher une résidence. Comment entrer en contact et être crédible auprès des pros.",
     path: "M 100 100 L 181.41 147 A 94 94 0 0 1 18.59 147 Z",
     tx: 100, ty: 158,
   },
   {
     id: 2,
-    label: "Social",
+    label: "Mashups",
+    label2: "FL Studio",
     color: "#a78bfa",
-    description: "Comment entrer en contact, et être crédible auprès des pros.",
+    description: "Créer ses propres mashups de A à Z. Aucun prérequis logiciel.",
     path: "M 100 100 L 18.59 147 A 94 94 0 0 1 100 6 Z",
-    tx: 50, ty: 70,
+    tx: 48, ty: 72,
   },
-];
-
-const priceOptions = [
-  { value: "<50", label: "Moins de 50€" },
-  { value: "50-100", label: "50€ — 100€" },
-  { value: "100-150", label: "100€ — 150€" },
-  { value: ">150", label: "Plus de 150€" },
 ];
 
 export default function Teaching() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activePillar, setActivePillar] = useState<number | null>(null);
-  const [price, setPrice] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -98,111 +93,67 @@ export default function Teaching() {
         {/* Hero */}
         <div className="mb-16 text-center">
           <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">
-            Devenir Dj résident.
+            Devenir DJ résident.
           </h1>
           <p className="text-zinc-500 text-base leading-relaxed">
-            Ici je ne te vends pas de jets privés et paillettes, je te propose la stabilité. Une formation qui t'apprend la technique, la mentalité et le réseau pour décrocher ta première résidence.
+            La plupart te vendent du rêve. Moi je te propose la stabilité. Une formation complète pour devenir DJ résident : la technique, la mentalité et le réseau.
           </p>
         </div>
 
         {/* Intro */}
         <div className="text-center mb-20">
-          <a
-            href="/"
-            className="inline-block bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors"
-          >
+          <a href="/" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
             Qui suis-je ?
           </a>
         </div>
 
-        {/* Deux cercles + Pack */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
-
-          {/* Cercle 1 — DJ Résident */}
-          <div className="flex flex-col items-center gap-3">
-            <p className="text-xs text-zinc-500 uppercase tracking-widest">Formation DJ Résident</p>
-            <svg
-              viewBox="0 0 200 200"
-              width="280"
-              height="280"
-              className="drop-shadow-md"
-            >
-              {pillars.map(p => (
-                <path
-                  key={p.id}
-                  d={p.path}
-                  fill={p.color}
-                  stroke="#ffffff"
-                  strokeWidth="2.5"
-                  opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
-                  className="cursor-pointer transition-opacity duration-200"
-                  onClick={() => togglePillar(p.id)}
-                />
-              ))}
-              {/* Centre */}
-              <circle cx="100" cy="100" r="32" fill="#ffffff" stroke="#e4e4e7" strokeWidth="1.5" />
-              <text x="100" y="97" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">DJ</text>
-              <text x="100" y="109" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">RÉSIDENT</text>
-              {/* Labels sections */}
-              {pillars.map(p => (
-                <text
-                  key={p.id}
-                  x={p.tx}
-                  y={p.ty}
-                  textAnchor="middle"
-                  fill="#fff"
-                  fontSize="7.5"
-                  fontWeight="700"
-                  className="cursor-pointer select-none pointer-events-none"
-                  opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
-                >
-                  {p.label}
-                </text>
-              ))}
-            </svg>
-          </div>
-
-          {/* Pack connector */}
-          <div className="flex md:flex-col items-center gap-2">
-            <div className="w-8 h-px md:w-px md:h-8 bg-zinc-300" />
-            <div className="border border-zinc-300 rounded-xl px-3 py-2 text-center">
-              <p className="text-zinc-500 text-xs font-semibold uppercase tracking-widest">Pack</p>
-              <p className="text-blue-500 text-xs mt-0.5">Prix réduit</p>
-            </div>
-            <div className="w-8 h-px md:w-px md:h-8 bg-zinc-300" />
-          </div>
-
-          {/* Cercle 2 — Mashup */}
-          <div className="flex flex-col items-center gap-3">
-            <p className="text-xs text-zinc-500 uppercase tracking-widest">Formation Mashup</p>
-            <div
-              className="w-[280px] h-[280px] rounded-full flex flex-col items-center justify-center text-center px-10 transition-all"
-              style={{
-                background: "radial-gradient(circle at center, #e8f0fe, #f8faff)",
-                border: "1.5px solid transparent",
-                backgroundClip: "padding-box",
-                boxShadow: "0 0 0 1.5px #3b82f660, inset 0 0 40px #3b82f610",
-              }}
-            >
-              <p className="text-zinc-900 font-bold text-sm mb-2">FL Studio</p>
-              <p className="text-zinc-500 text-xs leading-relaxed">
-                Crée tes propres mashups de A à Z. Aucun prérequis logiciel.
-              </p>
-            </div>
-          </div>
+        {/* Camembert centré */}
+        <div className="flex flex-col items-center mb-4">
+          <svg viewBox="0 0 200 200" width="300" height="300" className="drop-shadow-md">
+            {pillars.map(p => (
+              <path
+                key={p.id}
+                d={p.path}
+                fill={p.color}
+                stroke="#ffffff"
+                strokeWidth="2.5"
+                opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
+                className="cursor-pointer transition-opacity duration-200"
+                onClick={() => togglePillar(p.id)}
+              />
+            ))}
+            <circle cx="100" cy="100" r="32" fill="#ffffff" stroke="#e4e4e7" strokeWidth="1.5" />
+            <text x="100" y="97" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">DJ</text>
+            <text x="100" y="109" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">RÉSIDENT</text>
+            {pillars.map(p => (
+              <text
+                key={p.id}
+                x={p.tx}
+                y={p.ty}
+                textAnchor="middle"
+                fill="#fff"
+                fontSize="7.5"
+                fontWeight="700"
+                className="cursor-pointer select-none pointer-events-none"
+                opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
+              >
+                <tspan x={p.tx} dy="0">{p.label}</tspan>
+                {p.label2 && <tspan x={p.tx} dy="10">{p.label2}</tspan>}
+              </text>
+            ))}
+          </svg>
+          <p className="text-zinc-400 text-xs text-center mt-2">Clique sur un pilier pour en savoir plus</p>
         </div>
 
-        <p className="text-zinc-400 text-xs text-center mb-6">Clique sur un pilier pour en savoir plus</p>
-
         {/* Description pilier actif */}
-        <div className="min-h-[56px] mb-6">
+        <div className="min-h-[60px] mb-12">
           {activePillar !== null && (
             <div
               className="border rounded-xl px-5 py-4 transition-all"
               style={{ borderColor: pillars[activePillar].color + "50", background: pillars[activePillar].color + "08" }}
             >
               <p className="text-xs uppercase tracking-widest mb-1" style={{ color: pillars[activePillar].color }}>
-                {pillars[activePillar].label}
+                {pillars[activePillar].label}{pillars[activePillar].label2 ? " " + pillars[activePillar].label2 : ""}
               </p>
               <p className="text-zinc-500 text-sm leading-relaxed">
                 {pillars[activePillar].description}
@@ -211,53 +162,43 @@ export default function Teaching() {
           )}
         </div>
 
-        {/* Description Mashup */}
-        <div className="border border-zinc-200 rounded-xl px-5 py-4 mb-20 text-center">
-          <p className="text-zinc-500 text-sm leading-relaxed">
-            <span className="text-zinc-900 font-semibold">Formation Mashup</span> — La création de mashups, une des compétences les plus sous-estimées.
-            Les mashups peuvent te permettre de te démarquer dès tes premiers sets en club, mais aussi sur les réseaux. Prêt à montrer qui tu es ?
-          </p>
-        </div>
-
-        {/* Sondage pricing */}
+        {/* Pricing */}
         <div className="border-t border-zinc-200 pt-14 mb-20">
-          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Sondage</p>
-          <h2 className="text-xl font-bold mb-1">La formation est prévue pour septembre 2026.</h2>
-          <p className="text-zinc-500 text-sm mb-8">Aide-moi à la calibrer.</p>
-          <p className="text-zinc-500 text-sm mb-5">
-            Pour une formation complète (technique + psychologie + réseau) pour devenir DJ résident, tu mettrais...
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            {priceOptions.map(opt => (
-              <label
-                key={opt.value}
-                className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-colors ${
-                  price === opt.value
-                    ? "border-blue-500 bg-blue-500/10 text-zinc-900"
-                    : "border-zinc-200 text-zinc-500 hover:border-zinc-400 hover:text-zinc-900"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="price"
-                  value={opt.value}
-                  checked={price === opt.value}
-                  onChange={() => setPrice(opt.value)}
-                  className="accent-blue-500"
-                />
-                <span className="text-sm">{opt.label}</span>
-              </label>
-            ))}
+          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-6 text-center">Tarifs</p>
+
+          {/* Formation complète */}
+          <div className="border-2 border-blue-500 rounded-2xl px-6 py-6 mb-6 text-center relative">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full tracking-widest uppercase">Recommandé</span>
+            <p className="text-zinc-900 font-bold text-lg mb-1">Formation complète</p>
+            <p className="text-zinc-500 text-sm mb-4">Mixer · Mashups FL Studio · Psychologie & Réseau</p>
+            <p className="text-4xl font-bold text-zinc-900">99€</p>
           </div>
+
+          {/* Modules séparés */}
+          <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4 text-center">Modules séparés</p>
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="border border-zinc-200 rounded-xl px-4 py-4 text-center">
+              <p className="text-zinc-900 font-semibold text-sm mb-1">Apprendre à mixer</p>
+              <p className="text-2xl font-bold text-zinc-900">29€</p>
+            </div>
+            <div className="border border-zinc-200 rounded-xl px-4 py-4 text-center">
+              <p className="text-zinc-900 font-semibold text-sm mb-1">Mashups FL Studio</p>
+              <p className="text-2xl font-bold text-zinc-900">40€</p>
+            </div>
+          </div>
+          <p className="text-zinc-400 text-xs text-center">
+            Le module <span className="text-zinc-500 font-medium">Psychologie & Réseau</span> est uniquement disponible dans la formation complète.
+          </p>
         </div>
 
-        {/* Email */}
+        {/* Early bird */}
         <div className="border-t border-zinc-200 pt-14 pb-8">
           {submitted ? (
-            <p className="text-blue-500 text-sm text-center">Tu seras prévenu en avant-première ✓</p>
+            <p className="text-blue-500 text-sm text-center">Tu bénéficieras de -10% à la sortie ✓</p>
           ) : (
             <>
-              <p className="text-zinc-500 text-sm text-center mb-6">Je veux être notifié en avant-première</p>
+              <h2 className="text-xl font-bold text-center mb-2">Formation disponible en septembre 2026.</h2>
+              <p className="text-zinc-500 text-sm text-center mb-8">Inscris-toi maintenant et bénéficie de <span className="text-zinc-900 font-semibold">-10%</span> à la sortie.</p>
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
@@ -272,7 +213,7 @@ export default function Teaching() {
                   disabled={loading}
                   className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
-                  {loading ? "…" : "Me prévenir"}
+                  {loading ? "…" : "J'en profite"}
                 </button>
               </form>
               <p className="text-zinc-400 text-xs text-center mt-3">Aucun spam. Un seul email à la sortie.</p>
