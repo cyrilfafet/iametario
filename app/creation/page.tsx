@@ -50,7 +50,9 @@ function timeAgo(dateStr: string): string {
 
 function RatingsTicker({ avis }: { avis: Avis[] }) {
   if (!avis.length) return null;
-  const items = [...avis, ...avis]; // duplicate for seamless loop
+  // Répéter suffisamment pour remplir le bandeau sans que la boucle soit visible
+  const repeat = Math.max(2, Math.ceil(10 / avis.length));
+  const items = Array.from({ length: repeat * 2 }, () => avis).flat();
 
   return (
     <div className="overflow-hidden border-y border-zinc-100 py-3 mb-0" style={{ maskImage: "linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)" }}>
