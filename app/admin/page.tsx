@@ -116,7 +116,7 @@ export default function Admin() {
     return (
       <main className="min-h-screen bg-white text-zinc-900 flex items-center justify-center px-6">
         <div className="w-full max-w-sm">
-          <img src="/Logo_2k26v2.png" alt="E-Tario" className="h-5 mx-auto mb-12" />
+          <img src="/Logo _V1_black.png" alt="E-Tario" className="h-5 mx-auto mb-12" />
           <div className="flex flex-col gap-4">
             <input
               type="password"
@@ -142,7 +142,7 @@ export default function Admin() {
   return (
     <main className="min-h-screen bg-white text-zinc-900">
       <nav className="flex items-center justify-between px-8 py-6">
-        <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6 hover:opacity-70 transition-opacity" /></a>
+        <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6 hover:opacity-70 transition-opacity" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
           <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
           <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>

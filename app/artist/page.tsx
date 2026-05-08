@@ -8,7 +8,7 @@ export default function Artist() {
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6">
-        <a href="/"><img src="/Logo_2k26v2.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+        <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
           <a href="/artist" className="text-blue-500">PERFORM</a>
           <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
@@ -33,7 +33,7 @@ export default function Artist() {
       {/* Hero */}
 <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
   <img src="/mainphoto.png" alt="E-Tario" className="w-50 md:w-130 -mt-20" />
-  <img src="/Logo_2k26v2.png" alt="E-Tario" className="w-85 md:w-95 -mt-30" />
+  <img src="/Logo _V1_black.png" alt="E-Tario" className="w-85 md:w-95 -mt-30" />
   <p className="text-zinc-500 text-base leading-loose max-w-3xl mt-8 text-center">
   1500 scènes. Une décennie de vibrations.
   <br /><br />
