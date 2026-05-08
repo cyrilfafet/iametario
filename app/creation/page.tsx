@@ -355,7 +355,7 @@ function CreationInner() {
       </section>
 
       {/* Ticker avis */}
-      {avis.length > 0 && <RatingsTicker avis={avis} />}
+      {avis.length > 0 && <div className="mt-12"><RatingsTicker avis={avis} /></div>}
 
       {/* Formulaire */}
 <section id="commander" className="border-t border-zinc-100 px-8 py-24">
