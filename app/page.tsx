@@ -108,7 +108,7 @@ export default function Artist() {
     </a>
   </div>
   <span className="text-zinc-300">|</span>
-  <a href="mailto:contact@iametario.com" className="bg-blue-500 text-white px-5 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
+  <a href="#booking-form" className="bg-blue-500 text-white px-5 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
   Booking
 </a>
 </div>
@@ -152,7 +152,7 @@ export default function Artist() {
           {/* Titre */}
           <div className="text-center mb-14">
             <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Booking</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Donnez une vraie signature à votre soirée.</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Donnez une vraie signature à votre évènement.</h2>
             <p className="text-zinc-400 text-xs tracking-wide mb-4">+1500 sets · Clubs · Festivals · Ibiza · Sunburn Festival</p>
             <p className="text-zinc-500 text-base mb-7">Disponible pour clubs, festivals et événements privés.</p>
             <a href="#booking-form" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
