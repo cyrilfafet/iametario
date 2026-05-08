@@ -47,7 +47,7 @@ export default function Artist() {
 </div>
   {/* Photo + Logo - centre */}
 <div className="flex flex-col items-center">
-  <img src="/mainphoto.png" alt="E-Tario" className="w-50 md:w-130 -mt-20" />
+  <img src="/DSC_1607.png" alt="E-Tario" className="w-50 md:w-130 -mt-20" />
   <img src="/Logo _V1_black.png" alt="E-Tario" className="w-85 md:w-95 -mt-30" />
 </div>
 
