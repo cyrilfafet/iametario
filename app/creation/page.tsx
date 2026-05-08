@@ -50,30 +50,40 @@ function timeAgo(dateStr: string): string {
 
 function RatingsTicker({ avis }: { avis: Avis[] }) {
   if (!avis.length) return null;
-  // Répéter suffisamment pour remplir le bandeau sans que la boucle soit visible
   const repeat = Math.max(2, Math.ceil(10 / avis.length));
   const items = Array.from({ length: repeat * 2 }, () => avis).flat();
 
   return (
-    <div className="overflow-hidden border-y border-zinc-100 py-3 mb-0" style={{ maskImage: "linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)" }}>
+    <>
+      <style>{`
+        @keyframes ticker-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+      `}</style>
       <div
-        className="flex gap-10 whitespace-nowrap"
-        style={{
-          animation: "ticker 18s linear infinite",
-          width: "max-content",
-        }}
+        className="overflow-hidden border-y border-zinc-100 py-3"
+        style={{ maskImage: "linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)" }}
       >
-        {items.map((a, i) => (
-          <span key={i} className="text-sm text-zinc-500 flex items-center gap-2 shrink-0">
-            <span>{"⭐".repeat(a.stars)}</span>
-            <span className="text-zinc-400">—</span>
-            <span>{a.nom || "Anonyme"}</span>
-            <span className="text-zinc-300">·</span>
-            <span className="text-zinc-400">{timeAgo(a.created_at)}</span>
-          </span>
-        ))}
+        <div
+          className="flex gap-10 whitespace-nowrap"
+          style={{
+            width: "max-content",
+            animation: "ticker-scroll 20s linear infinite",
+          }}
+        >
+          {items.map((a, i) => (
+            <span key={i} className="text-sm text-zinc-500 flex items-center gap-2 shrink-0">
+              <span>{"⭐".repeat(a.stars)}</span>
+              <span className="text-zinc-400">—</span>
+              <span>{a.nom || "Anonyme"}</span>
+              <span className="text-zinc-300">·</span>
+              <span className="text-zinc-400">{timeAgo(a.created_at)}</span>
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
