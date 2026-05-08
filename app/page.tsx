@@ -120,7 +120,7 @@ export default function Artist() {
     <br /><br />
     Partageant l'affiche avec des artistes comme <strong className="text-zinc-900">Joachim Garraud</strong> ou <strong className="text-zinc-900">Willy William</strong>, j'ai imposé ma signature jusque dans la production. Mon remix de Peggy Gou (+70k plays) a ainsi voyagé des ondes de ZuTv en Roumanie jusqu'en Inde, où il a resonné lors du  <strong className="text-zinc-900">Sunburn Festival</strong>.
     <br /><br />
-    Aujourd'hui résident au <strong className="text-zinc-900">Bal'tazar</strong> (Dijon), je joue à l'instinct — mashups exclusifs, transitions techniques et sets qui s'adaptent à chaque nuit.
+    Aujourd'hui résident au <strong className="text-zinc-900">Bal'tazar</strong> (Dijon), je joue à l'instinct — mashups exclusifs, transitions techniques et sets qui s'adaptent à chaque moment.
     <br /><br />
     Entre la préparation de mon <strong className="text-zinc-900">troisième single</strong> pour juin 2026 et mes services de création audio, je prépare également une formation dédiée aux futurs DJs résidents.
   </p>
@@ -146,7 +146,7 @@ export default function Artist() {
 </section>
 
       {/* Booking */}
-      <section className="px-6 py-24 max-w-2xl mx-auto w-full">
+      <section className="px-6 py-24 max-w-4xl mx-auto w-full">
         <div className="border-t border-zinc-200 pt-16">
 
           {/* Titre */}
