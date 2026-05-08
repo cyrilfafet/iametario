@@ -56,13 +56,15 @@ export default function Artist() {
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
-        <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+        <div className="flex items-center gap-3">
+          <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+          <LangToggle />
+        </div>
         <div className="hidden md:flex items-center gap-8 text-sm text-zinc-500">
           <a href="/" className="text-blue-500">{t.nav.perform}</a>
           <a href="/teaching" className="hover:text-blue-500 transition-colors">{t.nav.teach}</a>
           <a href="/creation" className="hover:text-blue-500 transition-colors">{t.nav.create}</a>
           <a href="/contact" className="hover:text-blue-500 transition-colors">{t.nav.contact}</a>
-          <LangToggle />
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
           <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
