@@ -94,7 +94,27 @@ export default function Artist() {
 
         {/* Images droite */}
         <div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
-          <img src="/montagne.png" className="w-88 grayscale opacity-50 -mt-25 -mr-18" style={imgStyle(70, -15, 5)} />
+          <div
+            className="w-88 -mt-25 -mr-18 overflow-hidden"
+            style={{
+              ...imgStyle(70, -15, 5),
+              WebkitMaskImage: "url('/montagne.png')",
+              maskImage: "url('/montagne.png')",
+              WebkitMaskSize: "100% 100%",
+              maskSize: "100% 100%",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+            }}
+          >
+            <video
+              src="/montagne-video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          </div>
           <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" style={imgStyle(45, 20, -6)} />
         </div>
 
