@@ -15,7 +15,7 @@ export const fr = {
   },
   booking: {
     label: "Booking",
-    title: "Donnez une vraie signature à votre soirée.",
+    title: "Donnez une vraie signature à votre évènement.",
     credibility: "+1500 sets · Clubs · Festivals · Ibiza · Sunburn Festival",
     subtitle: "Disponible pour clubs, festivals et événements privés.",
     cta: "Booker une date",
