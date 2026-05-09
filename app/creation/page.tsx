@@ -124,6 +124,7 @@ function CreationInner() {
   const [voix, setVoix] = useState(false);
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
+  const [description, setDescription] = useState("");
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const searchParams = useSearchParams();
   const paymentSuccess = searchParams.get("payment") === "success";
@@ -442,6 +443,8 @@ function CreationInner() {
         placeholder="Décrivez votre projet en détail — plus vous êtes précis, mieux je pourrai vous aider"
         rows={5}
         required
+        value={description}
+        onChange={e => setDescription(e.target.value)}
         className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
       />
       <div className="border border-zinc-200 rounded-xl px-5 py-4 hover:border-zinc-400 transition-colors">
@@ -455,7 +458,7 @@ function CreationInner() {
       <div className="flex flex-col gap-3">
         <button
           type="button"
-          disabled={loadingCheckout}
+          disabled={loadingCheckout || !nom.trim() || !email.trim() || !description.trim()}
           onClick={async () => {
             setLoadingCheckout(true);
             const res = await fetch("/api/checkout", {
