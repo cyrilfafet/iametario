@@ -89,7 +89,27 @@ export default function Artist() {
         <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
           <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" style={imgStyle(-55, -20, -4)} />
           <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" style={imgStyle(-90, 15, 6)} />
-          <img src="/baltazar.png" className="w-80 grayscale opacity-50 -mt-10 -ml-19" style={imgStyle(-65, -10, -8)} />
+          <div
+            className="w-80 h-80 -mt-10 -ml-19 flex-shrink-0"
+            style={{
+              ...imgStyle(-65, -10, -8),
+              WebkitMaskImage: "url('/baltazar.png')",
+              maskImage: "url('/baltazar.png')",
+              WebkitMaskSize: "100% 100%",
+              maskSize: "100% 100%",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+            }}
+          >
+            <video
+              src="/baltazar-video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
 
         {/* Images droite */}
