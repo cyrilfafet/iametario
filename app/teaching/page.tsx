@@ -69,8 +69,9 @@ export default function Teaching() {
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
           <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
-          <a href="/teaching" className="text-blue-500">TEACH</a>
           <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/teaching" className="text-blue-500">TEACH</a>
+          
           <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -82,8 +83,9 @@ export default function Teaching() {
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
           <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
-          <a href="/teaching" className="text-blue-500">TEACH</a>
           <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+          <a href="/teaching" className="text-blue-500">TEACH</a>
+          
           <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
