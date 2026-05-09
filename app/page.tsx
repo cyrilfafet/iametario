@@ -95,7 +95,7 @@ export default function Artist() {
         {/* Images droite */}
         <div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
           <div
-            className="w-88 -mt-25 -mr-18 overflow-hidden"
+            className="w-88 h-88 -mt-25 -mr-18 flex-shrink-0"
             style={{
               ...imgStyle(70, -15, 5),
               WebkitMaskImage: "url('/montagne.png')",
