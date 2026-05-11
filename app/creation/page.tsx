@@ -117,6 +117,48 @@ function CreationInner() {
     filter: `grayscale(1) blur(${scrollProgress * 10}px)`,
     transition: "none",
   });
+  // Chat IA
+  const [chatMessages, setChatMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatStarted, setChatStarted] = useState(false);
+  const [chatDone, setChatDone] = useState(false);
+
+  const startChat = async () => {
+    setChatStarted(true);
+    setChatLoading(true);
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [] }),
+    });
+    const data = await res.json();
+    setChatMessages([{ role: "assistant", content: data.message }]);
+    setChatLoading(false);
+  };
+
+  const sendChatMessage = async () => {
+    if (!chatInput.trim() || chatLoading) return;
+    const userMsg = { role: "user" as const, content: chatInput.trim() };
+    const newMessages = [...chatMessages, userMsg];
+    setChatMessages(newMessages);
+    setChatInput("");
+    setChatLoading(true);
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: newMessages }),
+    });
+    const data = await res.json();
+    const assistantMsg = { role: "assistant" as const, content: data.message };
+    setChatMessages([...newMessages, assistantMsg]);
+    setChatLoading(false);
+    // Détecter si c'est la conclusion (contient "Estimation")
+    if (data.message.includes("Estimation") || data.message.includes("estimation")) {
+      setChatDone(true);
+    }
+  };
+
   const [preset, setPreset] = useState<string>("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showFaq, setShowFaq] = useState(false);
@@ -354,6 +396,81 @@ function CreationInner() {
               </div>
             ))}
           </div>}
+        </div>
+      </section>
+
+      {/* Chat IA */}
+      <section className="border-t border-zinc-100 px-8 py-16">
+        <div className="max-w-xl mx-auto">
+          <p className="text-zinc-500 text-xs tracking-widest uppercase mb-4 text-center">Estimez votre projet</p>
+          <h2 className="text-2xl font-bold text-center mb-2">Vous ne savez pas quel forfait choisir ?</h2>
+          <p className="text-zinc-500 text-sm text-center mb-8">Répondez à 3 questions et obtenez une estimation instantanée.</p>
+
+          {!chatStarted ? (
+            <div className="text-center">
+              <button
+                onClick={startChat}
+                className="bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors"
+              >
+                Estimer mon projet
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {/* Messages */}
+              <div className="flex flex-col gap-3">
+                {chatMessages.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                      msg.role === "user"
+                        ? "bg-blue-500 text-white rounded-br-sm"
+                        : "bg-zinc-50 border border-zinc-200 text-zinc-700 rounded-bl-sm"
+                    }`}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+                {chatLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-zinc-50 border border-zinc-200 rounded-2xl rounded-bl-sm px-4 py-3">
+                      <span className="flex gap-1 items-center">
+                        <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Mention indicative après conclusion */}
+              {chatDone && (
+                <p className="text-zinc-400 text-xs text-center mt-1">Estimation indicative — devis final confirmé sous 48h.</p>
+              )}
+
+              {/* Input */}
+              {!chatDone && (
+                <div className="flex gap-2 mt-2">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={e => setChatInput(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && sendChatMessage()}
+                    placeholder="Votre réponse…"
+                    disabled={chatLoading}
+                    className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
+                  />
+                  <button
+                    onClick={sendChatMessage}
+                    disabled={chatLoading || !chatInput.trim()}
+                    className="bg-blue-500 text-white px-4 py-3 rounded-xl text-xs font-semibold hover:bg-blue-400 transition-colors disabled:opacity-40"
+                  >
+                    →
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
