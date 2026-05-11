@@ -9,23 +9,16 @@ type Track = {
   prix: number;
 };
 
-function useCoverArt(url: string) {
+function useCoverArt(trackId: string) {
   const [cover, setCover] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!url) return;
-    import("jsmediatags").then(({ default: jsmediatags }) => {
-      jsmediatags.read(url, {
-        onSuccess: (tag: { tags: { picture?: { data: number[]; format: string } } }) => {
-          const pic = tag.tags.picture;
-          if (!pic) return;
-          const base64 = pic.data.reduce((acc: string, byte: number) => acc + String.fromCharCode(byte), "");
-          setCover(`data:${pic.format};base64,${btoa(base64)}`);
-        },
-        onError: () => {},
-      });
-    });
-  }, [url]);
+    if (!trackId) return;
+    fetch(`/api/shop/cover/${trackId}`)
+      .then(r => r.json())
+      .then(data => { if (data.cover) setCover(data.cover); })
+      .catch(() => {});
+  }, [trackId]);
 
   return cover;
 }
@@ -35,7 +28,7 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
-  const cover = useCoverArt(track.fichier_preview_url);
+  const cover = useCoverArt(track.id);
 
   const handleBuy = async () => {
     setLoadingCheckout(true);

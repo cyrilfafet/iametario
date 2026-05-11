@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.105.3",
     "jsmediatags": "^3.9.7",
     "next": "16.2.1",
+    "node-id3": "^0.2.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.2",
