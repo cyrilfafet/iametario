@@ -6,15 +6,36 @@ type Track = {
   titre: string;
   genre: string;
   fichier_preview_url: string;
-  cover_url: string | null;
   prix: number;
 };
+
+function useCoverArt(url: string) {
+  const [cover, setCover] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!url) return;
+    import("jsmediatags").then(({ default: jsmediatags }) => {
+      jsmediatags.read(url, {
+        onSuccess: (tag: { tags: { picture?: { data: number[]; format: string } } }) => {
+          const pic = tag.tags.picture;
+          if (!pic) return;
+          const base64 = pic.data.reduce((acc: string, byte: number) => acc + String.fromCharCode(byte), "");
+          setCover(`data:${pic.format};base64,${btoa(base64)}`);
+        },
+        onError: () => {},
+      });
+    });
+  }, [url]);
+
+  return cover;
+}
 
 function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: boolean; onToggle: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const cover = useCoverArt(track.fichier_preview_url);
 
   const handleBuy = async () => {
     setLoadingCheckout(true);
@@ -42,9 +63,10 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
 
   return (
     <div className="border border-zinc-200 rounded-2xl overflow-hidden hover:border-blue-500 transition-colors">
-      {track.cover_url && (
-        <img src={track.cover_url} alt={track.titre} className="w-full h-48 object-cover" />
-      )}
+      {cover
+        ? <img src={cover} alt={track.titre} className="w-full h-48 object-cover" />
+        : <div className="w-full h-48 bg-zinc-100 flex items-center justify-center"><span className="text-zinc-300 text-3xl">♪</span></div>
+      }
       <div className="px-5 py-4">
         <div className="flex items-center gap-4 mb-3">
           <button
