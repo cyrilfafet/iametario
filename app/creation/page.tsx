@@ -258,9 +258,14 @@ function CreationInner() {
       Le bon son au bon moment. Sur mesure, toujours.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
-    <a href="#commander" className="inline-block mt-6 bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
-      Commander un montage audio
-    </a>
+    <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+      <a href="#commander" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
+        Commander un montage audio
+      </a>
+      <a href="/shop" className="inline-block border border-zinc-300 text-zinc-600 px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:border-zinc-400 hover:text-zinc-900 transition-colors">
+        Prêts à l'emploi →
+      </a>
+    </div>
   </div>
 
 </section>
@@ -594,12 +599,7 @@ function CreationInner() {
         <p className="text-zinc-500 text-sm text-center">
           Acompte déduit du montant final à régler à la livraison
         </p>
-        <p className="text-zinc-400 text-sm text-center mt-4">
-          Pas d&apos;idée précise ?{" "}
-          <a href="/shop" className="text-zinc-500 underline underline-offset-2 hover:text-blue-500 transition-colors">
-            Jette un œil à mes créations prêtes à l&apos;emploi →
-          </a>
-        </p>
+
       </div>
 
     </form>
