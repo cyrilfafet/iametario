@@ -128,7 +128,7 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
             disabled={loadingCheckout}
             className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
           >
-            {loadingCheckout ? "…" : "Acheter"}
+            {loadingCheckout ? "…" : "Buy"}
           </button>
         </div>
       </div>
@@ -244,15 +244,15 @@ export default function ShopPage() {
         </div>
       )}
 
-      <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-16">
+      <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-16 text-center">
         <p className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Shop</p>
-        <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-3">Audios prêts à l'emploi.</h1>
-        <p className="text-zinc-500 text-base mb-12">Fichiers WAV haute qualité. Téléchargement immédiat après paiement.</p>
+        <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-3">Ready to drop.</h1>
+        <p className="text-zinc-500 text-base mb-12">High quality WAV files. Instant download after payment.</p>
 
         {loading ? (
-          <p className="text-zinc-400 text-sm animate-pulse text-center py-12">Chargement…</p>
+          <p className="text-zinc-400 text-sm animate-pulse text-center py-12">Loading…</p>
         ) : tracks.length === 0 ? (
-          <p className="text-zinc-400 text-sm text-center py-12">Aucun audio disponible pour l'instant.</p>
+          <p className="text-zinc-400 text-sm text-center py-12">No audio available yet.</p>
         ) : (
           <div className="flex flex-col gap-3">
             {tracks.map(track => (
@@ -268,7 +268,7 @@ export default function ShopPage() {
       </div>
 
       <footer className="border-t border-zinc-100 px-8 py-8 text-center text-zinc-400 text-sm">
-        © 2026 E-Tario. Tous droits réservés.
+        © 2026 E-Tario. All rights reserved.
       </footer>
     </main>
   );
