@@ -33,7 +33,7 @@ export default function Admin() {
   const [shopTracks, setShopTracks] = useState<ShopTrack[]>([]);
   const [shopTitre, setShopTitre] = useState("");
   const [shopGenre, setShopGenre] = useState("");
-  const [shopStripeLink, setShopStripeLink] = useState("");
+  const [shopPrix, setShopPrix] = useState("");
   const [shopPreviewFile, setShopPreviewFile] = useState<File | null>(null);
   const [shopWavFile, setShopWavFile] = useState<File | null>(null);
   const [shopLoading, setShopLoading] = useState(false);
@@ -87,7 +87,7 @@ export default function Admin() {
   };
 
   const createShopTrack = async () => {
-    if (!shopTitre || !shopGenre || !shopStripeLink || !shopPreviewFile || !shopWavFile) return;
+    if (!shopTitre || !shopGenre || !shopPrix || !shopPreviewFile || !shopWavFile) return;
     setShopLoading(true);
     const id = crypto.randomUUID();
     try {
@@ -100,11 +100,11 @@ export default function Admin() {
       const res = await fetch("/api/shop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, stripe_payment_link: shopStripeLink, fichier_preview_url, fichier_wav_url }),
+        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, prix: Math.round(parseFloat(shopPrix) * 100), fichier_preview_url, fichier_wav_url }),
       });
       if (res.ok) {
         setShopSuccess(true);
-        setShopTitre(""); setShopGenre(""); setShopStripeLink("");
+        setShopTitre(""); setShopGenre(""); setShopPrix("");
         setShopPreviewFile(null); setShopWavFile(null);
         fetchShopTracks();
       } else {
@@ -276,7 +276,7 @@ export default function Admin() {
               <div className="flex flex-col gap-4">
                 <input type="text" placeholder="Titre" value={shopTitre} onChange={e => setShopTitre(e.target.value)} className={inputClass} />
                 <input type="text" placeholder="Tag genre (Hardstyle / Urban / Electro…)" value={shopGenre} onChange={e => setShopGenre(e.target.value)} className={inputClass} />
-                <input type="url" placeholder="Lien Payment Link Stripe" value={shopStripeLink} onChange={e => setShopStripeLink(e.target.value)} className={inputClass} />
+                <input type="number" placeholder="Prix (€) — ex: 5" value={shopPrix} onChange={e => setShopPrix(e.target.value)} min={1} className={inputClass} />
                 <div className="border border-zinc-200 rounded-xl px-5 py-4">
                   <label className="text-sm text-zinc-500 block mb-1">Aperçu MP3 <span className="text-zinc-400">(watermarked — player public)</span></label>
                   <input type="file" accept=".mp3,audio/mpeg" onChange={e => setShopPreviewFile(e.target.files?.[0] || null)}
@@ -289,7 +289,7 @@ export default function Admin() {
                 </div>
                 <button
                   onClick={createShopTrack}
-                  disabled={shopLoading || !shopTitre || !shopGenre || !shopStripeLink || !shopPreviewFile || !shopWavFile}
+                  disabled={shopLoading || !shopTitre || !shopGenre || !shopPrix || !shopPreviewFile || !shopWavFile}
                   className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {shopLoading ? shopProgressLabel || "Chargement…" : "Ajouter la track"}

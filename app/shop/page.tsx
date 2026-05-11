@@ -6,13 +6,26 @@ type Track = {
   titre: string;
   genre: string;
   fichier_preview_url: string;
-  stripe_payment_link: string;
+  prix: number;
 };
 
 function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: boolean; onToggle: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+
+  const handleBuy = async () => {
+    setLoadingCheckout(true);
+    const res = await fetch("/api/shop/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: track.id }),
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else setLoadingCheckout(false);
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -47,15 +60,14 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
           <span className="text-xs text-blue-500 border border-blue-500/40 rounded-full px-2 py-0.5">{track.genre}</span>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
-          <span className="text-base font-bold text-zinc-900">5€</span>
-          <a
-            href={track.stripe_payment_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors"
+          <span className="text-base font-bold text-zinc-900">{(track.prix / 100).toFixed(0)}€</span>
+          <button
+            onClick={handleBuy}
+            disabled={loadingCheckout}
+            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
           >
-            Acheter
-          </a>
+            {loadingCheckout ? "…" : "Acheter"}
+          </button>
         </div>
       </div>
       <input
