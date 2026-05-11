@@ -5,17 +5,17 @@ import Footer from "@/components/Footer";
 const cards = [
   {
     label: "PERFORM",
-    desc: "DJ depuis 2014 · 1500+ sets · Résident Baltazar Dijon",
+    desc: "Réserve une date",
     href: "/perform",
   },
   {
     label: "CREATE",
-    desc: "Intros DJ, entrées mariés, montages audio sur mesure",
+    desc: "Commande un montage audio",
     href: "/creation",
   },
   {
     label: "TEACH",
-    desc: "Formation pour devenir DJ résident · Disponible septembre 2026",
+    desc: "Apprends à devenir DJ résident",
     href: "/teaching",
   },
 ];
