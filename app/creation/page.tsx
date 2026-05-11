@@ -258,7 +258,7 @@ function CreationInner() {
       Le bon son au bon moment. Sur mesure, toujours.<br />
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
-    <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+    <div className="flex flex-wrap items-center justify-center gap-3 mt-6 max-w-sm mx-auto">
       <a href="#commander" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
         Commander un montage audio
       </a>
