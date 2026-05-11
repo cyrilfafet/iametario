@@ -1,14 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  webpack: (config) => {
-    // jsmediatags pulls in react-native-fs which doesn't exist in a web context
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "react-native-fs": false,
-    };
-    return config;
-  },
+  // jsmediatags is client-only — exclude it from the server bundle to avoid
+  // its react-native-fs dependency causing a build error under Turbopack
+  serverExternalPackages: ["jsmediatags"],
+  turbopack: {},
 };
 
 export default nextConfig;
