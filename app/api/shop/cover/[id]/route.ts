@@ -23,21 +23,33 @@ export async function GET(
     const res = await fetch(track.fichier_preview_url, {
       headers: { Range: "bytes=0-524287" },
     });
-    if (!res.ok && res.status !== 206) return NextResponse.json({ cover: null });
+
+    const debug: Record<string, unknown> = { status: res.status, url: track.fichier_preview_url };
+
+    if (!res.ok && res.status !== 206) {
+      return NextResponse.json({ cover: null, debug });
+    }
 
     const arrayBuffer = await res.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    debug.bufferSize = buffer.length;
+
+    // Check ID3 header
+    debug.id3Header = buffer.slice(0, 3).toString("ascii");
 
     const tags = NodeID3.read(buffer);
+    debug.hasImage = !!tags.image;
+    debug.imageType = typeof tags.image;
+
     const image = tags.image;
 
     if (!image || typeof image === "string") {
-      return NextResponse.json({ cover: null });
+      return NextResponse.json({ cover: null, debug });
     }
 
     const cover = `data:${image.mime};base64,${image.imageBuffer.toString("base64")}`;
-    return NextResponse.json({ cover });
-  } catch {
-    return NextResponse.json({ cover: null });
+    return NextResponse.json({ cover, debug });
+  } catch (e) {
+    return NextResponse.json({ cover: null, error: String(e) });
   }
 }
