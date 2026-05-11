@@ -13,9 +13,10 @@ export default function Footer() {
 
         {/* Réseaux */}
         <div className="flex gap-5 text-xs">
-          <a href="https://www.instagram.com/e.tario/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Instagram</a>
-          <a href="https://soundcloud.com/e-tario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">SoundCloud</a>
-          <a href="https://open.spotify.com/artist/6mHMFhZHXGiH4qBFsf3GDu" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Spotify</a>
+          <a href="https://instagram.com/iametario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Instagram</a>
+          <a href="https://soundcloud.com/iametario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">SoundCloud</a>
+          <a href="https://open.spotify.com/intl-fr/artist/5PRHGYHjRAJsxSiHWuBUVp?si=QOFkWIr5Q12Fn2TDoBzlKg" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Spotify</a>
+          <a href="https://youtube.com/@e-tario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">YouTube</a>
         </div>
 
         {/* Légal */}
