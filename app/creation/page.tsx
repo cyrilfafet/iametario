@@ -405,7 +405,7 @@ function CreationInner() {
       </section>
 
       {/* Chat IA */}
-      <section className="border-t border-zinc-100 px-8 py-16">
+      {false && <section className="border-t border-zinc-100 px-8 py-16">
         <div className="max-w-xl mx-auto">
           <p className="text-zinc-500 text-xs tracking-widest uppercase mb-4 text-center">Estimez votre projet</p>
           <h2 className="text-2xl font-bold text-center mb-2">Vous ne savez pas quel forfait choisir ?</h2>
@@ -477,7 +477,7 @@ function CreationInner() {
             </div>
           )}
         </div>
-      </section>
+      </section>}
 
       {/* Ticker avis */}
       {avis.length > 0 && <div className="mt-12"><RatingsTicker avis={avis} /></div>}
