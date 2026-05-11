@@ -30,6 +30,9 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const cover = useCoverArt(track.id);
 
+  // genres séparés par virgule
+  const tags = track.genre.split(",").map(g => g.trim()).filter(Boolean);
+
   const handleBuy = async () => {
     setLoadingCheckout(true);
     const res = await fetch("/api/shop/checkout", {
@@ -55,16 +58,22 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
   };
 
   return (
-    <div className="border border-zinc-200 rounded-2xl overflow-hidden hover:border-blue-500 transition-colors">
-      {cover
-        ? <img src={cover} alt={track.titre} className="w-full h-48 object-cover" />
-        : <div className="w-full h-48 bg-zinc-100 flex items-center justify-center"><span className="text-zinc-300 text-3xl">♪</span></div>
-      }
-      <div className="px-5 py-4">
-        <div className="flex items-center gap-4 mb-3">
+    <div className="flex items-center gap-4 border border-zinc-200 rounded-2xl p-4 hover:border-blue-500 transition-colors">
+      {/* Cover carrée */}
+      <div className="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-zinc-100 flex items-center justify-center">
+        {cover
+          ? <img src={cover} alt={track.titre} className="w-full h-full object-cover" />
+          : <span className="text-zinc-300 text-2xl">♪</span>
+        }
+      </div>
+
+      {/* Infos + barre */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          {/* Bouton play */}
           <button
             onClick={onToggle}
-            className="w-9 h-9 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0"
+            className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0"
           >
             {isPlaying ? (
               <span className="w-3 h-3 flex gap-0.5">
@@ -75,21 +84,20 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
               <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-900 ml-0.5" />
             )}
           </button>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-zinc-900 truncate">{track.titre}</p>
-            <span className="text-xs text-blue-500 border border-blue-500/40 rounded-full px-2 py-0.5">{track.genre}</span>
-          </div>
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <span className="text-base font-bold text-zinc-900">{(track.prix / 100).toFixed(0)}€</span>
-            <button
-              onClick={handleBuy}
-              disabled={loadingCheckout}
-              className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
-            >
-              {loadingCheckout ? "…" : "Acheter"}
-            </button>
-          </div>
+
+          <p className="text-sm font-semibold text-zinc-900 truncate">{track.titre}</p>
         </div>
+
+        {/* Tags genre */}
+        <div className="flex flex-wrap gap-1 mb-2 ml-10">
+          {tags.map(tag => (
+            <span key={tag} className="text-xs text-blue-500 border border-blue-500/40 rounded-full px-2 py-0.5">
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Barre de progression */}
         <input
           type="range" min={0} max={100} value={progress}
           onChange={e => {
@@ -101,21 +109,34 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
           }}
           className="w-full h-1 accent-blue-500 cursor-pointer"
         />
-        <div className="flex justify-between text-xs text-zinc-400 mt-1">
+        <div className="flex justify-between text-xs text-zinc-400 mt-0.5">
           <span>{fmt((progress / 100) * duration)}</span>
           <span>{fmt(duration)}</span>
         </div>
-        <audio
-          ref={audioRef}
-          src={track.fichier_preview_url}
-          onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)}
-          onTimeUpdate={() => {
-            const audio = audioRef.current;
-            if (audio) setProgress((audio.currentTime / audio.duration) * 100);
-          }}
-          onEnded={() => { setProgress(0); onToggle(); }}
-        />
       </div>
+
+      {/* Prix + achat */}
+      <div className="flex flex-col items-end gap-2 flex-shrink-0">
+        <span className="text-base font-bold text-zinc-900">{(track.prix / 100).toFixed(0)}€</span>
+        <button
+          onClick={handleBuy}
+          disabled={loadingCheckout}
+          className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
+        >
+          {loadingCheckout ? "…" : "Acheter"}
+        </button>
+      </div>
+
+      <audio
+        ref={audioRef}
+        src={track.fichier_preview_url}
+        onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)}
+        onTimeUpdate={() => {
+          const audio = audioRef.current;
+          if (audio) setProgress((audio.currentTime / audio.duration) * 100);
+        }}
+        onEnded={() => { setProgress(0); onToggle(); }}
+      />
     </div>
   );
 }
@@ -160,7 +181,7 @@ export default function ShopPage() {
         </div>
       )}
 
-      <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-16">
+      <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-16">
         <p className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Shop</p>
         <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-3">Audios prêts à l'emploi.</h1>
         <p className="text-zinc-500 text-base mb-12">Fichiers WAV haute qualité. Téléchargement immédiat après paiement.</p>
@@ -170,7 +191,7 @@ export default function ShopPage() {
         ) : tracks.length === 0 ? (
           <p className="text-zinc-400 text-sm text-center py-12">Aucun audio disponible pour l'instant.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-3">
             {tracks.map(track => (
               <TrackPlayer
                 key={track.id}
