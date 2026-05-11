@@ -12,9 +12,10 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
     return NextResponse.json({ error: "Session manquante" }, { status: 400 });
   }
 
-  // Vérifier le paiement Stripe
+  // Vérifier le paiement Stripe (no_payment_required pour les tracks à 0€)
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-  if (session.payment_status !== "paid" || session.metadata?.track_id !== id) {
+  const validStatus = session.payment_status === "paid" || session.payment_status === "no_payment_required";
+  if (!validStatus || session.metadata?.track_id !== id) {
     return NextResponse.json({ error: "Paiement non confirmé" }, { status: 403 });
   }
 
