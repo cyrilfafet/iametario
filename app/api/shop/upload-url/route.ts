@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const filename = type === "preview" ? "preview.mp3" : "final.wav";
+  const filename = type === "preview" ? "preview.mp3" : type === "cover" ? "cover.jpg" : "final.wav";
   const path = `shop/${id}/${filename}`;
 
   const { data, error } = await supabaseAdmin.storage

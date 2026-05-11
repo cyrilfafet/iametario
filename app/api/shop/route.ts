@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from("shop_tracks")
-    .select("id, titre, genre, fichier_preview_url, prix")
+    .select("id, titre, genre, fichier_preview_url, cover_url, prix")
     .eq("published", true)
     .order("created_at", { ascending: false });
 
@@ -15,7 +15,7 @@ export async function GET() {
 
 // POST — créer une track (admin)
 export async function POST(req: NextRequest) {
-  const { password, titre, genre, fichier_preview_url, fichier_wav_url, prix } = await req.json();
+  const { password, titre, genre, fichier_preview_url, fichier_wav_url, cover_url, prix } = await req.json();
 
   if (password !== process.env.ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from("shop_tracks")
-    .insert({ titre, genre, fichier_preview_url, fichier_wav_url, prix, published: false })
+    .insert({ titre, genre, fichier_preview_url, fichier_wav_url, cover_url: cover_url || null, prix, published: false })
     .select()
     .single();
 

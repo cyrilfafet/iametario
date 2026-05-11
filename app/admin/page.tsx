@@ -36,6 +36,7 @@ export default function Admin() {
   const [shopPrix, setShopPrix] = useState("");
   const [shopPreviewFile, setShopPreviewFile] = useState<File | null>(null);
   const [shopWavFile, setShopWavFile] = useState<File | null>(null);
+  const [shopCoverFile, setShopCoverFile] = useState<File | null>(null);
   const [shopLoading, setShopLoading] = useState(false);
   const [shopProgressLabel, setShopProgressLabel] = useState("");
   const [shopSuccess, setShopSuccess] = useState(false);
@@ -72,7 +73,7 @@ export default function Admin() {
       .then(data => { if (Array.isArray(data)) setShopTracks(data); });
   };
 
-  const uploadShopFile = async (file: File, id: string, type: "preview" | "wav") => {
+  const uploadShopFile = async (file: File, id: string, type: "preview" | "wav" | "cover") => {
     setShopProgressLabel(type === "preview" ? "Upload aperçu MP3…" : "Upload WAV final…");
     const urlRes = await fetch("/api/shop/upload-url", {
       method: "POST",
@@ -93,18 +94,21 @@ export default function Admin() {
     try {
       await uploadShopFile(shopPreviewFile, id, "preview");
       await uploadShopFile(shopWavFile, id, "wav");
+      if (shopCoverFile) await uploadShopFile(shopCoverFile, id, "cover");
       setShopProgressLabel("Création de la track…");
       const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const fichier_preview_url = `${base}/storage/v1/object/public/Livraison/shop/${id}/preview.mp3`;
       const fichier_wav_url = `${base}/storage/v1/object/public/Livraison/shop/${id}/final.wav`;
+      const cover_url = shopCoverFile ? `${base}/storage/v1/object/public/Livraison/shop/${id}/cover.jpg` : null;
       const res = await fetch("/api/shop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, prix: Math.round(parseFloat(shopPrix) * 100), fichier_preview_url, fichier_wav_url }),
+        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, prix: Math.round(parseFloat(shopPrix) * 100), fichier_preview_url, fichier_wav_url, cover_url }),
       });
       if (res.ok) {
         setShopSuccess(true);
         setShopTitre(""); setShopGenre(""); setShopPrix("");
+        setShopCoverFile(null);
         setShopPreviewFile(null); setShopWavFile(null);
         fetchShopTracks();
       } else {
@@ -277,6 +281,11 @@ export default function Admin() {
                 <input type="text" placeholder="Titre" value={shopTitre} onChange={e => setShopTitre(e.target.value)} className={inputClass} />
                 <input type="text" placeholder="Tag genre (Hardstyle / Urban / Electro…)" value={shopGenre} onChange={e => setShopGenre(e.target.value)} className={inputClass} />
                 <input type="number" placeholder="Prix (€) — ex: 5" value={shopPrix} onChange={e => setShopPrix(e.target.value)} min={1} className={inputClass} />
+                <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                  <label className="text-sm text-zinc-500 block mb-1">Cover <span className="text-zinc-400">(JPG/PNG — affichée sur la page shop)</span></label>
+                  <input type="file" accept="image/*" onChange={e => setShopCoverFile(e.target.files?.[0] || null)}
+                    className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                </div>
                 <div className="border border-zinc-200 rounded-xl px-5 py-4">
                   <label className="text-sm text-zinc-500 block mb-1">Aperçu MP3 <span className="text-zinc-400">(watermarked — player public)</span></label>
                   <input type="file" accept=".mp3,audio/mpeg" onChange={e => setShopPreviewFile(e.target.files?.[0] || null)}
