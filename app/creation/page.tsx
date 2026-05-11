@@ -594,6 +594,12 @@ function CreationInner() {
         <p className="text-zinc-500 text-sm text-center">
           Acompte déduit du montant final à régler à la livraison
         </p>
+        <p className="text-zinc-400 text-sm text-center mt-4">
+          Pas d&apos;idée précise ?{" "}
+          <a href="/shop" className="text-zinc-500 underline underline-offset-2 hover:text-blue-500 transition-colors">
+            Jette un œil à mes créations prêtes à l&apos;emploi →
+          </a>
+        </p>
       </div>
 
     </form>
