@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase-client";
 
 type Client = { nom: string; email: string };
 type Livraison = { code: string; prenom: string; nom_projet: string; solde: number; paiement_solde: boolean; created_at: string };
+type ShopTrack = { id: string; titre: string; genre: string; fichier_preview_url: string; fichier_wav_url: string; stripe_payment_link: string; published: boolean; created_at: string };
 
 export default function Admin() {
   const [password, setPassword] = useState("");
@@ -26,6 +27,18 @@ export default function Admin() {
   const [deliveryUrl, setDeliveryUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"livraisons" | "shop">("livraisons");
+
+  // Shop state
+  const [shopTracks, setShopTracks] = useState<ShopTrack[]>([]);
+  const [shopTitre, setShopTitre] = useState("");
+  const [shopGenre, setShopGenre] = useState("");
+  const [shopStripeLink, setShopStripeLink] = useState("");
+  const [shopPreviewFile, setShopPreviewFile] = useState<File | null>(null);
+  const [shopWavFile, setShopWavFile] = useState<File | null>(null);
+  const [shopLoading, setShopLoading] = useState(false);
+  const [shopProgressLabel, setShopProgressLabel] = useState("");
+  const [shopSuccess, setShopSuccess] = useState(false);
 
   const login = async () => {
     const res = await fetch("/api/admin-auth", {
@@ -48,7 +61,71 @@ export default function Admin() {
     fetch(`/api/admin/livraisons?password=${encodeURIComponent(password)}`)
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setLivraisons(data); });
+    fetch(`/api/admin/shop?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setShopTracks(data); });
   }, [authenticated]);
+
+  const fetchShopTracks = () => {
+    fetch(`/api/admin/shop?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setShopTracks(data); });
+  };
+
+  const uploadShopFile = async (file: File, id: string, type: "preview" | "wav") => {
+    setShopProgressLabel(type === "preview" ? "Upload aperçu MP3…" : "Upload WAV final…");
+    const urlRes = await fetch("/api/shop/upload-url", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password, id, type }),
+    });
+    const { token, path } = await urlRes.json();
+    const { error } = await supabase.storage
+      .from("Livraison")
+      .uploadToSignedUrl(path, token, file, { contentType: file.type || "audio/mpeg" });
+    if (error) throw new Error(`Upload ${type} échoué : ${error.message}`);
+  };
+
+  const createShopTrack = async () => {
+    if (!shopTitre || !shopGenre || !shopStripeLink || !shopPreviewFile || !shopWavFile) return;
+    setShopLoading(true);
+    const id = crypto.randomUUID();
+    try {
+      await uploadShopFile(shopPreviewFile, id, "preview");
+      await uploadShopFile(shopWavFile, id, "wav");
+      setShopProgressLabel("Création de la track…");
+      const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const fichier_preview_url = `${base}/storage/v1/object/public/Livraison/shop/${id}/preview.mp3`;
+      const fichier_wav_url = `${base}/storage/v1/object/public/Livraison/shop/${id}/final.wav`;
+      const res = await fetch("/api/shop", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, stripe_payment_link: shopStripeLink, fichier_preview_url, fichier_wav_url }),
+      });
+      if (res.ok) {
+        setShopSuccess(true);
+        setShopTitre(""); setShopGenre(""); setShopStripeLink("");
+        setShopPreviewFile(null); setShopWavFile(null);
+        fetchShopTracks();
+      } else {
+        const err = await res.json();
+        alert(`Erreur : ${err.error}`);
+      }
+    } catch (e: unknown) {
+      alert(`Erreur : ${e instanceof Error ? e.message : JSON.stringify(e)}`);
+    }
+    setShopLoading(false);
+    setShopProgressLabel("");
+  };
+
+  const togglePublish = async (track: ShopTrack) => {
+    await fetch(`/api/shop/${track.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password, published: !track.published }),
+    });
+    fetchShopTracks();
+  };
 
   const selectClient = (client: Client) => {
     setEmail(client.email);
@@ -171,11 +248,85 @@ export default function Admin() {
         </div>
       )}
       <div className="max-w-6xl mx-auto px-6 pb-12">
-        <div className="flex items-center justify-end mb-12">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex gap-1 border border-zinc-200 rounded-xl p-1">
+            <button
+              onClick={() => setActiveTab("livraisons")}
+              className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-colors ${activeTab === "livraisons" ? "bg-blue-500 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
+            >
+              Livraisons
+            </button>
+            <button
+              onClick={() => setActiveTab("shop")}
+              className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-colors ${activeTab === "shop" ? "bg-blue-500 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
+            >
+              Shop
+            </button>
+          </div>
           <span className="text-zinc-400 text-xs uppercase tracking-widest">Back-office</span>
         </div>
 
-        <div className="flex gap-10 items-start">
+        {/* Onglet Shop */}
+        {activeTab === "shop" && (
+          <div className="flex gap-10 items-start">
+            {/* Formulaire ajout track */}
+            <div className="flex-1 min-w-0">
+              <p className="text-zinc-500 text-xs tracking-widest uppercase mb-4">Nouvelle track</p>
+              {shopSuccess && <p className="text-blue-500 text-sm mb-4">Track ajoutée ✓</p>}
+              <div className="flex flex-col gap-4">
+                <input type="text" placeholder="Titre" value={shopTitre} onChange={e => setShopTitre(e.target.value)} className={inputClass} />
+                <input type="text" placeholder="Tag genre (Hardstyle / Urban / Electro…)" value={shopGenre} onChange={e => setShopGenre(e.target.value)} className={inputClass} />
+                <input type="url" placeholder="Lien Payment Link Stripe" value={shopStripeLink} onChange={e => setShopStripeLink(e.target.value)} className={inputClass} />
+                <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                  <label className="text-sm text-zinc-500 block mb-1">Aperçu MP3 <span className="text-zinc-400">(watermarked — player public)</span></label>
+                  <input type="file" accept=".mp3,audio/mpeg" onChange={e => setShopPreviewFile(e.target.files?.[0] || null)}
+                    className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                </div>
+                <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                  <label className="text-sm text-zinc-500 block mb-1">WAV final <span className="text-zinc-400">(débloqué après achat)</span></label>
+                  <input type="file" accept=".wav,audio/wav" onChange={e => setShopWavFile(e.target.files?.[0] || null)}
+                    className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                </div>
+                <button
+                  onClick={createShopTrack}
+                  disabled={shopLoading || !shopTitre || !shopGenre || !shopStripeLink || !shopPreviewFile || !shopWavFile}
+                  className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {shopLoading ? shopProgressLabel || "Chargement…" : "Ajouter la track"}
+                </button>
+              </div>
+            </div>
+
+            {/* Liste des tracks */}
+            <div className="hidden lg:block w-80 flex-shrink-0">
+              <div className="sticky top-28">
+                <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4">Tracks ({shopTracks.length})</p>
+                {shopTracks.length === 0 ? (
+                  <p className="text-zinc-400 text-sm">Aucune track.</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {shopTracks.map(track => (
+                      <div key={track.id} className="border border-zinc-100 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-zinc-900 truncate">{track.titre}</p>
+                          <p className="text-xs text-zinc-400">{track.genre}</p>
+                        </div>
+                        <button
+                          onClick={() => togglePublish(track)}
+                          className={`text-xs px-3 py-1.5 rounded-full font-semibold flex-shrink-0 transition-colors ${track.published ? "bg-green-50 text-green-600 hover:bg-red-50 hover:text-red-500" : "bg-zinc-100 text-zinc-500 hover:bg-green-50 hover:text-green-600"}`}
+                        >
+                          {track.published ? "Publié" : "Publier"}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "livraisons" && <div className="flex gap-10 items-start">
 
           {/* Colonne principale — formulaire */}
           <div className="flex-1 min-w-0">
@@ -307,7 +458,8 @@ export default function Admin() {
             </div>
           </div>
 
-        </div>
+        </div>}
+
       </div>
     </main>
   );
