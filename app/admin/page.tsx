@@ -196,10 +196,31 @@ export default function Admin() {
 
   if (!authenticated) {
     return (
-      <main className="min-h-screen text-zinc-900 flex items-center justify-center px-6">
-        <div className="w-full max-w-sm">
-          <img src="/Logo _V1_black.png" alt="E-Tario" className="h-5 mx-auto mb-12" />
-          <div className="flex flex-col gap-4">
+      <main className="min-h-screen text-zinc-900 flex flex-col">
+        <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
+          <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+          <div className="hidden md:flex gap-8 text-sm text-zinc-500">
+            <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+            <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+            <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+            <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+          </div>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
+            <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+            <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          </button>
+        </nav>
+        {menuOpen && (
+          <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
+            <a href="/" className="hover:text-blue-500 transition-colors">PERFORM</a>
+            <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
+            <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+            <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+          </div>
+        )}
+        <div className="flex-1 flex items-center justify-center px-6">
+          <div className="w-full max-w-sm flex flex-col gap-4">
             <input
               type="password"
               placeholder="Mot de passe"
