@@ -62,10 +62,10 @@ export default function Artist() {
           <LangToggle />
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm text-zinc-500">
-          <a href="/" className="text-blue-500">{t.nav.perform}</a>
-          <a href="/creation" className="hover:text-blue-500 transition-colors">{t.nav.create}</a>
-          <a href="/teaching" className="hover:text-blue-500 transition-colors">{t.nav.teach}</a>
-          <a href="/contact" className="hover:text-blue-500 transition-colors">{t.nav.contact}</a>
+          <a href="/perform" className="text-blue-500">{t.nav.perform}</a>
+          <a href="/creation" className="hover:text-indigo-400 transition-colors">{t.nav.create}</a>
+          <a href="/teaching" className="hover:text-violet-400 transition-colors">{t.nav.teach}</a>
+          <a href="/contact" className="hover:text-zinc-600 transition-colors">{t.nav.contact}</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
           <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
@@ -75,10 +75,10 @@ export default function Artist() {
       </nav>
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/" className="text-blue-500">{t.nav.perform}</a>
-          <a href="/creation" className="hover:text-blue-500 transition-colors">{t.nav.create}</a>
-          <a href="/teaching" className="hover:text-blue-500 transition-colors">{t.nav.teach}</a>
-          <a href="/contact" className="hover:text-blue-500 transition-colors">{t.nav.contact}</a>
+          <a href="/perform" className="text-blue-500">{t.nav.perform}</a>
+          <a href="/creation" className="hover:text-indigo-400 transition-colors">{t.nav.create}</a>
+          <a href="/teaching" className="hover:text-violet-400 transition-colors">{t.nav.teach}</a>
+          <a href="/contact" className="hover:text-zinc-600 transition-colors">{t.nav.contact}</a>
           <LangToggle />
         </div>
       )}

@@ -214,8 +214,8 @@ function CreationInner() {
   <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
   <div className="hidden md:flex gap-8 text-sm text-zinc-500">
     <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
-    <a href="/creation" className="text-blue-500">CREATE</a>
-          <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>CREATE</a>
+          <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
     
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
@@ -229,8 +229,8 @@ function CreationInner() {
 {menuOpen && (
   <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
     <a href="/artist" className="hover:text-blue-500 transition-colors">ARTIST</a>
-    <a href="/creation" className="text-blue-500">CREATE</a>
-          <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>CREATE</a>
+          <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
     
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
@@ -260,7 +260,7 @@ function CreationInner() {
       <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
     </p>
     <div className="flex flex-wrap items-center justify-center gap-3 mt-6 max-w-sm mx-auto">
-      <a href="#commander" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
+      <a href="#commander" className="inline-block bg-indigo-400 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors">
         Commander un montage audio
       </a>
       <a href="/shop" className="inline-block border border-zinc-300 text-zinc-600 px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:border-zinc-400 hover:text-zinc-900 transition-colors">
@@ -290,12 +290,12 @@ function CreationInner() {
                 </div>
                 {/* Lecteur audio */}
                 <div className="ml-11 flex items-center gap-4">
-                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-blue-500" : "border-zinc-100 opacity-60"}`}>
+                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-indigo-400" : "border-zinc-100 opacity-60"}`}>
                     <div className="flex items-center gap-4 mb-3">
                       <button
                         onClick={() => demo.file && togglePlay(index)}
                         disabled={!demo.file}
-                        className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-indigo-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {playing === index ? (
                           <span className="w-3 h-3 flex gap-0.5">
@@ -308,7 +308,7 @@ function CreationInner() {
                       </button>
                       <div className="flex-1">
                         <p className="text-sm font-medium mb-1">{demo.title}</p>
-                        <span className="text-xs text-blue-500 border border-blue-500 rounded-full px-2.5 py-0.5">{demo.tag}</span>
+                        <span className="text-xs text-blue-500 border border-indigo-400 rounded-full px-2.5 py-0.5">{demo.tag}</span>
                       </div>
                     </div>
                     {/* Barre de progression */}
@@ -318,7 +318,7 @@ function CreationInner() {
                       max={100}
                       value={progress[index]}
                       onChange={(e) => handleSeek(index, e)}
-                      className="w-full h-1 accent-blue-500 cursor-pointer"
+                      className="w-full h-1 accent-indigo-400 cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-zinc-400 mt-1">
                       <span>{fmt((progress[index] / 100) * durations[index])}</span>
@@ -416,7 +416,7 @@ function CreationInner() {
             <div className="text-center">
               <button
                 onClick={startChat}
-                className="bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors"
+                className="bg-indigo-400 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors"
               >
                 Estimer mon projet
               </button>
@@ -429,7 +429,7 @@ function CreationInner() {
                   <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-blue-500 text-white rounded-br-sm"
+                        ? "bg-indigo-400 text-white rounded-br-sm"
                         : "bg-zinc-50 border border-zinc-200 text-zinc-700 rounded-bl-sm"
                     }`}>
                       {msg.content}
@@ -464,12 +464,12 @@ function CreationInner() {
                     onKeyDown={e => e.key === "Enter" && sendChatMessage()}
                     placeholder="Votre réponse…"
                     disabled={chatLoading}
-                    className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
+                    className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors disabled:opacity-50"
                   />
                   <button
                     onClick={sendChatMessage}
                     disabled={chatLoading || !chatInput.trim()}
-                    className="bg-blue-500 text-white px-4 py-3 rounded-xl text-xs font-semibold hover:bg-blue-400 transition-colors disabled:opacity-40"
+                    className="bg-indigo-400 text-white px-4 py-3 rounded-xl text-xs font-semibold hover:bg-indigo-500 transition-colors disabled:opacity-40"
                   >
                     →
                   </button>
@@ -517,7 +517,7 @@ function CreationInner() {
         required
         value={nom}
         onChange={e => setNom(e.target.value)}
-        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
       />
       <input
         name="email"
@@ -526,7 +526,7 @@ function CreationInner() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
       />
       <div className="flex flex-col gap-2 border border-zinc-200 rounded-xl px-5 py-4">
         <p className="text-xs text-zinc-500 uppercase tracking-widest text-center mb-1">Grille tarifaire</p>
@@ -537,10 +537,10 @@ function CreationInner() {
         ].map(({ id, label, desc, prix }) => (
           <label
             key={id}
-            className={`flex items-center justify-between gap-4 rounded-lg px-4 py-3 cursor-pointer transition-colors border ${preset === id ? "border-blue-500 bg-blue-500/5" : "border-transparent hover:bg-zinc-50"}`}
+            className={`flex items-center justify-between gap-4 rounded-lg px-4 py-3 cursor-pointer transition-colors border ${preset === id ? "border-indigo-400 bg-blue-500/5" : "border-transparent hover:bg-zinc-50"}`}
           >
             <div className="flex items-center gap-3">
-              <input type="radio" name="preset" value={id} checked={preset === id} onChange={() => setPreset(id)} className="accent-blue-500 w-4 h-4 cursor-pointer" />
+              <input type="radio" name="preset" value={id} checked={preset === id} onChange={() => setPreset(id)} className="accent-indigo-400 w-4 h-4 cursor-pointer" />
               <div>
                 <p className="text-sm font-medium text-zinc-700">{label}</p>
                 <p className="text-xs text-zinc-500">{desc}</p>
@@ -551,11 +551,11 @@ function CreationInner() {
         ))}
         <div className="flex gap-8 justify-center border-t border-zinc-200 pt-3 mt-1">
           <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-blue-500 cursor-pointer" />
+            <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-indigo-400 cursor-pointer" />
             <span className="text-sm text-zinc-500 group-hover:text-zinc-900 transition-colors">Délai urgent <span className="text-zinc-400">(−4 jours, +30€)</span></span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-blue-500 cursor-pointer" />
+            <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-indigo-400 cursor-pointer" />
             <span className="text-sm text-zinc-500 group-hover:text-zinc-900 transition-colors">Intégration de voix <span className="text-zinc-400">(+40€)</span></span>
           </label>
         </div>
@@ -568,7 +568,7 @@ function CreationInner() {
         required
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors resize-none"
       />
       <div className="border border-zinc-200 rounded-xl px-5 py-4 hover:border-zinc-400 transition-colors">
         <label className="text-sm text-zinc-500 block mb-2">Joindre un fichier (optionnel)</label>
@@ -593,7 +593,7 @@ function CreationInner() {
             if (data.url) window.location.href = data.url;
             else setLoadingCheckout(false);
           }}
-          className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-indigo-400 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loadingCheckout ? "Redirection…" : "Réserver avec un acompte de 30€"}
         </button>
@@ -606,7 +606,7 @@ function CreationInner() {
     </form>
 
     {paymentSuccess && (
-      <div className="mt-8 bg-zinc-50 border border-blue-500 rounded-2xl px-6 py-5 text-center">
+      <div className="mt-8 bg-zinc-50 border border-indigo-400 rounded-2xl px-6 py-5 text-center">
         <p className="text-blue-500 font-semibold mb-1">Acompte reçu ✓</p>
         <p className="text-zinc-500 text-sm">Merci ! Je vous contacte sous 48h pour lancer votre projet.</p>
       </div>

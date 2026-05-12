@@ -70,10 +70,10 @@ export default function Teaching() {
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
           <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
-          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
-          <a href="/teaching" className="text-blue-500">TEACH</a>
+          <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
+          <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>TEACH</a>
           
-          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+          <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
           <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
@@ -84,10 +84,10 @@ export default function Teaching() {
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
           <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
-          <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
-          <a href="/teaching" className="text-blue-500">TEACH</a>
+          <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
+          <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>TEACH</a>
           
-          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+          <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
       )}
 
@@ -106,7 +106,7 @@ export default function Teaching() {
 
         {/* Intro */}
         <div className="text-center mb-20">
-          <a href="/" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
+          <a href="/perform" className="inline-block bg-violet-400 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-500 transition-colors">
             Qui suis-je pour t'apprendre ?
           </a>
         </div>
@@ -171,8 +171,8 @@ export default function Teaching() {
           <p className="text-zinc-500 text-xs uppercase tracking-widest mb-6 text-center">Tarifs</p>
 
           {/* Formation complète */}
-          <div className="border-2 border-blue-500 rounded-2xl px-6 py-6 mb-6 text-center relative">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full tracking-widest uppercase">Recommandé</span>
+          <div className="border-2 border-violet-400 rounded-2xl px-6 py-6 mb-6 text-center relative">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-400 text-white text-xs font-semibold px-3 py-1 rounded-full tracking-widest uppercase">Recommandé</span>
             <p className="text-zinc-900 font-bold text-lg mb-1">Formation complète</p>
             <p className="text-zinc-500 text-sm mb-4">Mixer · Mashups FL Studio · Psychologie & Réseau</p>
             <p className="text-4xl font-bold text-zinc-900">99€</p>
@@ -198,7 +198,7 @@ export default function Teaching() {
         {/* Early bird */}
         <div className="border-t border-zinc-200 pt-14 pb-8">
           {submitted ? (
-            <p className="text-blue-500 text-sm text-center">Tu bénéficieras de -10% à la sortie ✓</p>
+            <p className="text-violet-400 text-sm text-center">Tu bénéficieras de -10% à la sortie ✓</p>
           ) : (
             <>
               <h2 className="text-xl font-bold text-center mb-2">Formation disponible en septembre 2026.</h2>
@@ -210,12 +210,12 @@ export default function Teaching() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  className="flex-1 bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
+                  className="flex-1 bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 whitespace-nowrap"
+                  className="bg-violet-400 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-500 transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
                   {loading ? "…" : "J'en profite"}
                 </button>
