@@ -341,11 +341,11 @@ export default function Artist() {
           },
           {
             type: "Vidéo", color: "#a78bfa", title: "E-Tario @ Almanach Festival", subtitle: "Set Live",
-            content: (active: boolean) => <VideoCard src="/extrait%20pjanoo%20linkin.mp4" active={active} />,
+            content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/extrait-pjanoo-linkin.mp4" active={active} />,
           },
           {
             type: "Interview", color: "#f472b6", title: "E-Tario @ Fun Radio Bourgogne", subtitle: "2026",
-            content: (active: boolean) => <VideoCard src="/Interview%20Fun%20Radio%20Part%201.mp4" active={active} objectPosition="center center" />,
+            content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/interview-fun-radio-part1.mp4" active={active} objectPosition="center center" />,
           },
         ];
         return (
