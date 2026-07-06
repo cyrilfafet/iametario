@@ -94,7 +94,7 @@ function CreationInner() {
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
   const [demosOpen, setDemosOpen] = useState(false);
-  const [currentDemo, setCurrentDemo] = useState(0);
+  const [openDemo, setOpenDemo] = useState<number | null>(null);
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -274,22 +274,19 @@ function CreationInner() {
 </section>
 
       {/* Démos */}
-      <section className="border-t border-zinc-100">
-        {/* Toggle header */}
+      <section className="border-t border-zinc-100 px-8">
+        <div className="max-w-2xl mx-auto">
         <button
           onClick={() => setDemosOpen(o => !o)}
-          className="w-full flex items-center justify-between px-8 py-6 hover:bg-zinc-50 transition-colors group"
+          className="w-full flex items-center justify-between py-6 group"
         >
-          <div className="flex items-center gap-3">
-            <span className="text-xs uppercase tracking-widest text-zinc-400 group-hover:text-zinc-600 transition-colors">Exemples de réalisations</span>
-            <span className="text-xs text-zinc-300">({demos.length})</span>
-          </div>
-          <span className={`text-zinc-400 text-xl transition-transform duration-300 ${demosOpen ? "rotate-45" : ""}`}>+</span>
+          <p className="text-zinc-500 text-sm tracking-widest uppercase">Exemples de réalisations</p>
+          <span className={`text-zinc-500 group-hover:text-zinc-900 transition-all duration-200 text-lg leading-none ${demosOpen ? "rotate-45" : ""}`}>+</span>
         </button>
 
         {/* Carousel */}
         {demosOpen && (
-          <div className="px-8 pb-10">
+          <div className="pb-10">
             <div className="max-w-2xl mx-auto">
               {/* Compteur + navigation */}
               <div className="flex items-center justify-between mb-6">
@@ -387,6 +384,7 @@ function CreationInner() {
             </div>
           </div>
         )}
+        </div>
       </section>
 
       {/* FAQ */}
