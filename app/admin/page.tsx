@@ -81,11 +81,10 @@ export default function Admin() {
     });
     const urlData = await urlRes.json();
     if (!urlRes.ok) throw new Error(`Signed URL ${type} : ${urlData.error}`);
-    const { token, path } = urlData;
-    const { error } = await supabase.storage
-      .from("Livraison")
-      .uploadToSignedUrl(path, token, file, { contentType: file.type || "audio/mpeg" });
-    if (error) throw new Error(`Upload ${type} échoué : ${error.message}`);
+    const { url } = urlData;
+    const contentType = type === "preview" ? "audio/mpeg" : type === "cover" ? "image/jpeg" : "audio/wav";
+    const uploadRes = await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": contentType } });
+    if (!uploadRes.ok) throw new Error(`Upload ${type} échoué : ${uploadRes.status}`);
   };
 
   const createShopTrack = async () => {
@@ -96,9 +95,9 @@ export default function Admin() {
       await uploadShopFile(shopPreviewFile, id, "preview");
       await uploadShopFile(shopWavFile, id, "wav");
       setShopProgressLabel("Création de la track…");
-      const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const fichier_preview_url = `${base}/storage/v1/object/public/Livraison/shop/${id}/preview.mp3`;
-      const fichier_wav_url = `${base}/storage/v1/object/public/Livraison/shop/${id}/final.wav`;
+      const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+      const fichier_preview_url = `${base}/shop/${id}/preview.mp3`;
+      const fichier_wav_url = `${base}/shop/${id}/final.wav`;
       const res = await fetch("/api/shop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

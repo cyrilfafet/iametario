@@ -1,4 +1,6 @@
-import { supabaseAdmin } from "@/lib/supabase";
+import { r2, R2_BUCKET } from "@/lib/r2";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -9,12 +11,14 @@ export async function POST(req: NextRequest) {
   }
 
   const filename = type === "preview" ? "preview.mp3" : type === "cover" ? "cover.jpg" : "final.wav";
-  const path = `shop/${id}/${filename}`;
+  const contentType = type === "preview" ? "audio/mpeg" : type === "cover" ? "image/jpeg" : "audio/wav";
+  const key = `shop/${id}/${filename}`;
 
-  const { data, error } = await supabaseAdmin.storage
-    .from("Livraison")
-    .createSignedUploadUrl(path);
+  const url = await getSignedUrl(
+    r2,
+    new PutObjectCommand({ Bucket: R2_BUCKET, Key: key, ContentType: contentType }),
+    { expiresIn: 3600 }
+  );
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ token: data.token, path: data.path });
+  return NextResponse.json({ url, key });
 }

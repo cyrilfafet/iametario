@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.1",
+    "@aws-sdk/client-s3": "^3.1080.0",
+    "@aws-sdk/s3-request-presigner": "^3.1080.0",
     "@supabase/supabase-js": "^2.105.3",
     "jsmediatags": "^3.9.7",
     "next": "16.2.1",
