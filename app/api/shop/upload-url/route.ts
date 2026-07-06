@@ -15,6 +15,6 @@ export async function POST(req: NextRequest) {
     .from("Livraison")
     .createSignedUploadUrl(path);
 
-  if (error) return NextResponse.json({ error: `${error.message} | status: ${(error as any).status} | url: ${process.env.NEXT_PUBLIC_SUPABASE_URL} | key_set: ${!!process.env.SUPABASE_SERVICE_ROLE_KEY}` }, { status: 500 });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ token: data.token, path: data.path });
 }
