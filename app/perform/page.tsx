@@ -252,58 +252,75 @@ export default function Artist() {
       </section>
 
       {/* Médias */}
-      <section className="w-full bg-zinc-950 py-14">
-        <p className="text-zinc-600 text-xs uppercase tracking-widest mb-8 text-center">Médias</p>
+      <section className="w-full bg-zinc-50 py-16 border-t border-zinc-100">
+        <div className="max-w-4xl mx-auto px-8 mb-8 flex items-end justify-between">
+          <div>
+            <p className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Écouter · Regarder</p>
+            <h2 className="text-2xl font-bold text-zinc-900">Médias</h2>
+          </div>
+        </div>
         <div className="overflow-x-auto scrollbar-none">
-          <div className="flex gap-3 px-8 min-w-max mx-auto" style={{ maxWidth: "fit-content" }}>
+          <div className="flex gap-5 px-8 min-w-max pb-2">
 
             {/* SoundCloud 1 */}
-            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
-              <div className="px-5 pt-4 pb-3">
-                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Audio</p>
-                <p className="text-white text-sm font-medium">Mix Club — 2024</p>
+            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
+              <div className="h-1 w-full bg-blue-500" />
+              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
+                <p className="text-xs uppercase tracking-widest text-blue-400 mb-2">Audio</p>
+                <p className="text-zinc-900 font-semibold mb-1">Mix Club</p>
+                <p className="text-zinc-400 text-xs mb-4">2024</p>
+                <div className="mt-auto -mx-5 -mb-4">
+                  <iframe width="100%" height="120" scrolling="no" frameBorder="no" allow="autoplay"
+                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+                  />
+                </div>
               </div>
-              <iframe width="100%" height="130" scrolling="no" frameBorder="no" allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-              />
             </div>
 
             {/* SoundCloud 2 */}
-            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
-              <div className="px-5 pt-4 pb-3">
-                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Audio</p>
-                <p className="text-white text-sm font-medium">Mix Festival — 2025</p>
+            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
+              <div className="h-1 w-full bg-blue-500" />
+              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
+                <p className="text-xs uppercase tracking-widest text-blue-400 mb-2">Audio</p>
+                <p className="text-zinc-900 font-semibold mb-1">Mix Festival</p>
+                <p className="text-zinc-400 text-xs mb-4">2025</p>
+                <div className="mt-auto -mx-5 -mb-4">
+                  <iframe width="100%" height="120" scrolling="no" frameBorder="no" allow="autoplay"
+                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+                  />
+                </div>
               </div>
-              <iframe width="100%" height="130" scrolling="no" frameBorder="no" allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-              />
             </div>
 
             {/* Vidéo set — placeholder */}
-            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
-              <div className="px-5 pt-4 pb-3">
-                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Vidéo</p>
-                <p className="text-white text-sm font-medium">Set — Live</p>
-              </div>
-              <div className="w-full h-44 flex flex-col items-center justify-center gap-2">
-                <span className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center">
-                  <span className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[10px] border-transparent border-l-zinc-600 ml-0.5" />
-                </span>
-                <span className="text-zinc-700 text-xs tracking-widest uppercase">Bientôt disponible</span>
+            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
+              <div className="h-1 w-full bg-indigo-400" />
+              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
+                <p className="text-xs uppercase tracking-widest text-indigo-400 mb-2">Vidéo</p>
+                <p className="text-zinc-900 font-semibold mb-1">Set Live</p>
+                <p className="text-zinc-400 text-xs mb-4">À venir</p>
+                <div className="mt-auto bg-zinc-50 rounded-xl h-32 flex flex-col items-center justify-center gap-2">
+                  <div className="w-9 h-9 rounded-full border border-zinc-200 flex items-center justify-center">
+                    <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-300 ml-0.5" />
+                  </div>
+                  <span className="text-zinc-300 text-xs tracking-widest uppercase">Bientôt disponible</span>
+                </div>
               </div>
             </div>
 
             {/* Interview — placeholder */}
-            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
-              <div className="px-5 pt-4 pb-3">
-                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Interview</p>
-                <p className="text-white text-sm font-medium">Fun Radio Bourgogne</p>
-              </div>
-              <div className="w-full h-44 flex flex-col items-center justify-center gap-2">
-                <span className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center">
-                  <span className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[10px] border-transparent border-l-zinc-600 ml-0.5" />
-                </span>
-                <span className="text-zinc-700 text-xs tracking-widest uppercase">Bientôt disponible</span>
+            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
+              <div className="h-1 w-full bg-violet-400" />
+              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
+                <p className="text-xs uppercase tracking-widest text-violet-400 mb-2">Interview</p>
+                <p className="text-zinc-900 font-semibold mb-1">Fun Radio Bourgogne</p>
+                <p className="text-zinc-400 text-xs mb-4">À venir</p>
+                <div className="mt-auto bg-zinc-50 rounded-xl h-32 flex flex-col items-center justify-center gap-2">
+                  <div className="w-9 h-9 rounded-full border border-zinc-200 flex items-center justify-center">
+                    <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-300 ml-0.5" />
+                  </div>
+                  <span className="text-zinc-300 text-xs tracking-widest uppercase">Bientôt disponible</span>
+                </div>
               </div>
             </div>
 
