@@ -3,10 +3,23 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "@/lib/i18n";
 import Footer from "@/components/Footer";
 
+const timeline = [
+  { year: 2015, event: "Premières platines" },
+  { year: 2017, event: "17ème sur 18 à mon premier concours DJ" },
+  { year: 2018, event: "1er à 3 concours DJ consécutifs" },
+  { year: 2019, event: "Première résidence au Beverly (Dijon)" },
+  { year: 2021, event: "Saison DJ au Club Med" },
+  { year: 2023, event: "Remix Peggy Gou : 70k plays, ZuTv Roumanie, Sunburn Festival Inde" },
+  { year: 2024, event: "500k vues sur les réseaux sociaux" },
+  { year: 2025, event: 'Premier titre "Your Stage" + Line Up Amani Ibiza' },
+  { year: 2026, event: "Résident Bal'tazar Dijon + Fun Radio Bourgogne" },
+];
+
 export default function Artist() {
   const { t, lang, setLang } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [tlIndex, setTlIndex] = useState(timeline.length - 1);
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
   const [bookingType, setBookingType] = useState("");
@@ -179,6 +192,58 @@ export default function Artist() {
           <br /><br />
           <span dangerouslySetInnerHTML={{__html: t.bio.p4}} />
         </p>
+
+        {/* Timeline */}
+        <div className="w-full max-w-3xl mt-14">
+          {/* Année + événement */}
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <button
+              onClick={() => setTlIndex(i => Math.max(0, i - 1))}
+              disabled={tlIndex === 0}
+              className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors disabled:opacity-20 disabled:cursor-not-allowed flex-shrink-0"
+            >‹</button>
+            <div className="text-center">
+              <p className="text-5xl md:text-6xl font-bold tabular-nums" style={{ color: "#60A5FA" }}>
+                {timeline[tlIndex].year}
+              </p>
+              <p className="text-zinc-500 text-base mt-2 max-w-sm mx-auto leading-snug">
+                {timeline[tlIndex].event}
+              </p>
+            </div>
+            <button
+              onClick={() => setTlIndex(i => Math.min(timeline.length - 1, i + 1))}
+              disabled={tlIndex === timeline.length - 1}
+              className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors disabled:opacity-20 disabled:cursor-not-allowed flex-shrink-0"
+            >›</button>
+          </div>
+
+          {/* Ligne des années */}
+          <div className="relative">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-px h-px bg-zinc-100" />
+            <div className="overflow-x-auto scrollbar-none">
+              <div className="flex gap-6 px-4 relative min-w-max mx-auto justify-center">
+                {timeline.map((item, i) => (
+                  <button
+                    key={item.year}
+                    onClick={() => setTlIndex(i)}
+                    className="relative flex flex-col items-center gap-1.5 py-1 transition-colors"
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full transition-colors"
+                      style={{ backgroundColor: i === tlIndex ? "#60A5FA" : "#d4d4d8" }}
+                    />
+                    <span
+                      className="text-xs font-mono transition-colors whitespace-nowrap"
+                      style={{ color: i === tlIndex ? "#60A5FA" : "#a1a1aa" }}
+                    >
+                      {item.year}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Lecteurs Soundcloud */}
         <div className="w-full max-w-4xl mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
