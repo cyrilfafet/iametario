@@ -249,57 +249,64 @@ export default function Artist() {
           </div>
         </div>
 
-        {/* Médias */}
-        <div className="w-full max-w-4xl mt-14">
-          <p className="text-zinc-400 text-xs uppercase tracking-widest mb-6 text-center">Médias</p>
-          <div className="overflow-x-auto scrollbar-none -mx-4 px-4">
-            <div className="flex gap-4 min-w-max">
+      </section>
 
-              {/* SoundCloud 1 */}
-              <div className="w-72 flex-shrink-0 border border-zinc-100 rounded-xl overflow-hidden">
-                <div className="px-4 pt-3 pb-2 flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-widest text-zinc-400 bg-zinc-50 px-2 py-0.5 rounded-full">Audio</span>
-                  <span className="text-xs text-zinc-500 truncate">Mix Club — 2024</span>
-                </div>
-                <iframe width="100%" height="140" scrolling="no" frameBorder="no" allow="autoplay"
-                  src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%232c2a32&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-                />
+      {/* Médias */}
+      <section className="w-full bg-zinc-950 py-14">
+        <p className="text-zinc-600 text-xs uppercase tracking-widest mb-8 text-center">Médias</p>
+        <div className="overflow-x-auto scrollbar-none">
+          <div className="flex gap-3 px-8 min-w-max mx-auto" style={{ maxWidth: "fit-content" }}>
+
+            {/* SoundCloud 1 */}
+            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
+              <div className="px-5 pt-4 pb-3">
+                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Audio</p>
+                <p className="text-white text-sm font-medium">Mix Club — 2024</p>
               </div>
-
-              {/* SoundCloud 2 */}
-              <div className="w-72 flex-shrink-0 border border-zinc-100 rounded-xl overflow-hidden">
-                <div className="px-4 pt-3 pb-2 flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-widest text-zinc-400 bg-zinc-50 px-2 py-0.5 rounded-full">Audio</span>
-                  <span className="text-xs text-zinc-500 truncate">Mix Festival — 2025</span>
-                </div>
-                <iframe width="100%" height="140" scrolling="no" frameBorder="no" allow="autoplay"
-                  src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%232c2a32&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-                />
-              </div>
-
-              {/* Vidéo set — placeholder */}
-              <div className="w-72 flex-shrink-0 border border-zinc-100 rounded-xl overflow-hidden">
-                <div className="px-4 pt-3 pb-2 flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-widest text-zinc-400 bg-zinc-50 px-2 py-0.5 rounded-full">Vidéo</span>
-                  <span className="text-xs text-zinc-500 truncate">Set — Live</span>
-                </div>
-                <div className="w-full h-40 bg-zinc-50 flex items-center justify-center">
-                  <span className="text-zinc-300 text-xs tracking-widest uppercase">Bientôt disponible</span>
-                </div>
-              </div>
-
-              {/* Interview — placeholder */}
-              <div className="w-72 flex-shrink-0 border border-zinc-100 rounded-xl overflow-hidden">
-                <div className="px-4 pt-3 pb-2 flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-widest text-zinc-400 bg-zinc-50 px-2 py-0.5 rounded-full">Interview</span>
-                  <span className="text-xs text-zinc-500 truncate">Fun Radio Bourgogne</span>
-                </div>
-                <div className="w-full h-40 bg-zinc-50 flex items-center justify-center">
-                  <span className="text-zinc-300 text-xs tracking-widest uppercase">Bientôt disponible</span>
-                </div>
-              </div>
-
+              <iframe width="100%" height="130" scrolling="no" frameBorder="no" allow="autoplay"
+                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+              />
             </div>
+
+            {/* SoundCloud 2 */}
+            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
+              <div className="px-5 pt-4 pb-3">
+                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Audio</p>
+                <p className="text-white text-sm font-medium">Mix Festival — 2025</p>
+              </div>
+              <iframe width="100%" height="130" scrolling="no" frameBorder="no" allow="autoplay"
+                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+              />
+            </div>
+
+            {/* Vidéo set — placeholder */}
+            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
+              <div className="px-5 pt-4 pb-3">
+                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Vidéo</p>
+                <p className="text-white text-sm font-medium">Set — Live</p>
+              </div>
+              <div className="w-full h-44 flex flex-col items-center justify-center gap-2">
+                <span className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center">
+                  <span className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[10px] border-transparent border-l-zinc-600 ml-0.5" />
+                </span>
+                <span className="text-zinc-700 text-xs tracking-widest uppercase">Bientôt disponible</span>
+              </div>
+            </div>
+
+            {/* Interview — placeholder */}
+            <div className="w-80 flex-shrink-0 bg-zinc-900 rounded-2xl overflow-hidden">
+              <div className="px-5 pt-4 pb-3">
+                <p className="text-xs uppercase tracking-widest text-zinc-600 mb-1">Interview</p>
+                <p className="text-white text-sm font-medium">Fun Radio Bourgogne</p>
+              </div>
+              <div className="w-full h-44 flex flex-col items-center justify-center gap-2">
+                <span className="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center">
+                  <span className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[10px] border-transparent border-l-zinc-600 ml-0.5" />
+                </span>
+                <span className="text-zinc-700 text-xs tracking-widest uppercase">Bientôt disponible</span>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
