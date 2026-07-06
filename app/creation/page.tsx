@@ -93,6 +93,8 @@ function CreationInner() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
+  const [demosOpen, setDemosOpen] = useState(false);
+  const [currentDemo, setCurrentDemo] = useState(0);
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -272,75 +274,119 @@ function CreationInner() {
 </section>
 
       {/* Démos */}
-      <section className="border-t border-zinc-100 px-8 py-12">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-zinc-500 text-sm tracking-widest uppercase mb-12 text-center">Ils m'ont demandé, j'ai livré</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {demos.map((demo, index) => (
-              <div key={demo.title} className="flex flex-col gap-3">
-                {/* Bulle client */}
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center text-xs text-zinc-500 flex-shrink-0">
-                    {demo.client[0]}
-                  </div>
-                  <div className="bg-zinc-50 rounded-2xl rounded-tl-sm px-4 py-3">
-                    <p className="text-xs text-zinc-500 mb-1">{demo.client}</p>
-                    <p className="text-sm text-zinc-700 leading-relaxed">{demo.brief}</p>
-                  </div>
-                </div>
-                {/* Lecteur audio */}
-                <div className="ml-11 flex items-center gap-4">
-                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-indigo-400" : "border-zinc-100 opacity-60"}`}>
-                    <div className="flex items-center gap-4 mb-3">
-                      <button
-                        onClick={() => demo.file && togglePlay(index)}
-                        disabled={!demo.file}
-                        className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-indigo-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
-                      >
-                        {playing === index ? (
-                          <span className="w-3 h-3 flex gap-0.5">
-                            <span className="w-1 h-full bg-zinc-900 rounded-sm" />
-                            <span className="w-1 h-full bg-zinc-900 rounded-sm" />
-                          </span>
-                        ) : (
-                          <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent border-l-zinc-900 ml-0.5" />
-                        )}
-                      </button>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium mb-1">{demo.title}</p>
-                        <span className="text-xs text-blue-500 border border-indigo-400 rounded-full px-2.5 py-0.5">{demo.tag}</span>
-                      </div>
-                    </div>
-                    {/* Barre de progression */}
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      value={progress[index]}
-                      onChange={(e) => handleSeek(index, e)}
-                      className="w-full h-1 accent-indigo-400 cursor-pointer"
-                    />
-                    <div className="flex justify-between text-xs text-zinc-400 mt-1">
-                      <span>{fmt((progress[index] / 100) * durations[index])}</span>
-                      <span>{fmt(durations[index])}</span>
-                    </div>
-                    <audio
-                      ref={(el) => { audioRefs.current[index] = el; }}
-                      src={demo.file}
-                      onLoadedMetadata={() => {
-                        const audio = audioRefs.current[index];
-                        if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
-                      }}
-                      onTimeUpdate={() => handleTimeUpdate(index)}
-                      onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
-                    />
-                  </div>
-                  <span className="text-base font-semibold text-zinc-500 border border-zinc-300 rounded-full px-3 py-1 flex-shrink-0">{demo.price}</span>
+      <section className="border-t border-zinc-100">
+        {/* Toggle header */}
+        <button
+          onClick={() => setDemosOpen(o => !o)}
+          className="w-full flex items-center justify-between px-8 py-6 hover:bg-zinc-50 transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-xs uppercase tracking-widest text-zinc-400 group-hover:text-zinc-600 transition-colors">Exemples de réalisations</span>
+            <span className="text-xs text-zinc-300">({demos.length})</span>
+          </div>
+          <span className={`text-zinc-400 text-xl transition-transform duration-300 ${demosOpen ? "rotate-45" : ""}`}>+</span>
+        </button>
+
+        {/* Carousel */}
+        {demosOpen && (
+          <div className="px-8 pb-10">
+            <div className="max-w-2xl mx-auto">
+              {/* Compteur + navigation */}
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-xs text-zinc-400 font-mono">{currentDemo + 1} / {demos.length}</span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => { setPlaying(null); setCurrentDemo(i => Math.max(0, i - 1)); }}
+                    disabled={currentDemo === 0}
+                    className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-indigo-400 hover:text-indigo-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >‹</button>
+                  <button
+                    onClick={() => { setPlaying(null); setCurrentDemo(i => Math.min(demos.length - 1, i + 1)); }}
+                    disabled={currentDemo === demos.length - 1}
+                    className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-indigo-400 hover:text-indigo-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >›</button>
                 </div>
               </div>
-            ))}
+
+              {/* Slide */}
+              {(() => {
+                const index = currentDemo;
+                const demo = demos[index];
+                return (
+                  <div className="flex flex-col gap-3">
+                    {/* Bulle client */}
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center text-xs text-zinc-500 flex-shrink-0">
+                        {demo.client[0]}
+                      </div>
+                      <div className="bg-zinc-50 rounded-2xl rounded-tl-sm px-4 py-3">
+                        <p className="text-xs text-zinc-500 mb-1">{demo.client}</p>
+                        <p className="text-sm text-zinc-700 leading-relaxed">{demo.brief}</p>
+                      </div>
+                    </div>
+                    {/* Lecteur */}
+                    <div className="ml-11 flex items-center gap-4">
+                      <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-indigo-400" : "border-zinc-100 opacity-60"}`}>
+                        <div className="flex items-center gap-4 mb-3">
+                          <button
+                            onClick={() => demo.file && togglePlay(index)}
+                            disabled={!demo.file}
+                            className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-indigo-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                          >
+                            {playing === index ? (
+                              <span className="w-3 h-3 flex gap-0.5">
+                                <span className="w-1 h-full bg-zinc-900 rounded-sm" />
+                                <span className="w-1 h-full bg-zinc-900 rounded-sm" />
+                              </span>
+                            ) : (
+                              <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent border-l-zinc-900 ml-0.5" />
+                            )}
+                          </button>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium mb-1">{demo.title}</p>
+                            <span className="text-xs text-indigo-400 border border-indigo-400/40 rounded-full px-2.5 py-0.5">{demo.tag}</span>
+                          </div>
+                        </div>
+                        <input
+                          type="range" min={0} max={100} value={progress[index]}
+                          onChange={(e) => handleSeek(index, e)}
+                          className="w-full h-1 accent-indigo-400 cursor-pointer"
+                        />
+                        <div className="flex justify-between text-xs text-zinc-400 mt-1">
+                          <span>{fmt((progress[index] / 100) * durations[index])}</span>
+                          <span>{fmt(durations[index])}</span>
+                        </div>
+                        <audio
+                          ref={(el) => { audioRefs.current[index] = el; }}
+                          src={demo.file}
+                          onLoadedMetadata={() => {
+                            const audio = audioRefs.current[index];
+                            if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
+                          }}
+                          onTimeUpdate={() => handleTimeUpdate(index)}
+                          onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
+                        />
+                      </div>
+                      <span className="text-base font-semibold text-zinc-500 border border-zinc-300 rounded-full px-3 py-1 flex-shrink-0">{demo.price}</span>
+                    </div>
+
+                    {/* Points de navigation */}
+                    <div className="flex justify-center gap-1.5 mt-4">
+                      {demos.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => { setPlaying(null); setCurrentDemo(i); }}
+                          className="w-1.5 h-1.5 rounded-full transition-colors"
+                          style={{ backgroundColor: i === currentDemo ? "#818cf8" : "#d4d4d8" }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* FAQ */}
