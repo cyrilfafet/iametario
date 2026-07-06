@@ -256,8 +256,7 @@ function CreationInner() {
   <div className="relative z-10">
     <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-5">Services Audio</h1>
     <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-      Le bon son au bon moment. Sur mesure, toujours.<br />
-      <span className="text-zinc-500 text-base">Intro DJ & Club, bandes son spectacle, feux d'artifice, entrée des mariés, publicité audio...</span>
+      Le bon son au bon moment, sur mesure.
     </p>
     <div className="flex flex-wrap items-center justify-center gap-3 mt-6 max-w-sm mx-auto">
       <a href="#commander" className="inline-block bg-indigo-400 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors">
