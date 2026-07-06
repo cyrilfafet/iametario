@@ -263,7 +263,7 @@ function CreationInner() {
         Commander un montage audio
       </a>
       <a href="/shop" className="inline-block border border-zinc-300 text-zinc-600 px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:border-zinc-400 hover:text-zinc-900 transition-colors">
-        Prêts à l'emploi →
+        Shop — intros, transitions, remixes →
       </a>
     </div>
   </div>
