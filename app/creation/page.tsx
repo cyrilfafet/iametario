@@ -197,7 +197,7 @@ function CreationInner() {
 
   const handleTimeUpdate = (index: number) => {
     const audio = audioRefs.current[index];
-    if (!audio) return;
+    if (!audio || !audio.duration) return;
     const pct = (audio.currentTime / audio.duration) * 100;
     setProgress(prev => prev.map((p, i) => i === index ? pct : p));
   };
