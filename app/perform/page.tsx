@@ -22,9 +22,7 @@ export default function Artist() {
   const [tlIndex, setTlIndex] = useState(timeline.length - 1);
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
-  const [bookingType, setBookingType] = useState("");
   const [bookingDate, setBookingDate] = useState("");
-  const [bookingBudget, setBookingBudget] = useState("");
   const [bookingMessage, setBookingMessage] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
@@ -41,7 +39,7 @@ export default function Artist() {
     await fetch("/api/booking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nom: bookingNom, email: bookingEmail, type: bookingType, date: bookingDate, budget: bookingBudget, message: bookingMessage }),
+      body: JSON.stringify({ nom: bookingNom, email: bookingEmail, date: bookingDate, message: bookingMessage }),
     });
     setBookingSubmitted(true);
     setBookingLoading(false);
@@ -284,38 +282,57 @@ export default function Artist() {
             </div>
           </div>
 
-          <div id="booking-form">
+          <div id="booking-form" className="max-w-lg mx-auto">
             {bookingSubmitted ? (
-              <div className="border border-blue-500/40 rounded-2xl px-6 py-10 text-center">
-                <p className="text-blue-500 font-semibold mb-1">{t.booking.success_title}</p>
-                <p className="text-zinc-500 text-sm">{t.booking.success_text}</p>
+              <div className="border border-zinc-200 px-8 py-12 text-center">
+                <p className="text-blue-500 font-semibold mb-2">{t.booking.success_title}</p>
+                <p className="text-zinc-400 text-sm">{t.booking.success_text}</p>
               </div>
             ) : (
-              <form onSubmit={handleBooking} className="flex flex-col gap-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input type="text" placeholder={t.booking.form_name} value={bookingNom} onChange={e => setBookingNom(e.target.value)} required className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
-                  <input type="email" placeholder={t.booking.form_email} value={bookingEmail} onChange={e => setBookingEmail(e.target.value)} required className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <select value={bookingType} onChange={e => setBookingType(e.target.value)} required className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 focus:outline-none focus:border-blue-500 transition-colors cursor-pointer">
-                    <option value="" disabled>{t.booking.form_type}</option>
-                    <option value="Club">{t.booking.form_type_club}</option>
-                    <option value="Festival">{t.booking.form_type_festival}</option>
-                    <option value="Private">{t.booking.form_type_private}</option>
-                    <option value="Other">{t.booking.form_type_other}</option>
-                  </select>
-                  <input type="text" placeholder={t.booking.form_date} value={bookingDate} onChange={e => setBookingDate(e.target.value)} className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
-                </div>
-                <input type="text" placeholder={t.booking.form_budget} value={bookingBudget} onChange={e => setBookingBudget(e.target.value)} className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors" />
-                <textarea placeholder={t.booking.form_message} value={bookingMessage} onChange={e => setBookingMessage(e.target.value)} rows={4} className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none" />
-                <button type="submit" disabled={bookingLoading} className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50">
-                  {bookingLoading ? t.booking.form_sending : t.booking.form_submit}
-                </button>
-                <p className="text-center mt-1">
+              <form onSubmit={handleBooking} className="flex flex-col gap-0">
+                <input
+                  type="text"
+                  placeholder={t.booking.form_name}
+                  value={bookingNom}
+                  onChange={e => setBookingNom(e.target.value)}
+                  required
+                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-white"
+                />
+                <input
+                  type="email"
+                  placeholder={t.booking.form_email}
+                  value={bookingEmail}
+                  onChange={e => setBookingEmail(e.target.value)}
+                  required
+                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-white"
+                />
+                <input
+                  type="text"
+                  placeholder={t.booking.form_date}
+                  value={bookingDate}
+                  onChange={e => setBookingDate(e.target.value)}
+                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-white"
+                />
+                <textarea
+                  placeholder={t.booking.form_message}
+                  value={bookingMessage}
+                  onChange={e => setBookingMessage(e.target.value)}
+                  rows={5}
+                  required
+                  className="border border-zinc-200 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors resize-none bg-white"
+                />
+                <div className="flex flex-col items-start gap-3 mt-6">
+                  <button
+                    type="submit"
+                    disabled={bookingLoading}
+                    className="border border-zinc-900 text-zinc-900 px-7 py-3 text-xs font-semibold tracking-widest uppercase hover:bg-zinc-900 hover:text-white transition-colors disabled:opacity-40"
+                  >
+                    {bookingLoading ? t.booking.form_sending : t.booking.form_submit}
+                  </button>
                   <a href="/presskit.pdf" target="_blank" className="text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
                     {t.booking.presskit}
                   </a>
-                </p>
+                </div>
               </form>
             )}
           </div>
