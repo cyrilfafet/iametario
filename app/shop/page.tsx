@@ -228,6 +228,7 @@ export default function ShopPage() {
           <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
           <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
           <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+          <a href="/shop" className="font-medium text-zinc-900">SHOP</a>
           <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -241,6 +242,7 @@ export default function ShopPage() {
           <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
           <a href="/creation" className="hover:text-blue-500 transition-colors">CREATE</a>
           <a href="/teaching" className="hover:text-blue-500 transition-colors">TEACH</a>
+          <a href="/shop" className="font-medium text-zinc-900">SHOP</a>
           <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
