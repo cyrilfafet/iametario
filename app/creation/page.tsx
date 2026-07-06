@@ -604,7 +604,7 @@ function CreationInner() {
         >
           Envoyer
         </button>
-        <p className="text-zinc-400 text-xs">Je vous réponds sous 48h avec une confirmation et un lien de paiement.</p>
+        <p className="text-zinc-400 text-xs">Je vous réponds sous 48h — confirmation de faisabilité et acompte de 30€ pour lancer le projet.</p>
       </div>
 
     </form>
