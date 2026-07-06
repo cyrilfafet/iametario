@@ -163,15 +163,12 @@ function CreationInner() {
     }
   };
 
-  const [preset, setPreset] = useState<string>("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showFaq, setShowFaq] = useState(false);
-  const [urgent, setUrgent] = useState(false);
-  const [voix, setVoix] = useState(false);
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
-  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const paymentSuccess = searchParams.get("payment") === "success";
 
@@ -548,11 +545,12 @@ function CreationInner() {
         if (data.success) {
           alert("Message envoyé ! Je vous réponds sous 48h.");
           (e.target as HTMLFormElement).reset();
+          setNom(""); setEmail(""); setDescription(""); setFileName(null);
         } else {
           alert("Erreur lors de l'envoi. Réessayez ou contactez-moi directement.");
         }
       }}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-0"
     >
       <input type="hidden" name="source" value="creation" />
       <input
@@ -562,7 +560,7 @@ function CreationInner() {
         required
         value={nom}
         onChange={e => setNom(e.target.value)}
-        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
+        className="bg-white border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
       />
       <input
         name="email"
@@ -571,91 +569,45 @@ function CreationInner() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
+        className="bg-white border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
       />
-      <div className="flex flex-col gap-2 border border-zinc-200 rounded-xl px-5 py-4">
-        <p className="text-xs text-zinc-500 uppercase tracking-widest text-center mb-1">Grille tarifaire</p>
-        {[
-          { id: "simple", label: "Edit Simple", desc: "Mashup, transition propre, montage court", prix: "50€" },
-          { id: "avance", label: "Création Avancée", desc: "Intro personnalisée, medley 3–5 titres", prix: "80€" },
-          { id: "performance", label: "Pack Performance", desc: "Intro épique, montage complexe + Sound Design", prix: "Sur mesure" },
-        ].map(({ id, label, desc, prix }) => (
-          <label
-            key={id}
-            className={`flex items-center justify-between gap-4 rounded-lg px-4 py-3 cursor-pointer transition-colors border ${preset === id ? "border-indigo-400 bg-blue-500/5" : "border-transparent hover:bg-zinc-50"}`}
-          >
-            <div className="flex items-center gap-3">
-              <input type="radio" name="preset" value={id} checked={preset === id} onChange={() => setPreset(id)} className="accent-indigo-400 w-4 h-4 cursor-pointer" />
-              <div>
-                <p className="text-sm font-medium text-zinc-700">{label}</p>
-                <p className="text-xs text-zinc-500">{desc}</p>
-              </div>
-            </div>
-            <span className="text-sm font-semibold text-zinc-500 shrink-0">{prix}</span>
-          </label>
-        ))}
-        <div className="flex gap-8 justify-center border-t border-zinc-200 pt-3 mt-1">
-          <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" name="urgent" checked={urgent} onChange={e => setUrgent(e.target.checked)} className="w-4 h-4 accent-indigo-400 cursor-pointer" />
-            <span className="text-sm text-zinc-500 group-hover:text-zinc-900 transition-colors">Délai urgent <span className="text-zinc-400">(−4 jours, +30€)</span></span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="checkbox" name="voix" checked={voix} onChange={e => setVoix(e.target.checked)} className="w-4 h-4 accent-indigo-400 cursor-pointer" />
-            <span className="text-sm text-zinc-500 group-hover:text-zinc-900 transition-colors">Intégration de voix <span className="text-zinc-400">(+40€)</span></span>
-          </label>
-        </div>
-        <p className="text-zinc-400 text-xs text-center pt-1">Un devis personnalisé vous sera envoyé si votre projet nécessite un ajustement tarifaire.</p>
-      </div>
       <textarea
         name="description"
-        placeholder="Décrivez votre projet en détail — plus vous êtes précis, mieux je pourrai vous aider"
+        placeholder="Dites-moi ce que vous imaginez, je vous confirme la faisabilité sous 48h"
         rows={5}
         required
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors resize-none"
+        className="bg-white border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors resize-none"
       />
-      <div className="border border-zinc-200 rounded-xl px-5 py-4 hover:border-zinc-400 transition-colors">
-        <label className="text-sm text-zinc-500 block mb-2">Joindre un fichier (optionnel)</label>
+      <div className="border border-zinc-200 px-5 py-4">
         <input
+          id="fichier-input"
           name="fichier"
           type="file"
-          className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300"
+          className="hidden"
+          onChange={e => setFileName(e.target.files?.[0]?.name ?? null)}
         />
-      </div>
-      <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          disabled={loadingCheckout || !nom.trim() || !email.trim() || !description.trim()}
-          onClick={async () => {
-            setLoadingCheckout(true);
-            const res = await fetch("/api/checkout", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ nom, email, preset, urgent, voix }),
-            });
-            const data = await res.json();
-            if (data.url) window.location.href = data.url;
-            else setLoadingCheckout(false);
-          }}
-          className="bg-indigo-400 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        <label
+          htmlFor="fichier-input"
+          className="inline-flex items-center gap-2 text-xs text-zinc-500 border border-zinc-200 px-4 py-2 cursor-pointer hover:border-zinc-400 hover:text-zinc-900 transition-colors"
         >
-          {loadingCheckout ? "Redirection…" : "Réserver avec un acompte de 30€"}
-        </button>
-        <p className="text-zinc-500 text-sm text-center">
-          Acompte déduit du montant final à régler à la livraison
-        </p>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          {fileName ?? "Joindre un fichier (optionnel)"}
+        </label>
+      </div>
 
+      <div className="flex flex-col items-start gap-3 mt-6">
+        <button
+          type="submit"
+          className="border border-zinc-900 text-zinc-900 px-7 py-3 text-xs font-semibold tracking-widest uppercase hover:bg-zinc-900 hover:text-white transition-colors"
+        >
+          Envoyer
+        </button>
+        <p className="text-zinc-400 text-xs">Je vous réponds sous 48h avec une confirmation et un lien de paiement.</p>
       </div>
 
     </form>
-
-    {paymentSuccess && (
-      <div className="mt-8 bg-zinc-50 border border-indigo-400 rounded-2xl px-6 py-5 text-center">
-        <p className="text-blue-500 font-semibold mb-1">Acompte reçu ✓</p>
-        <p className="text-zinc-500 text-sm">Merci ! Je vous contacte sous 48h pour lancer votre projet.</p>
-      </div>
-    )}
 
   </div>
 </section>
