@@ -22,7 +22,6 @@ export default function Footer() {
         {/* Légal */}
         <div className="text-center md:text-right text-xs leading-relaxed">
           <p>© 2026 E-Tario — <a href="mailto:contact@iametario.com" className="hover:text-blue-500 transition-colors">contact@iametario.com</a></p>
-          <p className="text-zinc-300 mt-0.5">TVA non applicable, art. 293B du CGI</p>
         </div>
 
       </div>
