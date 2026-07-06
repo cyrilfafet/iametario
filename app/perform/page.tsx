@@ -219,7 +219,6 @@ export default function Artist() {
 
           {/* Ligne des années */}
           <div className="relative">
-            <div className="absolute inset-x-0 top-1/2 -translate-y-px h-px bg-zinc-100" />
             <div className="overflow-x-auto scrollbar-none">
               <div className="flex gap-6 px-4 relative min-w-max mx-auto justify-center">
                 {timeline.map((item, i) => (
