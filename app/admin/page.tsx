@@ -79,7 +79,9 @@ export default function Admin() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password, id, type }),
     });
-    const { token, path } = await urlRes.json();
+    const urlData = await urlRes.json();
+    if (!urlRes.ok) throw new Error(`Signed URL ${type} : ${urlData.error}`);
+    const { token, path } = urlData;
     const { error } = await supabase.storage
       .from("Livraison")
       .uploadToSignedUrl(path, token, file, { contentType: file.type || "audio/mpeg" });
