@@ -94,6 +94,7 @@ function CreationInner() {
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
   const [demosOpen, setDemosOpen] = useState(false);
+  const [currentDemo, setCurrentDemo] = useState(0);
   const [openDemo, setOpenDemo] = useState<number | null>(null);
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -318,7 +319,7 @@ function CreationInner() {
                       </div>
                       <div className="bg-zinc-50 rounded-2xl rounded-tl-sm px-4 py-3">
                         <p className="text-xs text-zinc-500 mb-1">{demo.client}</p>
-                        <p className="text-sm text-zinc-700 leading-relaxed">{demo.brief}</p>
+                        <p className="text-sm text-zinc-700 leading-relaxed italic">{demo.brief}</p>
                       </div>
                     </div>
                     {/* Lecteur */}
