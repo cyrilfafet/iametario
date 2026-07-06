@@ -8,6 +8,7 @@ export default function Footer() {
           <a href="/perform" className="hover:text-blue-500 transition-colors">Perform</a>
           <a href="/creation" className="hover:text-blue-500 transition-colors">Create</a>
           <a href="/teaching" className="hover:text-blue-500 transition-colors">Teach</a>
+          <a href="/shop" className="hover:text-blue-500 transition-colors">Shop</a>
           <a href="/contact" className="hover:text-blue-500 transition-colors">Contact</a>
         </nav>
 

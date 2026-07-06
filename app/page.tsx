@@ -65,6 +65,7 @@ export default function LandingPage() {
           <a href="/perform"  className="hover:text-blue-500 transition-colors">PERFORM</a>
           <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
+          <a href="/shop"     className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact"  className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -78,6 +79,7 @@ export default function LandingPage() {
           <a href="/perform"  className="hover:text-blue-500 transition-colors">PERFORM</a>
           <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
+          <a href="/shop"     className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact"  className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
       )}

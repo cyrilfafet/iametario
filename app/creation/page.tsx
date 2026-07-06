@@ -217,6 +217,7 @@ function CreationInner() {
     <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>CREATE</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
     
+    <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
   <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -232,6 +233,7 @@ function CreationInner() {
     <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>CREATE</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
     
+    <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
 )}

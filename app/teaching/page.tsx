@@ -73,6 +73,7 @@ export default function Teaching() {
           <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
           <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>TEACH</a>
           
+          <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -87,6 +88,7 @@ export default function Teaching() {
           <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
           <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>TEACH</a>
           
+          <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
       )}

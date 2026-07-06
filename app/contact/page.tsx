@@ -28,6 +28,7 @@ export default function Contact() {
           <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
           
+          <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="text-blue-500">CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -43,6 +44,7 @@ export default function Contact() {
           <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
           
+          <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="text-blue-500">CONTACT</a>
         </div>
       )}

@@ -76,6 +76,7 @@ export default function Artist() {
           <a href="/perform" className="text-blue-500">{t.nav.perform}</a>
           <a href="/creation" className="hover:text-indigo-400 transition-colors">{t.nav.create}</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">{t.nav.teach}</a>
+          <a href="/shop" className="hover:text-zinc-900 transition-colors">{t.nav.shop}</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">{t.nav.contact}</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
@@ -89,6 +90,7 @@ export default function Artist() {
           <a href="/perform" className="text-blue-500">{t.nav.perform}</a>
           <a href="/creation" className="hover:text-indigo-400 transition-colors">{t.nav.create}</a>
           <a href="/teaching" className="hover:text-violet-400 transition-colors">{t.nav.teach}</a>
+          <a href="/shop" className="hover:text-zinc-900 transition-colors">{t.nav.shop}</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">{t.nav.contact}</a>
           <LangToggle />
         </div>
