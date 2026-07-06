@@ -1,8 +1,8 @@
 export const fr = {
   nav: {
-    perform: "PERFORM",
-    teach: "TEACH",
-    create: "CREATE",
+    perform: "ACCUEIL",
+    teach: "FORMATIONS",
+    create: "SERVICES",
     shop: "SHOP",
     contact: "CONTACT",
   },
@@ -14,6 +14,18 @@ export const fr = {
     p3: "Aujourd'hui résident au <strong class=\"text-zinc-900\">Bal'tazar</strong> (Dijon), je joue à l'instinct — mashups exclusifs, transitions techniques et sets qui s'adaptent à chaque moment.",
     p4: "Entre la préparation de mon <strong class=\"text-zinc-900\">troisième single</strong> pour juin 2026 et mes services de création audio, je prépare également une formation dédiée aux futurs DJs résidents.",
   },
+  timeline_title: "Mon Parcours",
+  timeline: [
+    { year: 2012, event: "J'achète mes premières platines." },
+    { year: 2017, event: "17ème sur 18 à mon tout premier concours DJ." },
+    { year: 2018, event: "Je remporte 3 concours DJ consécutifs." },
+    { year: 2019, event: "Première résidence au club Beverly à Dijon en tant que DJ et DA." },
+    { year: 2021, event: "Saison comme DJ résident au Club Med, devant des publics internationaux chaque soir." },
+    { year: 2023, event: "Mon remix de Peggy Gou dépasse les 70 000 plays, passe sur ZuTv en Roumanie et résonne au Sunburn Festival en Inde." },
+    { year: 2024, event: "Je crée du contenu et dépasse les 500k vues cumulées sur les réseaux sociaux." },
+    { year: 2025, event: "Sortie de mon premier titre original \"Your Stage\" et présence au line-up de l'Amani à Ibiza." },
+    { year: 2026, event: "Résident au Bal'tazar, et invité sur Fun Radio Bourgogne.", detail: "Interview chez Fun Radio Bourgogne" },
+  ],
   booking: {
     label: "Booking",
     title: "Donnez une vraie signature à votre évènement.",

@@ -2,9 +2,9 @@ import type { Translations } from "./fr";
 
 export const en: Translations = {
   nav: {
-    perform: "PERFORM",
-    teach: "TEACH",
-    create: "CREATE",
+    perform: "HOME",
+    teach: "COURSES",
+    create: "SERVICES",
     shop: "SHOP",
     contact: "CONTACT",
   },
@@ -16,6 +16,18 @@ export const en: Translations = {
     p3: "Currently resident at <strong class=\"text-zinc-900\">Bal'tazar</strong> (Dijon, FR), I play by instinct — exclusive mashups, technical transitions, and sets that adapt to every night.",
     p4: "Between preparing my <strong class=\"text-zinc-900\">third single</strong> for June 2026 and my audio creation services, I'm also developing a training program for aspiring resident DJs.",
   },
+  timeline_title: "My Journey",
+  timeline: [
+    { year: 2012, event: "I get my first turntables." },
+    { year: 2017, event: "17th out of 18 at my very first DJ competition." },
+    { year: 2018, event: "I win 3 consecutive DJ competitions." },
+    { year: 2019, event: "First residency at Club Beverly in Dijon as DJ and Music Director." },
+    { year: 2021, event: "Full season as resident DJ at Club Med, performing for international audiences every night." },
+    { year: 2023, event: "My Peggy Gou remix surpasses 70,000 plays, airs on ZuTv in Romania, and resonates at the Sunburn Festival in India." },
+    { year: 2024, event: "I start creating content and surpass 500k cumulative views on social media." },
+    { year: 2025, event: "Release of my first original track \"Your Stage\" and a spot on the Amani Ibiza lineup." },
+    { year: 2026, event: "Resident at Bal'tazar, and guest on Fun Radio Bourgogne.", detail: "Interview on Fun Radio Bourgogne" },
+  ],
   booking: {
     label: "Booking",
     title: "Give your event a real signature.",

@@ -34,60 +34,10 @@ const demos = [
     title: "Women × Jatti × Shakira — Wedding Mix",
     file: "/Women_Jatti_Shakira_Wedding_Mix.mp3",
     tag: "Chorée Mariage",
-    price: "90€",
+    price: "70€",
   },
 ];
 
-type Avis = { stars: number; nom: string | null; montant: number | null; created_at: string };
-
-function timeAgo(dateStr: string): string {
-  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-  if (diff < 3600) return `il y a ${Math.floor(diff / 60)} min`;
-  if (diff < 86400) return `il y a ${Math.floor(diff / 3600)} h`;
-  if (diff < 86400 * 7) return `il y a ${Math.floor(diff / 86400)} jour${Math.floor(diff / 86400) > 1 ? "s" : ""}`;
-  if (diff < 86400 * 30) return `il y a ${Math.floor(diff / (86400 * 7))} semaine${Math.floor(diff / (86400 * 7)) > 1 ? "s" : ""}`;
-  return `il y a ${Math.floor(diff / (86400 * 30))} mois`;
-}
-
-function RatingsTicker({ avis }: { avis: Avis[] }) {
-  if (!avis.length) return null;
-  const repeat = Math.max(2, Math.ceil(10 / avis.length));
-  const items = Array.from({ length: repeat * 2 }, () => avis).flat();
-
-  return (
-    <>
-      <style>{`
-        @keyframes ticker-scroll {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-      `}</style>
-      <div
-        className="overflow-hidden border-y border-zinc-100 py-3"
-        style={{ maskImage: "linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)" }}
-      >
-        <div
-          className="flex gap-10 whitespace-nowrap"
-          style={{
-            width: "max-content",
-            animation: "ticker-scroll 20s linear infinite",
-          }}
-        >
-          {items.map((a, i) => (
-            <span key={i} className="flex items-center gap-2 shrink-0 border border-zinc-200 rounded-full px-4 py-1.5 text-sm text-zinc-500">
-              <span>{"⭐".repeat(a.stars)}</span>
-              <span className="text-zinc-400">—</span>
-              <span>{a.nom || "Anonyme"}</span>
-              {a.montant && <><span className="text-zinc-300">·</span><span className="text-zinc-400">{a.montant} €</span></>}
-              <span className="text-zinc-300">·</span>
-              <span className="text-zinc-400">{timeAgo(a.created_at)}</span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-}
 
 function CreationInner() {
   const [playing, setPlaying] = useState<number | null>(null);
@@ -99,7 +49,6 @@ function CreationInner() {
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [avis, setAvis] = useState<Avis[]>([]);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
@@ -107,12 +56,6 @@ function CreationInner() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    fetch("/api/avis")
-      .then(r => r.json())
-      .then(data => { if (data.avis) setAvis(data.avis); })
-      .catch(() => {});
-  }, []);
 
   const scrollProgress = Math.min(1, scrollY / 350);
   const imgStyle = (x: number, y: number, rot: number) => ({
@@ -213,9 +156,9 @@ function CreationInner() {
     <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
   <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
   <div className="hidden md:flex gap-8 text-sm text-zinc-500">
-    <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
-    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>CREATE</a>
-          <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
+    <a href="/perform" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
+          <a href="/teaching" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
     
     <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
@@ -230,8 +173,8 @@ function CreationInner() {
 {menuOpen && (
   <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
     <a href="/artist" className="hover:text-blue-500 transition-colors">ARTIST</a>
-    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>CREATE</a>
-          <a href="/teaching" className="hover:text-violet-400 transition-colors">TEACH</a>
+    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
+          <a href="/teaching" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
     
     <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
@@ -289,17 +232,25 @@ function CreationInner() {
             <div className="max-w-2xl mx-auto">
               {/* Compteur + navigation */}
               <div className="flex items-center justify-between mb-6">
-                <span className="text-xs text-zinc-400 font-mono">{currentDemo + 1} / {demos.length}</span>
-                <div className="flex gap-2">
+                <span className="text-sm text-zinc-500 font-medium">Exemple <span className="text-indigo-400 font-bold">{currentDemo + 1}</span> / {demos.length}</span>
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => { setPlaying(null); setCurrentDemo(i => Math.max(0, i - 1)); }}
                     disabled={currentDemo === 0}
-                    className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-indigo-400 hover:text-indigo-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-400 text-lg hover:bg-indigo-100 hover:border-indigo-400 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
                   >‹</button>
+                  <div className="flex gap-1.5">
+                    {demos.map((_, i) => (
+                      <button key={i} onClick={() => { setPlaying(null); setCurrentDemo(i); }}
+                        className="w-1.5 h-1.5 rounded-full transition-colors"
+                        style={{ backgroundColor: i === currentDemo ? "#818cf8" : "#d4d4d8" }}
+                      />
+                    ))}
+                  </div>
                   <button
                     onClick={() => { setPlaying(null); setCurrentDemo(i => Math.min(demos.length - 1, i + 1)); }}
                     disabled={currentDemo === demos.length - 1}
-                    className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-indigo-400 hover:text-indigo-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-400 text-lg hover:bg-indigo-100 hover:border-indigo-400 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
                   >›</button>
                 </div>
               </div>
@@ -366,17 +317,6 @@ function CreationInner() {
                       <span className="text-base font-semibold text-zinc-500 border border-zinc-300 rounded-full px-3 py-1 flex-shrink-0">{demo.price}</span>
                     </div>
 
-                    {/* Points de navigation */}
-                    <div className="flex justify-center gap-1.5 mt-4">
-                      {demos.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => { setPlaying(null); setCurrentDemo(i); }}
-                          className="w-1.5 h-1.5 rounded-full transition-colors"
-                          style={{ backgroundColor: i === currentDemo ? "#818cf8" : "#d4d4d8" }}
-                        />
-                      ))}
-                    </div>
                   </div>
                 );
               })()}
@@ -400,7 +340,7 @@ function CreationInner() {
             {[
               {
                 q: "Comment se passe la livraison ?",
-                a: "Vos fichiers seront livrés par mail 10 jours maximum après validation de l'acompte, dans deux formats WAV (haute qualité) et MP3 (qualité standard plus légère). Vos fichiers resteront disponibles à vie et vous pourrez me les demander à tout moment en cas de perte.",
+                a: "Vos fichiers seront livrés par mail dans les 10 jours suivant le démarrage du projet, en formats WAV (haute qualité) et MP3 (qualité standard). Vos fichiers restent disponibles 1 an — vous pouvez me les redemander à tout moment en cas de perte.",
               },
               {
                 q: "Est-ce que je peux fournir mes propres musiques ?",
@@ -412,19 +352,15 @@ function CreationInner() {
               },
               {
                 q: "Et si je ne suis pas satisfait ?",
-                a: "Mon objectif est votre entière satisfaction. Si toutefois nous n'arrivons pas au résultat escompté après 3 révisions, la commande est close. L'acompte permet de couvrir l'expertise et le temps studio déjà engagés.",
+                a: "Mon objectif est votre entière satisfaction. Si nous n'arrivons pas au résultat escompté après 3 révisions, on en discute — un arrangement sera toujours trouvé.",
               },
               {
                 q: "Tout est possible ?",
-                a: "Envoyez votre demande, les possibilités sont nombreuses mais pas infinies. Si la commande reçue est irréalisable pour diverses raisons, l'acompte sera immédiatement remboursé.",
-              },
-              {
-                q: "Quel forfait choisir ?",
-                a: "Un Edit Simple concerne le mélange de deux titres. Choisissez Création Avancée dès que votre projet nécessite une structure personnalisée ou plus de 3 titres.",
+                a: "Envoyez votre demande, les possibilités sont nombreuses mais pas infinies. Si le projet est irréalisable, je vous le signale rapidement avant tout engagement.",
               },
               {
                 q: "Comment se passe le paiement ?",
-                a: "L'acompte de 30€ valide le lancement du projet. Le solde restant est réglé par lien sécurisé une fois que vous avez validé la commande.",
+                a: "Après confirmation de faisabilité, je vous envoie un devis et un lien de paiement sécurisé de 30€ pour valider le projet.",
               },
               {
                 q: "Appliquez-vous une réduction pour plusieurs commandes ?",
@@ -523,8 +459,6 @@ function CreationInner() {
         </div>
       </section>}
 
-      {/* Ticker avis */}
-      {avis.length > 0 && <div className="mt-12"><RatingsTicker avis={avis} /></div>}
 
       {/* Formulaire */}
 <section id="commander" className="border-t border-zinc-100 px-8 py-24">
@@ -605,7 +539,7 @@ function CreationInner() {
         >
           Envoyer
         </button>
-        <p className="text-zinc-400 text-xs">Je vous réponds sous 48h — confirmation de faisabilité et acompte de 30€ pour lancer le projet.</p>
+        <p className="text-zinc-400 text-xs">Je vous réponds sous 48h — confirmation de faisabilité et devis personnalisé.</p>
       </div>
 
     </form>

@@ -1,25 +1,97 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@/lib/i18n";
 import Footer from "@/components/Footer";
 
-const timeline = [
-  { year: 2012, event: "Premières platines" },
-  { year: 2017, event: "17ème sur 18 à mon premier concours DJ" },
-  { year: 2018, event: "1er à 3 concours DJ consécutifs" },
-  { year: 2019, event: "Première résidence au Beverly (Dijon)" },
-  { year: 2021, event: "Saison DJ au Club Med" },
-  { year: 2023, event: "Remix Peggy Gou : 70k plays, ZuTv Roumanie, Sunburn Festival Inde" },
-  { year: 2024, event: "500k vues sur les réseaux sociaux" },
-  { year: 2025, event: 'Premier titre "Your Stage" + Line Up Amani Ibiza' },
-  { year: 2026, event: "Résident Bal'tazar Dijon + Fun Radio Bourgogne", detail: "Interview chez Fun Radio Bourgogne" },
-];
+
+function SoundCloudCard({ src, active }: { src: string; active: boolean }) {
+  const ref = useRef<HTMLIFrameElement>(null);
+  useEffect(() => {
+    if (!active && ref.current?.contentWindow) {
+      ref.current.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+    }
+  }, [active]);
+  return (
+    <iframe ref={ref} width="100%" height="150" scrolling="no" frameBorder="no" allow="autoplay" src={src} />
+  );
+}
+
+function FullscreenIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1 5V1H5M9 1H13V5M13 9V13H9M5 13H1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function VideoCard({ src, active, objectPosition = "center" }: { src: string; active: boolean; objectPosition?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (ref.current) ref.current.muted = !active;
+  }, [active]);
+
+  const toggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const v = ref.current;
+    if (!v) return;
+    if (v.paused) { v.play(); setPaused(false); }
+    else { v.pause(); setPaused(true); }
+  };
+
+  const fullscreen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    ref.current?.requestFullscreen();
+  };
+
+  return (
+    <div className="relative" style={{ height: 150, overflow: "hidden", cursor: "pointer" }} onClick={toggle}>
+      <video ref={ref} autoPlay loop muted playsInline style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", minWidth: "100%", minHeight: "100%", width: "auto", height: "auto" }}>
+        <source src={src} type="video/mp4" />
+      </video>
+      <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${paused ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        style={{ background: "rgba(0,0,0,0.25)" }}>
+        <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow">
+          <span className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[11px] border-transparent border-l-zinc-800 ml-1" />
+        </div>
+      </div>
+      <button onClick={fullscreen} className="absolute bottom-2 right-2 w-7 h-7 rounded-md bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors pointer-events-auto">
+        <FullscreenIcon />
+      </button>
+    </div>
+  );
+}
+
+function YouTubeCard({ videoId, active }: { videoId: string; active: boolean }) {
+  const ref = useRef<HTMLIFrameElement>(null);
+  useEffect(() => {
+    const iframe = ref.current;
+    if (!iframe?.contentWindow) return;
+    const func = active ? "unMute" : "mute";
+    iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func, args: [] }), "*");
+  }, [active]);
+
+  return (
+    <div className="relative" style={{ height: 150 }}>
+      <iframe
+        ref={ref}
+        width="100%" height="150"
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&enablejsapi=1`}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        style={{ display: "block" }}
+      />
+    </div>
+  );
+}
 
 export default function Artist() {
   const { t, lang, setLang } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [tlIndex, setTlIndex] = useState(timeline.length - 1);
+  const [tlIndex, setTlIndex] = useState(8);
+  const [mediaIndex, setMediaIndex] = useState(0);
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
   const [bookingDate, setBookingDate] = useState("");
@@ -64,7 +136,7 @@ export default function Artist() {
   );
 
   return (
-    <main className="min-h-screen text-zinc-900 flex flex-col">
+    <main className="min-h-screen text-zinc-900 flex flex-col [overflow-x:clip]">
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
@@ -194,7 +266,8 @@ export default function Artist() {
         </p>
 
         {/* Timeline */}
-        <div className="w-full max-w-3xl mt-14">
+        <div className="w-full max-w-3xl mt-14 bg-slate-50 rounded-2xl px-6 py-10">
+          <h2 className="text-2xl font-bold text-zinc-900 text-center mb-10">{t.timeline_title}</h2>
           {/* Année + événement */}
           <div className="flex items-center justify-between gap-4 mb-8">
             <button
@@ -204,20 +277,20 @@ export default function Artist() {
             >‹</button>
             <div className="text-center">
               <p className="text-5xl md:text-6xl font-bold tabular-nums" style={{ color: "#60A5FA" }}>
-                {timeline[tlIndex].year}
+                {t.timeline[tlIndex].year}
               </p>
               <p className="text-zinc-500 text-base mt-2 max-w-sm mx-auto leading-snug">
-                {timeline[tlIndex].event}
+                {t.timeline[tlIndex].event}
               </p>
-              {"detail" in timeline[tlIndex] && (
+              {"detail" in t.timeline[tlIndex] && (
                 <p className="text-zinc-400 text-xs mt-1.5 max-w-xs mx-auto">
-                  {(timeline[tlIndex] as { detail: string }).detail}
+                  {(t.timeline[tlIndex] as { detail: string }).detail}
                 </p>
               )}
             </div>
             <button
-              onClick={() => setTlIndex(i => Math.min(timeline.length - 1, i + 1))}
-              disabled={tlIndex === timeline.length - 1}
+              onClick={() => setTlIndex(i => Math.min(t.timeline.length - 1, i + 1))}
+              disabled={tlIndex === t.timeline.length - 1}
               className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors disabled:opacity-20 disabled:cursor-not-allowed flex-shrink-0"
             >›</button>
           </div>
@@ -226,7 +299,7 @@ export default function Artist() {
           <div className="relative">
             <div className="overflow-x-auto scrollbar-none">
               <div className="flex gap-6 px-4 relative min-w-max mx-auto justify-center">
-                {timeline.map((item, i) => (
+                {t.timeline.map((item, i) => (
                   <button
                     key={item.year}
                     onClick={() => setTlIndex(i)}
@@ -252,81 +325,95 @@ export default function Artist() {
       </section>
 
       {/* Médias */}
-      <section className="w-full bg-zinc-50 py-16 border-t border-zinc-100">
-        <div className="max-w-4xl mx-auto px-8 mb-8 flex items-end justify-between">
-          <div>
-            <p className="text-zinc-400 text-xs uppercase tracking-widest mb-1">Écouter · Regarder</p>
-            <h2 className="text-2xl font-bold text-zinc-900">Médias</h2>
-          </div>
-        </div>
-        <div className="overflow-x-auto scrollbar-none">
-          <div className="flex gap-5 px-8 min-w-max pb-2">
-
-            {/* SoundCloud 1 */}
-            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
-              <div className="h-1 w-full bg-blue-500" />
-              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
-                <p className="text-xs uppercase tracking-widest text-blue-400 mb-2">Audio</p>
-                <p className="text-zinc-900 font-semibold mb-1">Mix Club</p>
-                <p className="text-zinc-400 text-xs mb-4">2024</p>
-                <div className="mt-auto -mx-5 -mb-4">
-                  <iframe width="100%" height="120" scrolling="no" frameBorder="no" allow="autoplay"
-                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-                  />
-                </div>
+      {(() => {
+        const mediaItems = [
+          {
+            type: "Audio", color: "#3B82F6", title: "Afro House Selection by E-Tario", subtitle: "2024",
+            content: (active: boolean) => <SoundCloudCard active={active} src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" />,
+          },
+          {
+            type: "Audio", color: "#3B82F6", title: "EDM Club Selection by E-Tario", subtitle: "2025",
+            content: (active: boolean) => <SoundCloudCard active={active} src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" />,
+          },
+          {
+            type: "Vidéo", color: "#818cf8", title: "Peggy Gou – Nanana (E-Tario Remix)", subtitle: "2025",
+            content: (active: boolean) => <YouTubeCard videoId="9x81NCHbXhU" active={active} />,
+          },
+          {
+            type: "Vidéo", color: "#a78bfa", title: "E-Tario @ Almanach Festival", subtitle: "Set Live",
+            content: (active: boolean) => <VideoCard src="/extrait%20pjanoo%20linkin.mp4" active={active} />,
+          },
+          {
+            type: "Interview", color: "#f472b6", title: "E-Tario @ Fun Radio Bourgogne", subtitle: "2026",
+            content: (active: boolean) => <VideoCard src="/Interview%20Fun%20Radio%20Part%201.mp4" active={active} objectPosition="center center" />,
+          },
+        ];
+        return (
+          <section className="w-full pt-12 pb-6 border-t border-zinc-100 overflow-hidden">
+            <div className="flex flex-col items-center mb-8 gap-4">
+              <h2 className="text-2xl font-bold text-zinc-900">Médias</h2>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
+                  className="w-10 h-10 rounded-full border border-zinc-200 bg-white flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
+                >‹</button>
+                <button
+                  onClick={() => setMediaIndex(i => (i + 1) % mediaItems.length)}
+                  className="w-10 h-10 rounded-full border border-zinc-200 bg-white flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
+                >›</button>
               </div>
             </div>
+            <div className="relative flex items-center justify-center" style={{ height: 280 }}>
 
-            {/* SoundCloud 2 */}
-            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
-              <div className="h-1 w-full bg-blue-500" />
-              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
-                <p className="text-xs uppercase tracking-widest text-blue-400 mb-2">Audio</p>
-                <p className="text-zinc-900 font-semibold mb-1">Mix Festival</p>
-                <p className="text-zinc-400 text-xs mb-4">2025</p>
-                <div className="mt-auto -mx-5 -mb-4">
-                  <iframe width="100%" height="120" scrolling="no" frameBorder="no" allow="autoplay"
-                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Vidéo set — placeholder */}
-            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
-              <div className="h-1 w-full bg-indigo-400" />
-              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
-                <p className="text-xs uppercase tracking-widest text-indigo-400 mb-2">Vidéo</p>
-                <p className="text-zinc-900 font-semibold mb-1">Set Live</p>
-                <p className="text-zinc-400 text-xs mb-4">À venir</p>
-                <div className="mt-auto bg-zinc-50 rounded-xl h-32 flex flex-col items-center justify-center gap-2">
-                  <div className="w-9 h-9 rounded-full border border-zinc-200 flex items-center justify-center">
-                    <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-300 ml-0.5" />
+              {/* Cartes */}
+              {mediaItems.map((item, i) => {
+                let offset = i - mediaIndex;
+                const n = mediaItems.length;
+                if (offset > n / 2) offset -= n;
+                if (offset < -n / 2) offset += n;
+                if (Math.abs(offset) > 1) return null;
+                const isActive = offset === 0;
+                return (
+                  <div
+                    key={i}
+                    onClick={() => !isActive && setMediaIndex(i)}
+                    style={{
+                      position: "absolute",
+                      width: 320,
+                      transform: `translateX(${offset * 300}px) scale(${isActive ? 1 : 0.82})`,
+                      filter: isActive ? "none" : "blur(3px)",
+                      opacity: isActive ? 1 : 0.45,
+                      zIndex: isActive ? 10 : 5,
+                      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+                      cursor: isActive ? "default" : "pointer",
+                    }}
+                    className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
+                  >
+                    <div className="h-1 w-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                    <div className="px-5 pt-4 pb-3 flex-shrink-0">
+                      <p className="text-xs uppercase tracking-widest mb-1" style={{ color: item.color }}>{item.type}</p>
+                      <p className="text-zinc-900 font-semibold text-base truncate">{item.title}</p>
+                      <p className="text-zinc-400 text-xs mt-0.5">{item.subtitle}</p>
+                    </div>
+                    <div className="flex-1 overflow-hidden">{item.content(isActive)}</div>
                   </div>
-                  <span className="text-zinc-300 text-xs tracking-widest uppercase">Bientôt disponible</span>
-                </div>
-              </div>
+                );
+              })}
+
             </div>
 
-            {/* Interview — placeholder */}
-            <div className="w-80 flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm shadow-zinc-200 flex flex-col">
-              <div className="h-1 w-full bg-violet-400" />
-              <div className="px-5 pt-4 pb-4 flex-1 flex flex-col">
-                <p className="text-xs uppercase tracking-widest text-violet-400 mb-2">Interview</p>
-                <p className="text-zinc-900 font-semibold mb-1">Fun Radio Bourgogne</p>
-                <p className="text-zinc-400 text-xs mb-4">À venir</p>
-                <div className="mt-auto bg-zinc-50 rounded-xl h-32 flex flex-col items-center justify-center gap-2">
-                  <div className="w-9 h-9 rounded-full border border-zinc-200 flex items-center justify-center">
-                    <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-300 ml-0.5" />
-                  </div>
-                  <span className="text-zinc-300 text-xs tracking-widest uppercase">Bientôt disponible</span>
-                </div>
-              </div>
+            {/* Dots */}
+            <div className="flex justify-center gap-1.5 mt-6">
+              {mediaItems.map((_, i) => (
+                <button key={i} onClick={() => setMediaIndex(i)}
+                  className="w-1.5 h-1.5 rounded-full transition-colors"
+                  style={{ backgroundColor: i === mediaIndex ? "#3B82F6" : "#d4d4d8" }}
+                />
+              ))}
             </div>
-
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* Booking */}
       <section className="px-6 py-24 max-w-4xl mx-auto w-full">
@@ -335,7 +422,7 @@ export default function Artist() {
           <div className="text-center mb-14">
             <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4">{t.booking.label}</p>
             <h2 className="text-3xl md:text-4xl font-bold mb-3">{t.booking.title}</h2>
-            <p className="text-zinc-400 text-xs tracking-wide mb-4">{t.booking.credibility}</p>
+
             <p className="text-zinc-500 text-base mb-7">{t.booking.subtitle}</p>
             <a href="#booking-form" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
               {t.booking.cta}
@@ -343,15 +430,15 @@ export default function Artist() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
-            <div className="border border-zinc-200 rounded-2xl px-7 py-8">
+            <div className="bg-zinc-50 rounded-2xl px-7 py-8">
               <p className="text-zinc-900 font-semibold mb-3">{t.booking.card1_title}</p>
               <p className="text-zinc-500 text-sm leading-relaxed">{t.booking.card1_text}</p>
             </div>
-            <div className="border border-zinc-200 rounded-2xl px-7 py-8">
+            <div className="bg-zinc-50 rounded-2xl px-7 py-8">
               <p className="text-zinc-900 font-semibold mb-3">{t.booking.card2_title}</p>
               <p className="text-zinc-500 text-sm leading-relaxed">{t.booking.card2_text}</p>
             </div>
-            <div className="border border-zinc-200 rounded-2xl px-7 py-8">
+            <div className="bg-zinc-50 rounded-2xl px-7 py-8">
               <p className="text-zinc-900 font-semibold mb-3">{t.booking.card3_title}</p>
               <p className="text-zinc-500 text-sm leading-relaxed">{t.booking.card3_text}</p>
             </div>

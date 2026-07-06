@@ -69,9 +69,9 @@ export default function Teaching() {
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
-          <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
-          <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
-          <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>TEACH</a>
+          <a href="/perform" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/creation" className="hover:text-indigo-400 transition-colors">SERVICES</a>
+          <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>FORMATIONS</a>
           
           <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
@@ -84,9 +84,9 @@ export default function Teaching() {
       </nav>
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/perform" className="hover:text-blue-500 transition-colors">PERFORM</a>
-          <a href="/creation" className="hover:text-indigo-400 transition-colors">CREATE</a>
-          <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>TEACH</a>
+          <a href="/perform" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/creation" className="hover:text-indigo-400 transition-colors">SERVICES</a>
+          <a href="/teaching" className="font-medium" style={{ color: "#a78bfa" }}>FORMATIONS</a>
           
           <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
