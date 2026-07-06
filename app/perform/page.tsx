@@ -4,7 +4,7 @@ import { useTranslation } from "@/lib/i18n";
 import Footer from "@/components/Footer";
 
 const timeline = [
-  { year: 2015, event: "Premières platines" },
+  { year: 2012, event: "Premières platines" },
   { year: 2017, event: "17ème sur 18 à mon premier concours DJ" },
   { year: 2018, event: "1er à 3 concours DJ consécutifs" },
   { year: 2019, event: "Première résidence au Beverly (Dijon)" },
@@ -12,7 +12,7 @@ const timeline = [
   { year: 2023, event: "Remix Peggy Gou : 70k plays, ZuTv Roumanie, Sunburn Festival Inde" },
   { year: 2024, event: "500k vues sur les réseaux sociaux" },
   { year: 2025, event: 'Premier titre "Your Stage" + Line Up Amani Ibiza' },
-  { year: 2026, event: "Résident Bal'tazar Dijon + Fun Radio Bourgogne" },
+  { year: 2026, event: "Résident Bal'tazar Dijon + Fun Radio Bourgogne", detail: "Interview chez Fun Radio Bourgogne" },
 ];
 
 export default function Artist() {
@@ -209,6 +209,11 @@ export default function Artist() {
               <p className="text-zinc-500 text-base mt-2 max-w-sm mx-auto leading-snug">
                 {timeline[tlIndex].event}
               </p>
+              {"detail" in timeline[tlIndex] && (
+                <p className="text-zinc-400 text-xs mt-1.5 max-w-xs mx-auto">
+                  {(timeline[tlIndex] as { detail: string }).detail}
+                </p>
+              )}
             </div>
             <button
               onClick={() => setTlIndex(i => Math.min(timeline.length - 1, i + 1))}
