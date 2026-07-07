@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase-client";
 
 type Client = { nom: string; email: string };
 type Livraison = { code: string; prenom: string; nom_projet: string; solde: number; paiement_solde: boolean; created_at: string };
-type ShopTrack = { id: string; titre: string; genre: string; fichier_preview_url: string; fichier_wav_url: string; stripe_payment_link: string; published: boolean; created_at: string };
+type ShopTrack = { id: string; titre: string; genre: string; prix: number; fichier_preview_url: string; fichier_wav_url: string; stripe_payment_link: string; cover_url: string | null; published: boolean; created_at: string };
 
 export default function Admin() {
   const [password, setPassword] = useState("");
@@ -36,9 +36,18 @@ export default function Admin() {
   const [shopPrix, setShopPrix] = useState("");
   const [shopPreviewFile, setShopPreviewFile] = useState<File | null>(null);
   const [shopWavFile, setShopWavFile] = useState<File | null>(null);
+  const [shopCoverFile, setShopCoverFile] = useState<File | null>(null);
   const [shopLoading, setShopLoading] = useState(false);
   const [shopProgressLabel, setShopProgressLabel] = useState("");
   const [shopSuccess, setShopSuccess] = useState(false);
+
+  // Edit mode
+  const [editingTrack, setEditingTrack] = useState<ShopTrack | null>(null);
+  const [editTitre, setEditTitre] = useState("");
+  const [editGenre, setEditGenre] = useState("");
+  const [editPrix, setEditPrix] = useState("");
+  const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
 
   const login = async () => {
     const res = await fetch("/api/admin-auth", {
@@ -94,19 +103,25 @@ export default function Admin() {
     try {
       await uploadShopFile(shopPreviewFile, id, "preview");
       await uploadShopFile(shopWavFile, id, "wav");
-      setShopProgressLabel("Création de la track…");
       const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
       const fichier_preview_url = `${base}/shop/${id}/preview.mp3`;
       const fichier_wav_url = `${base}/shop/${id}/final.wav`;
+      let cover_url: string | null = null;
+      if (shopCoverFile) {
+        setShopProgressLabel("Upload image…");
+        await uploadShopFile(shopCoverFile, id, "cover");
+        cover_url = `${base}/shop/${id}/cover.jpg`;
+      }
+      setShopProgressLabel("Création de la track…");
       const res = await fetch("/api/shop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, prix: Math.round(parseFloat(shopPrix) * 100), fichier_preview_url, fichier_wav_url }),
+        body: JSON.stringify({ password, titre: shopTitre, genre: shopGenre, prix: Math.round(parseFloat(shopPrix) * 100), fichier_preview_url, fichier_wav_url, cover_url }),
       });
       if (res.ok) {
         setShopSuccess(true);
         setShopTitre(""); setShopGenre(""); setShopPrix("");
-        setShopPreviewFile(null); setShopWavFile(null);
+        setShopPreviewFile(null); setShopWavFile(null); setShopCoverFile(null);
         fetchShopTracks();
       } else {
         const err = await res.json();
@@ -117,6 +132,53 @@ export default function Admin() {
     }
     setShopLoading(false);
     setShopProgressLabel("");
+  };
+
+  const startEditing = (track: ShopTrack) => {
+    setEditingTrack(track);
+    setEditTitre(track.titre);
+    setEditGenre(track.genre);
+    setEditPrix(track.prix ? String(track.prix / 100) : "");
+    setEditCoverFile(null);
+  };
+
+  const cancelEditing = () => {
+    setEditingTrack(null);
+    setEditTitre(""); setEditGenre(""); setEditPrix(""); setEditCoverFile(null);
+  };
+
+  const saveEditTrack = async () => {
+    if (!editingTrack || !editTitre || !editGenre || !editPrix) return;
+    setEditLoading(true);
+    try {
+      const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+      let cover_url = editingTrack.cover_url;
+      if (editCoverFile) {
+        await uploadShopFile(editCoverFile, editingTrack.id, "cover");
+        cover_url = `${base}/shop/${editingTrack.id}/cover.jpg`;
+      }
+      const res = await fetch(`/api/shop/${editingTrack.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password,
+          titre: editTitre,
+          genre: editGenre,
+          prix: Math.round(parseFloat(editPrix) * 100),
+          cover_url,
+        }),
+      });
+      if (res.ok) {
+        cancelEditing();
+        fetchShopTracks();
+      } else {
+        const err = await res.json();
+        alert(`Erreur : ${err.error}`);
+      }
+    } catch (e: unknown) {
+      alert(`Erreur : ${e instanceof Error ? e.message : JSON.stringify(e)}`);
+    }
+    setEditLoading(false);
   };
 
   const togglePublish = async (track: ShopTrack) => {
@@ -291,32 +353,73 @@ export default function Admin() {
         {/* Onglet Shop */}
         {activeTab === "shop" && (
           <div className="flex gap-10 items-start">
-            {/* Formulaire ajout track */}
+            {/* Formulaire gauche — ajout ou édition */}
             <div className="flex-1 min-w-0">
-              <p className="text-zinc-500 text-xs tracking-widest uppercase mb-4">Nouvelle track</p>
-              {shopSuccess && <p className="text-blue-500 text-sm mb-4">Track ajoutée ✓</p>}
-              <div className="flex flex-col gap-4">
-                <input type="text" placeholder="Titre" value={shopTitre} onChange={e => setShopTitre(e.target.value)} className={inputClass} />
-                <input type="text" placeholder="Tag genre (Hardstyle / Urban / Electro…)" value={shopGenre} onChange={e => setShopGenre(e.target.value)} className={inputClass} />
-                <input type="number" placeholder="Prix (€) — ex: 5" value={shopPrix} onChange={e => setShopPrix(e.target.value)} min={1} className={inputClass} />
-                <div className="border border-zinc-200 rounded-xl px-5 py-4">
-                  <label className="text-sm text-zinc-500 block mb-1">Aperçu MP3 <span className="text-zinc-400">(watermarked — player public)</span></label>
-                  <input type="file" accept=".mp3,audio/mpeg" onChange={e => setShopPreviewFile(e.target.files?.[0] || null)}
-                    className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+              {editingTrack ? (
+                /* Mode édition */
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-zinc-500 text-xs tracking-widest uppercase">Modifier la track</p>
+                    <button onClick={cancelEditing} className="text-zinc-400 text-xs hover:text-zinc-700 transition-colors">Annuler</button>
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <input type="text" placeholder="Titre" value={editTitre} onChange={e => setEditTitre(e.target.value)} className={inputClass} />
+                    <input type="text" placeholder="Tag genre" value={editGenre} onChange={e => setEditGenre(e.target.value)} className={inputClass} />
+                    <input type="number" placeholder="Prix (€)" value={editPrix} onChange={e => setEditPrix(e.target.value)} min={1} className={inputClass} />
+                    <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                      <label className="text-sm text-zinc-500 block mb-1">
+                        Image cover
+                        {editingTrack.cover_url && <span className="text-zinc-400 ml-1">(une image existe déjà — remplacer ?)</span>}
+                      </label>
+                      {editingTrack.cover_url && !editCoverFile && (
+                        <img src={editingTrack.cover_url} alt="cover actuelle" className="w-16 h-16 object-cover rounded-lg mb-2" />
+                      )}
+                      <input type="file" accept="image/*" onChange={e => setEditCoverFile(e.target.files?.[0] || null)}
+                        className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                    </div>
+                    <button
+                      onClick={saveEditTrack}
+                      disabled={editLoading || !editTitre || !editGenre || !editPrix}
+                      className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      {editLoading ? "Enregistrement…" : "Enregistrer"}
+                    </button>
+                  </div>
                 </div>
-                <div className="border border-zinc-200 rounded-xl px-5 py-4">
-                  <label className="text-sm text-zinc-500 block mb-1">WAV final <span className="text-zinc-400">(débloqué après achat)</span></label>
-                  <input type="file" accept=".wav,audio/wav" onChange={e => setShopWavFile(e.target.files?.[0] || null)}
-                    className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+              ) : (
+                /* Mode ajout */
+                <div>
+                  <p className="text-zinc-500 text-xs tracking-widest uppercase mb-4">Nouvelle track</p>
+                  {shopSuccess && <p className="text-blue-500 text-sm mb-4">Track ajoutée ✓</p>}
+                  <div className="flex flex-col gap-4">
+                    <input type="text" placeholder="Titre" value={shopTitre} onChange={e => setShopTitre(e.target.value)} className={inputClass} />
+                    <input type="text" placeholder="Tag genre (Hardstyle / Urban / Electro…)" value={shopGenre} onChange={e => setShopGenre(e.target.value)} className={inputClass} />
+                    <input type="number" placeholder="Prix (€) — ex: 5" value={shopPrix} onChange={e => setShopPrix(e.target.value)} min={1} className={inputClass} />
+                    <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                      <label className="text-sm text-zinc-500 block mb-1">Image cover <span className="text-zinc-400">(optionnel)</span></label>
+                      <input type="file" accept="image/*" onChange={e => setShopCoverFile(e.target.files?.[0] || null)}
+                        className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                    </div>
+                    <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                      <label className="text-sm text-zinc-500 block mb-1">Aperçu MP3 <span className="text-zinc-400">(watermarked — player public)</span></label>
+                      <input type="file" accept=".mp3,audio/mpeg" onChange={e => setShopPreviewFile(e.target.files?.[0] || null)}
+                        className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                    </div>
+                    <div className="border border-zinc-200 rounded-xl px-5 py-4">
+                      <label className="text-sm text-zinc-500 block mb-1">WAV final <span className="text-zinc-400">(débloqué après achat)</span></label>
+                      <input type="file" accept=".wav,audio/wav" onChange={e => setShopWavFile(e.target.files?.[0] || null)}
+                        className="text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-200 file:text-zinc-900 hover:file:bg-zinc-300 w-full" />
+                    </div>
+                    <button
+                      onClick={createShopTrack}
+                      disabled={shopLoading || !shopTitre || !shopGenre || !shopPrix || !shopPreviewFile || !shopWavFile}
+                      className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      {shopLoading ? shopProgressLabel || "Chargement…" : "Ajouter la track"}
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={createShopTrack}
-                  disabled={shopLoading || !shopTitre || !shopGenre || !shopPrix || !shopPreviewFile || !shopWavFile}
-                  className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  {shopLoading ? shopProgressLabel || "Chargement…" : "Ajouter la track"}
-                </button>
-              </div>
+              )}
             </div>
 
             {/* Liste des tracks */}
@@ -328,17 +431,31 @@ export default function Admin() {
                 ) : (
                   <div className="flex flex-col gap-2">
                     {shopTracks.map(track => (
-                      <div key={track.id} className="border border-zinc-100 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-                        <div className="min-w-0">
+                      <div
+                        key={track.id}
+                        className={`border rounded-xl px-4 py-3 flex items-center gap-3 ${editingTrack?.id === track.id ? "border-blue-300 bg-blue-50" : "border-zinc-100"}`}
+                      >
+                        {track.cover_url && (
+                          <img src={track.cover_url} alt="" className="w-10 h-10 object-cover rounded-lg flex-shrink-0" />
+                        )}
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-zinc-900 truncate">{track.titre}</p>
                           <p className="text-xs text-zinc-400">{track.genre}</p>
                         </div>
-                        <button
-                          onClick={() => togglePublish(track)}
-                          className={`text-xs px-3 py-1.5 rounded-full font-semibold flex-shrink-0 transition-colors ${track.published ? "bg-green-50 text-green-600 hover:bg-red-50 hover:text-red-500" : "bg-zinc-100 text-zinc-500 hover:bg-green-50 hover:text-green-600"}`}
-                        >
-                          {track.published ? "Publié" : "Publier"}
-                        </button>
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                          <button
+                            onClick={() => startEditing(track)}
+                            className="text-xs px-3 py-1.5 rounded-full font-semibold bg-zinc-100 text-zinc-500 hover:bg-zinc-200 transition-colors"
+                          >
+                            Modifier
+                          </button>
+                          <button
+                            onClick={() => togglePublish(track)}
+                            className={`text-xs px-3 py-1.5 rounded-full font-semibold transition-colors ${track.published ? "bg-green-50 text-green-600 hover:bg-red-50 hover:text-red-500" : "bg-zinc-100 text-zinc-500 hover:bg-green-50 hover:text-green-600"}`}
+                          >
+                            {track.published ? "Publié" : "Publier"}
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>

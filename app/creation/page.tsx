@@ -203,6 +203,7 @@ function CreationInner() {
     <p className="text-zinc-500 text-lg max-w-xl mx-auto">
       Le bon son au bon moment, sur mesure.
     </p>
+    <p className="text-zinc-400 text-lg mt-1">Production soignée · Vocales haute qualité</p>
     <div className="flex flex-wrap items-center justify-center gap-3 mt-6 max-w-sm mx-auto">
       <a href="#commander" className="inline-block bg-indigo-400 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors">
         Commander un montage audio
@@ -465,7 +466,7 @@ function CreationInner() {
   <div className="max-w-xl mx-auto">
     <p className="text-zinc-500 text-sm tracking-widest uppercase mb-4 text-center">Contact</p>
     <h2 className="text-3xl font-bold mb-2 text-center">Un projet en tête ?</h2>
-    <p className="text-zinc-500 text-center mb-2">Décrivez votre projet, je valide la faisabilité sous 48h après réception de votre acompte.</p>
+    <p className="text-zinc-500 text-center mb-2">Décrivez votre projet, je valide la faisabilité et vous envoie un lien pour un premier acompte de 30€ sous 48h.</p>
     <p className="text-zinc-500 text-sm text-center mb-12">Livraison sous 10 jours · 3 révisions incluses</p>
 
     <form

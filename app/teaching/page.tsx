@@ -33,10 +33,10 @@ const pillars: Pillar[] = [
   },
   {
     id: 2,
-    label: "Mashups",
-    label2: "FL Studio",
+    label: "Produire",
+    label2: "ton son",
     color: "#a78bfa",
-    description: "Créer ses propres mashups de A à Z. Aucun prérequis logiciel.",
+    description: "Crée tes propres remix de A à Z. Les bases pour devenir producteur.",
     path: "M 100 100 L 18.59 147 A 94 94 0 0 1 100 6 Z",
     tx: 48, ty: 72,
   },
@@ -102,7 +102,7 @@ export default function Teaching() {
           </h1>
           <p className="text-zinc-400 text-sm mb-5">Formation disponible en septembre 2026.</p>
           <p className="text-zinc-500 text-base leading-relaxed">
-            La plupart te vendent les jets privés et les paillettes, je te propose la stabiilité. Une formation complète pour devenir DJ résident : la technique, la mentalité.
+            La plupart te vendent les jets privés et les paillettes, je te propose la stabiilité. Une formation complète pour devenir DJ résident : la technique, la mentalité, la créativité.
           </p>
         </div>
 
@@ -175,9 +175,20 @@ export default function Teaching() {
           {/* Formation complète */}
           <div className="border-2 border-violet-400 rounded-2xl px-6 py-6 mb-6 text-center relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-400 text-white text-xs font-semibold px-3 py-1 rounded-full tracking-widest uppercase">Recommandé</span>
-            <p className="text-zinc-900 font-bold text-lg mb-1">Formation complète</p>
-            <p className="text-zinc-500 text-sm mb-4">Mixer · Mashups FL Studio · Psychologie & Réseau</p>
-            <p className="text-4xl font-bold text-zinc-900">99€</p>
+            <p className="text-zinc-900 font-bold text-lg mb-4">Formation complète</p>
+            <div className="flex flex-wrap justify-center gap-2 mb-5">
+              <div className="rounded-xl px-3 py-2 text-center" style={{ background: "#60a5fa22", border: "1px solid #60a5fa55" }}>
+                <p className="text-[11px] font-semibold whitespace-nowrap" style={{ color: "#60a5fa" }}>Mixer</p>
+              </div>
+              <div className="rounded-xl px-3 py-2 text-center" style={{ background: "#a78bfa22", border: "1px solid #a78bfa55" }}>
+                <p className="text-[11px] font-semibold whitespace-nowrap" style={{ color: "#a78bfa" }}>Produire ton son</p>
+              </div>
+              <div className="rounded-xl px-3 py-2 text-center relative" style={{ background: "#818cf822", border: "1px solid #818cf855" }}>
+                <span className="absolute -top-2.5 right-1 text-xs leading-none">⭐</span>
+                <p className="text-[11px] font-semibold whitespace-nowrap" style={{ color: "#818cf8" }}>Psychologie & Réseau</p>
+              </div>
+            </div>
+            <p className="text-4xl font-bold text-zinc-900">169€</p>
           </div>
 
           {/* Modules séparés */}
@@ -185,11 +196,11 @@ export default function Teaching() {
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="border border-zinc-200 rounded-xl px-4 py-4 text-center">
               <p className="text-zinc-900 font-semibold text-sm mb-1">Apprendre à mixer</p>
-              <p className="text-2xl font-bold text-zinc-900">29€</p>
+              <p className="text-2xl font-bold text-zinc-900">79€</p>
             </div>
             <div className="border border-zinc-200 rounded-xl px-4 py-4 text-center">
-              <p className="text-zinc-900 font-semibold text-sm mb-1">Mashups FL Studio</p>
-              <p className="text-2xl font-bold text-zinc-900">40€</p>
+              <p className="text-zinc-900 font-semibold text-sm mb-1">Produire ton son</p>
+              <p className="text-2xl font-bold text-zinc-900">79€</p>
             </div>
           </div>
           <p className="text-zinc-400 text-xs text-center">
