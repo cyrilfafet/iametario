@@ -69,7 +69,7 @@ export default function Teaching() {
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
-          <a href="/accueil" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
           <a href="/services" className="hover:text-indigo-400 transition-colors">SERVICES</a>
           <a href="/formations" className="font-medium" style={{ color: "#a78bfa" }}>FORMATIONS</a>
           
@@ -84,7 +84,7 @@ export default function Teaching() {
       </nav>
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/accueil" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
           <a href="/services" className="hover:text-indigo-400 transition-colors">SERVICES</a>
           <a href="/formations" className="font-medium" style={{ color: "#a78bfa" }}>FORMATIONS</a>
           
@@ -102,13 +102,13 @@ export default function Teaching() {
           </h1>
           <p className="text-zinc-400 text-sm mb-5">Formation disponible en septembre 2026.</p>
           <p className="text-zinc-500 text-base leading-relaxed">
-            La plupart te vendent les jets privés et les paillettes, je te propose la stabiilité. Une formation complète pour devenir DJ résident : la technique, la mentalité, la créativité.
+            La plupart te vendent les jets privés et les paillettes, je te propose la stabilité. Une formation complète pour devenir DJ résident : la technique, la mentalité, la créativité.
           </p>
         </div>
 
         {/* Intro */}
         <div className="text-center mb-20">
-          <a href="/accueil" className="inline-block bg-violet-400 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-500 transition-colors">
+          <a href="/" className="inline-block bg-violet-400 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-500 transition-colors">
             Qui suis-je pour t'apprendre ?
           </a>
         </div>
