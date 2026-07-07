@@ -172,10 +172,9 @@ function CreationInner() {
 
 {menuOpen && (
   <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-    <a href="/artist" className="hover:text-blue-500 transition-colors">ARTIST</a>
+    <a href="/perform" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
     <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
-          <a href="/teaching" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
-    
+    <a href="/teaching" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
     <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
