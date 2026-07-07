@@ -156,9 +156,9 @@ function CreationInner() {
     <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
   <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
   <div className="hidden md:flex gap-8 text-sm text-zinc-500">
-    <a href="/perform" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
-          <a href="/teaching" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
+    <a href="/accueil" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+    <a href="/services" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
+          <a href="/formations" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
     
     <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
@@ -172,9 +172,9 @@ function CreationInner() {
 
 {menuOpen && (
   <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-    <a href="/perform" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-    <a href="/creation" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
-    <a href="/teaching" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
+    <a href="/accueil" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+    <a href="/services" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
+    <a href="/formations" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
     <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
     <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
   </div>
