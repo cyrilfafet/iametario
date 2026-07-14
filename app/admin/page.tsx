@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase-client";
 
 type Client = { nom: string; email: string };
 type Livraison = { code: string; prenom: string; nom_projet: string; solde: number; paiement_solde: boolean; created_at: string };
@@ -211,12 +210,10 @@ export default function Admin() {
     });
     const urlData = await urlRes.json();
     if (!urlRes.ok) throw new Error(`URL upload ${type} : ${urlData.error}`);
-    const { token, path } = urlData;
-    if (!token || !path) throw new Error(`Données d'upload manquantes pour ${type}`);
-    const { error } = await supabase.storage
-      .from("Livraison")
-      .uploadToSignedUrl(path, token, file, { contentType: file.type || "application/octet-stream" });
-    if (error) throw new Error(`Upload ${type} échoué : ${error.message}`);
+    const { url } = urlData;
+    if (!url || typeof url !== "string") throw new Error(`URL d'upload manquante pour ${type}`);
+    const uploadRes = await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": file.type || "application/octet-stream" } });
+    if (!uploadRes.ok) throw new Error(`Upload ${type} échoué : ${uploadRes.status}`);
   };
 
   const createDelivery = async () => {

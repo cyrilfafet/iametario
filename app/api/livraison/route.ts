@@ -11,10 +11,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const fichier_preview_url = `${base}/storage/v1/object/public/Livraison/${code}/preview.mp3`;
-  const fichier_wav_url = `${base}/storage/v1/object/public/Livraison/${code}/final.wav`;
-  const fichier_mp3_url = `${base}/storage/v1/object/public/Livraison/${code}/final.mp3`;
+  const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+  const fichier_preview_url = `${base}/livraisons/${code}/preview.mp3`;
+  const fichier_wav_url = `${base}/livraisons/${code}/final.wav`;
+  const fichier_mp3_url = `${base}/livraisons/${code}/final.mp3`;
 
   const { error } = await supabaseAdmin
     .from("livraisons")
