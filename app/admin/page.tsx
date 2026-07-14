@@ -82,7 +82,8 @@ export default function Admin() {
   };
 
   const uploadShopFile = async (file: File, id: string, type: "preview" | "wav" | "cover") => {
-    setShopProgressLabel(type === "preview" ? "Upload aperçu MP3…" : "Upload WAV final…");
+    const labels = { preview: "Upload aperçu MP3…", wav: "Upload WAV final…", cover: "Upload image cover…" };
+    setShopProgressLabel(labels[type]);
     const urlRes = await fetch("/api/shop/upload-url", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -91,7 +92,8 @@ export default function Admin() {
     const urlData = await urlRes.json();
     if (!urlRes.ok) throw new Error(`Signed URL ${type} : ${urlData.error}`);
     const { url } = urlData;
-    const contentType = type === "preview" ? "audio/mpeg" : type === "cover" ? "image/jpeg" : "audio/wav";
+    if (!url || typeof url !== "string") throw new Error(`URL d'upload manquante pour ${type}`);
+    const contentType = type === "preview" ? "audio/mpeg" : type === "cover" ? (file.type || "image/jpeg") : "audio/wav";
     const uploadRes = await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": contentType } });
     if (!uploadRes.ok) throw new Error(`Upload ${type} échoué : ${uploadRes.status}`);
   };
