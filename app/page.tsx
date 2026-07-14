@@ -93,6 +93,7 @@ export default function Artist() {
   const [tlIndex, setTlIndex] = useState(8);
   const [mediaIndex, setMediaIndex] = useState(0);
   const [vw, setVw] = useState(375);
+  const touchStartX = useRef(0);
   useEffect(() => {
     const update = () => setVw(window.innerWidth);
     update();
@@ -370,7 +371,18 @@ export default function Artist() {
                 >›</button>
               </div>
             </div>
-            <div className="relative flex items-center justify-center" style={{ height: 280 }}>
+            <div
+              className="relative flex items-center justify-center"
+              style={{ height: 280 }}
+              onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
+              onTouchEnd={e => {
+                const dx = e.changedTouches[0].clientX - touchStartX.current;
+                if (Math.abs(dx) > 40) {
+                  if (dx < 0) setMediaIndex(i => (i + 1) % mediaItems.length);
+                  else setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length);
+                }
+              }}
+            >
 
               {/* Cartes */}
               {mediaItems.map((item, i) => {
