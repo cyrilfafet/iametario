@@ -42,7 +42,14 @@ function VideoCard({ src, active, objectPosition = "center" }: { src: string; ac
 
   const fullscreen = (e: React.MouseEvent) => {
     e.stopPropagation();
-    ref.current?.requestFullscreen();
+    const video = ref.current;
+    if (!video) return;
+    // iOS Safari uses webkitEnterFullscreen on the video element
+    if ((video as HTMLVideoElement & { webkitEnterFullscreen?: () => void }).webkitEnterFullscreen) {
+      (video as HTMLVideoElement & { webkitEnterFullscreen: () => void }).webkitEnterFullscreen();
+    } else if (video.requestFullscreen) {
+      video.requestFullscreen();
+    }
   };
 
   return (
