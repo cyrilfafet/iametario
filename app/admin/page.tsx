@@ -217,12 +217,13 @@ export default function Admin() {
   };
 
   const createDelivery = async () => {
-    if (!previewFile || !wavFile || !mp3File || !prenom || !nomProjet) return;
+    if (!previewFile || !mp3File || !prenom || !nomProjet) return;
     setLoading(true);
     const code = Math.random().toString(36).slice(2, 10);
+    const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
     try {
       await uploadFile(previewFile, code, "preview");
-      await uploadFile(wavFile, code, "wav");
+      if (wavFile) await uploadFile(wavFile, code, "wav");
       await uploadFile(mp3File, code, "mp3");
       setProgressLabel("Création de la livraison…");
       const res = await fetch("/api/livraison", {
@@ -236,6 +237,7 @@ export default function Admin() {
           message,
           email: email || null,
           solde: solde ? parseInt(solde) : 0,
+          fichier_wav_url: wavFile ? `${base}/livraisons/${code}/final.wav` : null,
         }),
       });
       if (res.ok) {
@@ -556,7 +558,7 @@ export default function Admin() {
 
                 <button
                   onClick={createDelivery}
-                  disabled={loading || !prenom || !nomProjet || !previewFile || !wavFile || !mp3File}
+                  disabled={loading || !prenom || !nomProjet || !previewFile || !mp3File}
                   className="bg-blue-500 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors mt-2 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {loading ? progressLabel || "Chargement…" : "Créer la livraison"}

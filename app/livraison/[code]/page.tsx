@@ -237,14 +237,16 @@ function LivraisonInner() {
 
         {/* Téléchargements */}
         {isUnlocked ? (
-          <div className="grid grid-cols-2 gap-3 mb-8">
-            <button
-              onClick={() => download(livraison.fichier_wav_url, `${livraison.nom_projet}.wav`)}
-              className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
-            >
-              <span>↓ WAV</span>
-              <span className="text-zinc-400 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
-            </button>
+          <div className={`grid ${livraison.fichier_wav_url ? "grid-cols-2" : "grid-cols-1"} gap-3 mb-8`}>
+            {livraison.fichier_wav_url && (
+              <button
+                onClick={() => download(livraison.fichier_wav_url, `${livraison.nom_projet}.wav`)}
+                className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
+              >
+                <span>↓ WAV</span>
+                <span className="text-zinc-400 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
+              </button>
+            )}
             <button
               onClick={() => download(livraison.fichier_mp3_url, `${livraison.nom_projet}.mp3`)}
               className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500 hover:border-blue-500 hover:text-zinc-900 transition-colors"
@@ -255,11 +257,13 @@ function LivraisonInner() {
           </div>
         ) : (
           <div className="mb-8">
-            <div className="grid grid-cols-2 gap-3 mb-4 opacity-40 pointer-events-none select-none">
-              <div className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500">
-                <span>🔒 WAV</span>
-                <span className="text-zinc-300 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
-              </div>
+            <div className={`grid ${livraison.fichier_wav_url ? "grid-cols-2" : "grid-cols-1"} gap-3 mb-4 opacity-40 pointer-events-none select-none`}>
+              {livraison.fichier_wav_url && (
+                <div className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500">
+                  <span>🔒 WAV</span>
+                  <span className="text-zinc-300 text-xs">Haute qualité{wavSize ? ` · ${wavSize}` : ""}</span>
+                </div>
+              )}
               <div className="flex flex-col items-center gap-1 border border-zinc-200 rounded-xl px-4 py-4 text-sm text-zinc-500">
                 <span>🔒 MP3</span>
                 <span className="text-zinc-300 text-xs">Standard{mp3Size ? ` · ${mp3Size}` : ""}</span>

@@ -5,7 +5,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
-  const { password, code, prenom, nom_projet, message, solde, email } = await req.json();
+  const { password, code, prenom, nom_projet, message, solde, email, fichier_wav_url: wavUrl } = await req.json();
 
   if (password !== process.env.ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
   const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
   const fichier_preview_url = `${base}/livraisons/${code}/preview.mp3`;
-  const fichier_wav_url = `${base}/livraisons/${code}/final.wav`;
+  const fichier_wav_url = wavUrl ?? null;
   const fichier_mp3_url = `${base}/livraisons/${code}/final.mp3`;
 
   const { error } = await supabaseAdmin
