@@ -209,7 +209,10 @@ export default function Admin() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password, code, type }),
     });
-    const { token, path } = await urlRes.json();
+    const urlData = await urlRes.json();
+    if (!urlRes.ok) throw new Error(`URL upload ${type} : ${urlData.error}`);
+    const { token, path } = urlData;
+    if (!token || !path) throw new Error(`Données d'upload manquantes pour ${type}`);
     const { error } = await supabase.storage
       .from("Livraison")
       .uploadToSignedUrl(path, token, file, { contentType: file.type || "application/octet-stream" });
