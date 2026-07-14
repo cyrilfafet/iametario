@@ -173,11 +173,10 @@ function LivraisonInner() {
       </nav>
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-          <a href="/services" className="hover:text-blue-500 transition-colors">SERVICES</a>
-          <a href="/formations" className="hover:text-blue-500 transition-colors">FORMATIONS</a>
-          
-          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+          <a href="/" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/services" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">SERVICES</a>
+          <a href="/formations" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">FORMATIONS</a>
+          <a href="/contact" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">

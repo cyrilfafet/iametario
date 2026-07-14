@@ -40,12 +40,11 @@ export default function Contact() {
 
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-          <a href="/services" className="hover:text-indigo-400 transition-colors">SERVICES</a>
-          <a href="/formations" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
-          
-          <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
-          <a href="/contact" className="text-blue-500">CONTACT</a>
+          <a href="/" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/services" onClick={() => setMenuOpen(false)} className="hover:text-indigo-400 transition-colors">SERVICES</a>
+          <a href="/formations" onClick={() => setMenuOpen(false)} className="hover:text-violet-400 transition-colors">FORMATIONS</a>
+          <a href="/shop" onClick={() => setMenuOpen(false)} className="hover:text-zinc-900 transition-colors">SHOP</a>
+          <a href="/contact" onClick={() => setMenuOpen(false)} className="text-blue-500">CONTACT</a>
         </div>
       )}
 

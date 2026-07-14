@@ -127,7 +127,7 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
           <button
             onClick={handleBuy}
             disabled={loadingCheckout}
-            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50"
+            className="bg-blue-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 min-w-[60px]"
           >
             {loadingCheckout ? "…" : "Buy"}
           </button>
@@ -239,11 +239,11 @@ export default function ShopPage() {
       </nav>
       {menuOpen && (
         <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-          <a href="/services" className="hover:text-blue-500 transition-colors">SERVICES</a>
-          <a href="/formations" className="hover:text-blue-500 transition-colors">FORMATIONS</a>
-          <a href="/shop" className="font-medium text-zinc-900">SHOP</a>
-          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+          <a href="/" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">ACCUEIL</a>
+          <a href="/services" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">SERVICES</a>
+          <a href="/formations" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">FORMATIONS</a>
+          <a href="/shop" onClick={() => setMenuOpen(false)} className="font-medium text-zinc-900">SHOP</a>
+          <a href="/contact" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">CONTACT</a>
         </div>
       )}
 
