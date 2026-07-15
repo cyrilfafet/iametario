@@ -98,6 +98,10 @@ export default function Artist() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [tlIndex, setTlIndex] = useState(8);
+  const [tlShown, setTlShown] = useState(8);
+  const [tlPhase, setTlPhase] = useState<"idle"|"exit"|"enter">("idle");
+  const tlDir = useRef(1);
+  const tlTouchX = useRef(0);
   const [mediaIndex, setMediaIndex] = useState(0);
   const [vw, setVw] = useState(375);
   const touchStartX = useRef(0);
@@ -130,6 +134,27 @@ export default function Artist() {
     });
     setBookingSubmitted(true);
     setBookingLoading(false);
+  };
+
+  const TL_MILESTONES: Record<number, string> = {
+    2018: "3 victoires consécutives",
+    2023: "70k plays · International",
+    2025: "Ibiza",
+    2026: "En cours",
+  };
+
+  const goTimeline = (dir: number) => {
+    if (tlPhase !== "idle") return;
+    const next = tlIndex + dir;
+    if (next < 0 || next >= t.timeline.length) return;
+    tlDir.current = dir > 0 ? 1 : -1;
+    setTlIndex(next);
+    setTlPhase("exit");
+    setTimeout(() => {
+      setTlShown(next);
+      setTlPhase("enter");
+      requestAnimationFrame(() => requestAnimationFrame(() => setTlPhase("idle")));
+    }, 210);
   };
 
   const progress = Math.min(1, scrollY / 350);
@@ -281,61 +306,105 @@ export default function Artist() {
         </p>
 
         {/* Timeline */}
-        <div className="w-full max-w-3xl mt-14 bg-slate-50 rounded-2xl px-6 py-10">
-          <h2 className="text-2xl font-bold text-zinc-900 text-center mb-10">{t.timeline_title}</h2>
-          {/* Année + événement */}
-          <div className="flex items-center justify-between gap-4 mb-8">
-            <button
-              onClick={() => setTlIndex(i => Math.max(0, i - 1))}
-              disabled={tlIndex === 0}
-              className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors disabled:opacity-20 disabled:cursor-not-allowed flex-shrink-0"
-            >‹</button>
-            <div className="text-center">
-              <p className="text-5xl md:text-6xl font-bold tabular-nums" style={{ color: "#60A5FA" }}>
-                {t.timeline[tlIndex].year}
-              </p>
-              <p className="text-zinc-500 text-base mt-2 max-w-sm mx-auto leading-snug">
-                {t.timeline[tlIndex].event}
-              </p>
-              {"detail" in t.timeline[tlIndex] && (
-                <p className="text-zinc-400 text-xs mt-1.5 max-w-xs mx-auto">
-                  {(t.timeline[tlIndex] as { detail: string }).detail}
-                </p>
-              )}
-            </div>
-            <button
-              onClick={() => setTlIndex(i => Math.min(t.timeline.length - 1, i + 1))}
-              disabled={tlIndex === t.timeline.length - 1}
-              className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors disabled:opacity-20 disabled:cursor-not-allowed flex-shrink-0"
-            >›</button>
-          </div>
+        {(() => {
+          const tlItem = t.timeline[tlShown];
+          const badge = TL_MILESTONES[tlItem.year] ?? null;
+          const isMilestone = badge !== null;
 
-          {/* Ligne des années */}
-          <div className="relative">
-            <div className="overflow-x-auto scrollbar-none">
-              <div className="flex gap-6 px-4 relative min-w-max mx-auto justify-center">
-                {t.timeline.map((item, i) => (
-                  <button
-                    key={item.year}
-                    onClick={() => setTlIndex(i)}
-                    className="relative flex flex-col items-center gap-1.5 py-1 transition-colors"
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full transition-colors"
-                      style={{ backgroundColor: i === tlIndex ? "#60A5FA" : "#d4d4d8" }}
-                    />
-                    <span
-                      className="text-xs font-mono transition-colors whitespace-nowrap"
-                      style={{ color: i === tlIndex ? "#60A5FA" : "#a1a1aa" }}
-                    >
-                      {item.year}
+          const ghostBase: React.CSSProperties = {
+            position: "absolute", right: 10, bottom: -18,
+            fontSize: 128, fontWeight: 900, lineHeight: 1, letterSpacing: "-.05em",
+            WebkitTextStroke: isMilestone ? "1.5px #bfdbfe" : "1.5px #e4e4e7",
+            color: "transparent", pointerEvents: "none", userSelect: "none",
+            fontVariantNumeric: "tabular-nums",
+          };
+          const ghostStyle: React.CSSProperties = tlPhase === "idle"
+            ? { ...ghostBase, opacity: 1, transform: "translateY(0)", transition: "opacity .22s ease, transform .28s cubic-bezier(.4,0,.2,1)", animation: "tl-float 5s ease-in-out infinite" }
+            : tlPhase === "exit"
+            ? { ...ghostBase, opacity: 0, transform: "translateY(14px)", transition: "opacity .2s ease, transform .26s cubic-bezier(.4,0,.2,1)" }
+            : { ...ghostBase, opacity: 0, transform: "translateY(14px)", transition: "none" };
+
+          const contentStyle: React.CSSProperties = tlPhase === "idle"
+            ? { opacity: 1, transform: "translateX(0)", transition: "opacity .2s ease, transform .24s cubic-bezier(.4,0,.2,1)" }
+            : tlPhase === "exit"
+            ? { opacity: 0, transform: `translateX(${tlDir.current > 0 ? "-16px" : "16px"})`, transition: "opacity .2s ease, transform .24s cubic-bezier(.4,0,.2,1)" }
+            : { opacity: 0, transform: `translateX(${tlDir.current > 0 ? "16px" : "-16px"})`, transition: "none" };
+
+          return (
+            <div className="w-full max-w-3xl mt-14">
+              <style>{`@keyframes tl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}`}</style>
+              <h2 className="text-2xl font-bold text-zinc-900 text-center mb-6">{t.timeline_title}</h2>
+              <div
+                className="relative overflow-hidden"
+                style={{ background: "#fff", border: "1.5px solid #e4e4e7", borderRadius: 20, height: 220, padding: "22px 26px 18px", display: "flex", flexDirection: "column" }}
+                onTouchStart={e => { tlTouchX.current = e.touches[0].clientX; }}
+                onTouchEnd={e => { const dx = e.changedTouches[0].clientX - tlTouchX.current; if (Math.abs(dx) > 40) goTimeline(dx < 0 ? 1 : -1); }}
+              >
+                {/* Ghost year */}
+                <span style={ghostStyle}>{tlItem.year}</span>
+
+                {/* Content */}
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", zIndex: 1, ...contentStyle }}>
+                  <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: isMilestone ? "#60a5fa" : "#a1a1aa", marginBottom: 10 }}>
+                    {tlItem.year}
+                  </p>
+                  <p style={{ fontSize: 17, fontWeight: 700, color: "#09090b", lineHeight: 1.38, maxWidth: "68%" }}>
+                    {tlItem.event}
+                  </p>
+                  {badge && (
+                    <span style={{
+                      display: "inline-block", marginTop: 9, fontSize: 9, fontWeight: 600, letterSpacing: ".1em",
+                      textTransform: "uppercase", color: "#60a5fa", background: "#eff6ff", borderRadius: 100,
+                      padding: "3px 9px", width: "fit-content",
+                      opacity: tlPhase === "idle" ? 1 : 0,
+                      transform: tlPhase === "idle" ? "translateY(0)" : "translateY(4px)",
+                      transition: "opacity .22s .1s, transform .22s .1s",
+                    }}>
+                      {badge}
                     </span>
-                  </button>
-                ))}
+                  )}
+                </div>
+
+                {/* Footer */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 1 }}>
+                  <button
+                    onClick={() => goTimeline(-1)}
+                    disabled={tlIndex === 0}
+                    style={{ width: 30, height: 30, borderRadius: "50%", border: "1.5px solid #e4e4e7", background: "#fff", color: "#71717a", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", cursor: tlIndex === 0 ? "not-allowed" : "pointer", flexShrink: 0, opacity: tlIndex === 0 ? 0.18 : 1, transition: "opacity .15s" }}
+                  >‹</button>
+
+                  {/* Dots */}
+                  <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                    {t.timeline.map((item, i) => (
+                      <button
+                        key={item.year}
+                        onClick={() => { if (i !== tlIndex) goTimeline(i - tlIndex); }}
+                        title={String(item.year)}
+                        style={{
+                          width: i === tlShown ? 16 : 5, height: 5, borderRadius: 100, border: "none",
+                          background: i === tlShown ? (TL_MILESTONES[item.year] ? "#60a5fa" : "#18181b") : (TL_MILESTONES[item.year] ? "#bfdbfe" : "#e4e4e7"),
+                          cursor: "pointer", flexShrink: 0,
+                          transition: "all .3s cubic-bezier(.4,0,.2,1)",
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Progress */}
+                  <div style={{ flex: 1, height: 2, background: "#f4f4f5", borderRadius: 2, overflow: "hidden" }}>
+                    <div style={{ height: "100%", background: "#18181b", borderRadius: 2, width: `${(tlIndex / (t.timeline.length - 1)) * 100}%`, transition: "width .4s cubic-bezier(.4,0,.2,1)" }} />
+                  </div>
+
+                  <button
+                    onClick={() => goTimeline(1)}
+                    disabled={tlIndex === t.timeline.length - 1}
+                    style={{ width: 30, height: 30, borderRadius: "50%", border: "1.5px solid #e4e4e7", background: "#fff", color: "#71717a", fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", cursor: tlIndex === t.timeline.length - 1 ? "not-allowed" : "pointer", flexShrink: 0, opacity: tlIndex === t.timeline.length - 1 ? 0.18 : 1, transition: "opacity .15s" }}
+                  >›</button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          );
+        })()}
 
       </section>
 
