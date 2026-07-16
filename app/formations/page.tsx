@@ -122,11 +122,14 @@ export default function Formations() {
       <div className="flex-1 px-6 py-16 max-w-2xl mx-auto w-full">
 
         {/* Hero */}
-        <div className="mb-16">
+        <div className="mb-10">
           <p className="text-zinc-400 text-xs uppercase tracking-widest mb-5">Formations</p>
-          <h1 className="text-3xl md:text-4xl font-bold leading-snug">
+          <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-4">
             Partager ce que j'ai mis<br className="hidden md:block" /> 15 ans à apprendre.
           </h1>
+          <p className="text-zinc-500 text-base leading-relaxed max-w-lg">
+            Des sessions en direct, pensées pour que tu repars avec quelque chose de concret — pas juste de la théorie.
+          </p>
         </div>
 
         {/* ── DISPONIBLE MAINTENANT ── */}
