@@ -283,6 +283,7 @@ export default function Formations() {
                 >
                   Réserver une session
                 </button>
+                <p className="text-zinc-400 text-xs text-center mt-2">Paiement sécurisé · Créneau choisi à l'étape suivante</p>
               </div>
             ) : creneaux.length === 0 ? (
               <div className="border border-zinc-200 rounded-2xl px-6 py-6 text-center">
