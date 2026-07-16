@@ -63,16 +63,29 @@ export async function POST(req: NextRequest) {
             resend.emails.send({
               from: "E-Tario <contact@iametario.com>",
               to: clientEmail,
-              subject: "Coaching FL Studio · Réservation confirmée ✓",
+              replyTo: "contact@iametario.com",
+              subject: "Session FL Studio avec E-Tario · Réservation confirmée",
               html: `
                 <h2>C'est confirmé !</h2>
-                <p>Bonjour ${clientNom},</p>
-                <p>Ton paiement a bien été reçu. Ta session de coaching <strong>FL Studio · Afro House</strong> est réservée.</p>
-                <p><strong>Date :</strong> ${dateStr}</p>
-                <p><strong>Heure :</strong> ${heure} — ${heureFin}</p>
-                <p><strong>Durée :</strong> 3 heures</p>
-                <p>Je te recontacte quelques jours avant pour te communiquer le lien Zoom et répondre à tes questions.</p>
-                <p>À très vite,<br/>E-Tario</p>
+                <p>Bonjour ${clientNom.split(" ")[0]},</p>
+                <p>Ta session FL Studio est réservée. Voici tout ce qu'il faut savoir pour qu'on soit prêts le jour J.</p>
+                <p>
+                  <strong>Date :</strong> ${dateStr}<br/>
+                  <strong>Heure :</strong> ${heure} — ${heureFin}<br/>
+                  <strong>Durée :</strong> 3 heures<br/>
+                  <strong>Plateforme :</strong> Zoom
+                </p>
+                <h3>À préparer avant la session</h3>
+                <ul>
+                  <li>Connexion internet stable (fibre ou très bon réseau)</li>
+                  <li>Casque ou écouteurs obligatoires</li>
+                  <li>FL Studio installé — la version démo gratuite suffit : <a href="https://www.image-line.com/fl-studio/download">https://www.image-line.com/fl-studio/download</a></li>
+                  <li>Pack de samples téléchargé à ce lien :</li>
+                  <li>Le fichier MP3 du morceau que tu veux remixer</li>
+                  <li>Logiciel de visio Zoom installé : <a href="https://zoom.us/download">https://zoom.us/download</a></li>
+                </ul>
+                <p>Des questions d'ici là ? Réponds directement à ce mail.</p>
+                <p>À très vite,<br/>Cyril / E-Tario</p>
               `,
             }),
             resend.emails.send({
