@@ -746,6 +746,53 @@ export default function Admin() {
                 </div>
               </div>
 
+              {/* Panneau réservation sélectionnée — au-dessus du calendrier */}
+              {selectedReservation && !rescheduleSource && (
+                <div className="mb-4 border border-zinc-200 rounded-xl p-4 bg-zinc-50/50">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <p className="text-sm font-semibold text-zinc-900">{selectedReservation.client_nom}</p>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${selectedReservation.reserve ? "bg-violet-100 text-violet-600" : "bg-amber-100 text-amber-600"}`}>
+                          {selectedReservation.reserve ? "Paiement confirmé" : "En attente de paiement"}
+                        </span>
+                      </div>
+                      <a href={`mailto:${selectedReservation.client_email}`} className="text-xs text-violet-500 hover:underline">{selectedReservation.client_email}</a>
+                      {selectedReservation.client_message && (
+                        <p className="text-xs text-zinc-400 italic mt-1">"{selectedReservation.client_message}"</p>
+                      )}
+                    </div>
+                    <button onClick={() => setSelectedReservation(null)} className="text-zinc-300 hover:text-zinc-500 text-xl leading-none flex-shrink-0">×</button>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => cancelReservation(selectedReservation)}
+                      className="flex-1 text-xs border border-red-200 text-red-400 rounded-lg py-2 hover:border-red-300 hover:text-red-500 transition-colors"
+                    >
+                      Annuler le RDV
+                    </button>
+                    {selectedReservation.reserve && (
+                      <button
+                        onClick={() => { setRescheduleSource(selectedReservation); setSelectedReservation(null); }}
+                        className="flex-1 text-xs border border-zinc-200 text-zinc-600 rounded-lg py-2 hover:border-zinc-400 transition-colors"
+                      >
+                        Décaler →
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Mode décalage — au-dessus du calendrier */}
+              {rescheduleSource && (
+                <div className="mb-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between gap-3">
+                  <p className="text-sm text-blue-700">
+                    Décalage de <strong>{rescheduleSource.client_nom}</strong> — clique sur un créneau vert disponible
+                  </p>
+                  <button onClick={() => setRescheduleSource(null)} className="text-xs text-blue-500 hover:text-blue-700 flex-shrink-0">Annuler</button>
+                </div>
+              )}
+
               {/* Calendrier */}
               <div className="overflow-x-auto">
                 <div className="min-w-[580px]">
@@ -821,54 +868,6 @@ export default function Admin() {
                   </div>
                 </div>
               </div>
-
-              {/* Mode décalage */}
-              {rescheduleSource && (
-                <div className="mt-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between gap-3">
-                  <p className="text-sm text-blue-700">
-                    Décalage de <strong>{rescheduleSource.client_nom}</strong> — clique sur un créneau vert disponible
-                  </p>
-                  <button onClick={() => setRescheduleSource(null)} className="text-xs text-blue-500 hover:text-blue-700 flex-shrink-0">Annuler</button>
-                </div>
-              )}
-
-              {/* Panneau réservation sélectionnée */}
-              {selectedReservation && !rescheduleSource && (
-                <div className="mt-4 border border-zinc-200 rounded-xl p-4">
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div>
-                      <p className="text-sm font-semibold text-zinc-900">{selectedReservation.client_nom}</p>
-                      <a href={`mailto:${selectedReservation.client_email}`} className="text-xs text-violet-500 hover:underline">{selectedReservation.client_email}</a>
-                      {selectedReservation.client_message && (
-                        <p className="text-xs text-zinc-400 italic mt-1">"{selectedReservation.client_message}"</p>
-                      )}
-                      <p className="text-xs mt-2">
-                        {selectedReservation.reserve
-                          ? <span className="text-violet-600 font-medium">✓ Paiement Stripe confirmé</span>
-                          : <span className="text-amber-600 font-medium">⏳ En attente de paiement</span>
-                        }
-                      </p>
-                    </div>
-                    <button onClick={() => setSelectedReservation(null)} className="text-zinc-300 hover:text-zinc-500 text-xl leading-none flex-shrink-0">×</button>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => cancelReservation(selectedReservation)}
-                      className="flex-1 text-xs border border-red-200 text-red-400 rounded-lg py-2 hover:border-red-300 hover:text-red-500 transition-colors"
-                    >
-                      Annuler le RDV
-                    </button>
-                    {selectedReservation.reserve && (
-                      <button
-                        onClick={() => { setRescheduleSource(selectedReservation); setSelectedReservation(null); }}
-                        className="flex-1 text-xs border border-zinc-200 text-zinc-600 rounded-lg py-2 hover:border-zinc-400 transition-colors"
-                      >
-                        Décaler →
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
 
               {/* Réservations à venir */}
               {upcomingReservations.length > 0 && (
