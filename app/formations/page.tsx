@@ -128,7 +128,7 @@ export default function Formations() {
             Partager ce que j'ai mis<br className="hidden md:block" /> 15 ans à apprendre.
           </h1>
           <p className="text-zinc-500 text-base leading-relaxed max-w-lg">
-            Des sessions en direct, pensées pour que tu repars avec quelque chose de concret — pas juste de la théorie.
+            Apprendre en faisant, pas en regardant.
           </p>
         </div>
 
