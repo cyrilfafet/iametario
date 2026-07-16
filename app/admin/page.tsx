@@ -26,7 +26,7 @@ export default function Admin() {
   const [deliveryUrl, setDeliveryUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"livraisons" | "shop">("livraisons");
+  const [activeTab, setActiveTab] = useState<"livraisons" | "shop" | "coaching">("livraisons");
 
   // Shop state
   const [shopTracks, setShopTracks] = useState<ShopTrack[]>([]);
@@ -39,6 +39,13 @@ export default function Admin() {
   const [shopLoading, setShopLoading] = useState(false);
   const [shopProgressLabel, setShopProgressLabel] = useState("");
   const [shopSuccess, setShopSuccess] = useState(false);
+
+  // Coaching
+  type Creneau = { id: string; date: string; heure_debut: string; duree_min: number; disponible: boolean; reserve: boolean; client_nom: string | null; client_email: string | null; client_message: string | null };
+  const [creneaux, setCreneaux] = useState<Creneau[]>([]);
+  const [newDate, setNewDate] = useState("");
+  const [newHour, setNewHour] = useState("10:00");
+  const [coachingLoading, setCoachingLoading] = useState(false);
 
   // Edit mode
   const [editingTrack, setEditingTrack] = useState<ShopTrack | null>(null);
@@ -72,7 +79,16 @@ export default function Admin() {
     fetch(`/api/admin/shop?password=${encodeURIComponent(password)}`)
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setShopTracks(data); });
+    fetch(`/api/admin/creneaux?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setCreneaux(data); });
   }, [authenticated]);
+
+  const fetchCreneaux = () => {
+    fetch(`/api/admin/creneaux?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setCreneaux(data); });
+  };
 
   const fetchShopTracks = () => {
     fetch(`/api/admin/shop?password=${encodeURIComponent(password)}`)
@@ -350,6 +366,12 @@ export default function Admin() {
             >
               Shop
             </button>
+            <button
+              onClick={() => setActiveTab("coaching")}
+              className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-colors ${activeTab === "coaching" ? "bg-violet-500 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
+            >
+              Coaching
+            </button>
           </div>
           <span className="text-zinc-400 text-xs uppercase tracking-widest">Back-office</span>
         </div>
@@ -602,6 +624,143 @@ export default function Admin() {
           </div>
 
         </div>}
+
+        {/* Onglet Coaching */}
+        {activeTab === "coaching" && (
+          <div className="flex gap-8 items-start">
+            {/* Ajout créneau */}
+            <div className="w-72 flex-shrink-0">
+              <h2 className="text-sm font-semibold text-zinc-900 mb-4">Ajouter un créneau</h2>
+              <div className="flex flex-col gap-3">
+                <div>
+                  <label className="text-xs text-zinc-400 uppercase tracking-widest mb-1.5 block">Date</label>
+                  <input
+                    type="date"
+                    value={newDate}
+                    onChange={e => setNewDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                    className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 focus:outline-none focus:border-violet-400 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-zinc-400 uppercase tracking-widest mb-1.5 block">Heure de début</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"].map(h => (
+                      <button
+                        key={h}
+                        onClick={() => setNewHour(h)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${newHour === h ? "bg-violet-500 text-white" : "border border-zinc-200 text-zinc-500 hover:border-violet-400"}`}
+                      >
+                        {h.replace(":00","h")}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  disabled={!newDate || coachingLoading}
+                  onClick={async () => {
+                    if (!newDate) return;
+                    setCoachingLoading(true);
+                    await fetch("/api/admin/creneaux", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ password, date: newDate, heure_debut: newHour }),
+                    });
+                    setNewDate("");
+                    fetchCreneaux();
+                    setCoachingLoading(false);
+                  }}
+                  className="w-full bg-violet-500 text-white px-4 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors disabled:opacity-40"
+                >
+                  {coachingLoading ? "…" : "Ajouter"}
+                </button>
+              </div>
+            </div>
+
+            {/* Liste des créneaux */}
+            <div className="flex-1">
+              <h2 className="text-sm font-semibold text-zinc-900 mb-4">
+                Créneaux ({creneaux.length})
+              </h2>
+              {creneaux.length === 0 ? (
+                <p className="text-zinc-400 text-sm">Aucun créneau pour l'instant.</p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {creneaux.map(c => {
+                    const isPast = c.date < new Date().toISOString().split("T")[0];
+                    const heure = c.heure_debut.slice(0, 5).replace(":", "h");
+                    const dateLabel = new Date(c.date + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" });
+                    return (
+                      <div
+                        key={c.id}
+                        className={`flex items-start justify-between gap-4 border rounded-xl px-4 py-3 transition-colors ${
+                          c.reserve ? "border-violet-200 bg-violet-50/40" :
+                          isPast ? "border-zinc-100 opacity-50" :
+                          c.disponible ? "border-emerald-200 bg-emerald-50/30" :
+                          "border-zinc-200 bg-zinc-50"
+                        }`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-sm font-semibold text-zinc-900">{dateLabel} · {heure}</span>
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              c.reserve ? "bg-violet-100 text-violet-600" :
+                              isPast ? "bg-zinc-100 text-zinc-400" :
+                              c.disponible ? "bg-emerald-100 text-emerald-600" :
+                              "bg-zinc-100 text-zinc-500"
+                            }`}>
+                              {c.reserve ? "Réservé" : isPast ? "Passé" : c.disponible ? "Disponible" : "Bloqué"}
+                            </span>
+                          </div>
+                          {c.reserve && c.client_nom && (
+                            <div className="text-xs text-zinc-500 mt-1">
+                              <span className="font-medium text-zinc-700">{c.client_nom}</span>
+                              {c.client_email && <> · <a href={`mailto:${c.client_email}`} className="text-violet-500 hover:underline">{c.client_email}</a></>}
+                              {c.client_message && <p className="mt-0.5 text-zinc-400 italic truncate">"{c.client_message}"</p>}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-2 flex-shrink-0">
+                          {!c.reserve && !isPast && (
+                            <button
+                              onClick={async () => {
+                                await fetch(`/api/admin/creneaux/${c.id}`, {
+                                  method: "PATCH",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ password, disponible: !c.disponible }),
+                                });
+                                fetchCreneaux();
+                              }}
+                              className="text-xs border border-zinc-200 rounded-lg px-2.5 py-1.5 text-zinc-500 hover:border-zinc-400 transition-colors"
+                            >
+                              {c.disponible ? "Bloquer" : "Débloquer"}
+                            </button>
+                          )}
+                          {!c.reserve && (
+                            <button
+                              onClick={async () => {
+                                if (!confirm("Supprimer ce créneau ?")) return;
+                                await fetch(`/api/admin/creneaux/${c.id}`, {
+                                  method: "DELETE",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ password }),
+                                });
+                                fetchCreneaux();
+                              }}
+                              className="text-xs border border-red-100 rounded-lg px-2.5 py-1.5 text-red-400 hover:border-red-300 hover:text-red-500 transition-colors"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
       </div>
     </main>

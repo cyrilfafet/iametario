@@ -1,12 +1,57 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Footer from "@/components/Footer";
+
+type Creneau = { id: string; date: string; heure_debut: string; duree_min: number };
 
 export default function Formations() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Booking widget
+  const [creneaux, setCreneaux] = useState<Creneau[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [bookingNom, setBookingNom] = useState("");
+  const [bookingEmail, setBookingEmail] = useState("");
+  const [bookingMsg, setBookingMsg] = useState("");
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingDone, setBookingDone] = useState(false);
+  const [bookingError, setBookingError] = useState("");
+
+  useEffect(() => {
+    fetch("/api/creneaux")
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setCreneaux(data); })
+      .catch(() => {});
+  }, []);
+
+  const handleBook = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedId || !bookingNom || !bookingEmail) return;
+    setBookingLoading(true);
+    setBookingError("");
+    const res = await fetch("/api/creneaux/reserver", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setBookingDone(true);
+    } else {
+      setBookingError(data.error === "Créneau non disponible" ? "Ce créneau vient d'être pris. Choisis-en un autre." : "Une erreur est survenue, réessaie.");
+      setSelectedId(null);
+    }
+    setBookingLoading(false);
+  };
+
+  // Group slots by date
+  const byDate = creneaux.reduce<Record<string, Creneau[]>>((acc, c) => {
+    (acc[c.date] ??= []).push(c);
+    return acc;
+  }, {});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -186,13 +231,97 @@ export default function Formations() {
             </div>
           </div>
 
-          {/* CTA principal */}
-          <a
-            href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
-            className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
-          >
-            Réserver mon coaching — 90€
-          </a>
+          {/* Widget réservation */}
+          <div className="mt-2">
+            {bookingDone ? (
+              <div className="border border-emerald-200 bg-emerald-50 rounded-2xl px-6 py-8 text-center">
+                <p className="text-emerald-600 font-semibold mb-1">Réservation confirmée ✓</p>
+                <p className="text-zinc-500 text-sm">Un email de confirmation t'a été envoyé. À très vite !</p>
+              </div>
+            ) : creneaux.length === 0 ? (
+              <a
+                href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
+                className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
+              >
+                Réserver mon coaching — 90€
+              </a>
+            ) : (
+              <div className="border border-zinc-200 rounded-2xl overflow-hidden">
+                {/* Sélection du créneau */}
+                <div className="px-5 py-4 border-b border-zinc-100">
+                  <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-3">Choisir un créneau</p>
+                  <div className="flex flex-col gap-3">
+                    {Object.entries(byDate).map(([date, slots]) => {
+                      const dateLabel = new Date(date + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+                      return (
+                        <div key={date}>
+                          <p className="text-xs text-zinc-400 mb-1.5 capitalize">{dateLabel}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {slots.map(s => {
+                              const heure = s.heure_debut.slice(0, 5).replace(":", "h");
+                              const isSelected = selectedId === s.id;
+                              return (
+                                <button
+                                  key={s.id}
+                                  onClick={() => setSelectedId(isSelected ? null : s.id)}
+                                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                                    isSelected
+                                      ? "bg-violet-500 text-white"
+                                      : "border border-zinc-200 text-zinc-700 hover:border-violet-400 hover:text-violet-600"
+                                  }`}
+                                >
+                                  {heure} <span className="text-xs opacity-60">· 3h</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Formulaire — s'affiche quand un créneau est sélectionné */}
+                {selectedId && (
+                  <form onSubmit={handleBook} className="px-5 py-4 flex flex-col gap-3">
+                    <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-1">Tes infos</p>
+                    <input
+                      type="text"
+                      placeholder="Ton prénom"
+                      value={bookingNom}
+                      onChange={e => setBookingNom(e.target.value)}
+                      required
+                      className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
+                    />
+                    <input
+                      type="email"
+                      placeholder="Ton email"
+                      value={bookingEmail}
+                      onChange={e => setBookingEmail(e.target.value)}
+                      required
+                      className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
+                    />
+                    <textarea
+                      placeholder="Un message ? (optionnel)"
+                      value={bookingMsg}
+                      onChange={e => setBookingMsg(e.target.value)}
+                      rows={2}
+                      className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors resize-none"
+                    />
+                    {bookingError && <p className="text-red-400 text-xs">{bookingError}</p>}
+                    <button
+                      type="submit"
+                      disabled={bookingLoading}
+                      className="w-full bg-violet-500 text-white px-6 py-3.5 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors disabled:opacity-50"
+                    >
+                      {bookingLoading ? "Réservation…" : "Confirmer — 90€"}
+                    </button>
+                    <p className="text-zinc-400 text-xs text-center">Le règlement se fait par virement après confirmation.</p>
+                  </form>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Séparateur */}
