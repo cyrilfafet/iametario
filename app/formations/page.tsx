@@ -130,7 +130,7 @@ export default function Formations() {
             Partager ce que j'ai mis<br className="hidden md:block" /> 15 ans à apprendre.
           </h1>
           <p className="text-zinc-500 text-base leading-relaxed max-w-lg">
-            Apprendre en faisant, pas en regardant.
+            Pas de théorie, on pratique dès la première minute.
           </p>
         </div>
 
