@@ -141,7 +141,7 @@ export default function Formations() {
             {/* Header */}
             <div className="px-6 pt-6 pb-5 border-b border-zinc-100">
               <p className="text-xs font-semibold tracking-widest uppercase text-violet-400 mb-2">Coaching individuel · Zoom</p>
-              <h2 className="text-xl font-bold text-zinc-900 mb-1">FL Studio · Afro House</h2>
+              <h2 className="text-xl font-bold text-zinc-900 mb-1">FL Studio · On crée un remix ensemble de A à Z</h2>
               <p className="text-zinc-500 text-sm leading-relaxed">
                 En 3h, on crée ensemble un remix d'un morceau de ton choix — de zéro, sur FL Studio gratuit. L'objectif est simple : que tu aies toutes les bases pour ouvrir la porte sur la production de tes propres mashups, remix, voire titres originaux. Même si tu n'as jamais ouvert un logiciel de musique, je te guide étape par étape pour maîtriser les bases du mixage et de la compo. Et comme c'est le style le plus efficace et accessible du moment, on travaillera sur une esthétique Afro House.
               </p>
