@@ -532,32 +532,6 @@ export default function Formations() {
             </div>
           </div>
 
-          {/* Newsletter early bird */}
-          {submitted ? (
-            <p className="text-violet-400 text-sm text-center">Tu bénéficieras de -10% à la sortie ✓</p>
-          ) : (
-            <>
-              <p className="text-zinc-500 text-sm text-center mb-5">Inscris-toi maintenant et bénéficie de <span className="text-zinc-900 font-semibold">-10%</span> à la sortie.</p>
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Ton email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  className="flex-1 bg-white border border-zinc-200 rounded-xl px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-zinc-900 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors disabled:opacity-50 whitespace-nowrap"
-                >
-                  {loading ? "…" : "Me prévenir"}
-                </button>
-              </form>
-              <p className="text-zinc-400 text-xs text-center mt-3">Aucun spam. Un seul email à la sortie.</p>
-            </>
-          )}
         </div>
 
       </div>
