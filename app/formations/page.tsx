@@ -266,7 +266,7 @@ export default function Formations() {
                 <div>
                   <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-1">Session de suivi</p>
                   <p className="text-sm font-semibold text-zinc-900">1h · 40€</p>
-                  <p className="text-xs text-zinc-400 mt-0.5">Réservée aux anciens élèves. Tu bloques sur un projet, tu veux perfectionner un mix ou approfondir un point technique — on se prend une heure pour débloquer.</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">Pour ceux qui ont déjà fait le coaching 3h — on continue là où on s'est arrêtés.</p>
                 </div>
               </div>
             </div>
