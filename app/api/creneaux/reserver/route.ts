@@ -5,7 +5,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
-  const { id, nom, email, message, promoCode, followUp } = await req.json();
+  const { id, nom, email, message, musique, promoCode, followUp } = await req.json();
   if (!id || !nom || !email) return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
 
   const { data: slot, error: fetchError } = await supabaseAdmin
@@ -102,6 +102,7 @@ export async function POST(req: NextRequest) {
       nom,
       email,
       message: message || "",
+      musique: musique || "",
       date: slot.date,
       heure_debut: slot.heure_debut,
       follow_up: followUp ? "1" : "0",

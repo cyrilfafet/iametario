@@ -16,6 +16,7 @@ export default function Formations() {
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
   const [bookingMsg, setBookingMsg] = useState("");
+  const [bookingMusique, setBookingMusique] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingDone, setBookingDone] = useState(false);
   const [bookingError, setBookingError] = useState("");
@@ -56,7 +57,7 @@ export default function Formations() {
     const res = await fetch("/api/creneaux/reserver", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, promoCode: promoValid?.code, followUp: isFollowUp }),
+      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, musique: bookingMusique, promoCode: promoValid?.code, followUp: isFollowUp }),
     });
     const data = await res.json();
     if (data.url) {
@@ -352,6 +353,13 @@ export default function Formations() {
                       value={bookingEmail}
                       onChange={e => setBookingEmail(e.target.value)}
                       required
+                      className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Quelle musique souhaites-tu remixer ?"
+                      value={bookingMusique}
+                      onChange={e => setBookingMusique(e.target.value)}
                       className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
                     />
                     <textarea
