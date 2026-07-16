@@ -83,6 +83,7 @@ export async function POST(req: NextRequest) {
                   <li>Pack de samples téléchargé à ce lien : <a href="https://drive.google.com/drive/folders/13xb385e38qMoibU2bPWEY44_i7z-3QBv?usp=sharing">Google Drive</a></li>
                   <li>Le fichier MP3 du morceau que tu veux remixer</li>
                   <li>Logiciel de visio Zoom installé : <a href="https://zoom.us/download">https://zoom.us/download</a></li>
+                  <li>Lien pour rejoindre la session le jour J : <a href="https://us05web.zoom.us/j/7814867148?pwd=dCwmJbzAaNBv23dzJVRDw7VzT7eBNs.1">Rejoindre le Zoom</a></li>
                 </ul>
                 <p>Des questions d'ici là ? Réponds directement à ce mail.</p>
                 <p>À très vite,<br/>Cyril / E-Tario</p>
