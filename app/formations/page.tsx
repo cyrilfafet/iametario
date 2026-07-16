@@ -17,6 +17,7 @@ export default function Formations() {
   const [bookingEmail, setBookingEmail] = useState("");
   const [bookingMsg, setBookingMsg] = useState("");
   const [bookingMusique, setBookingMusique] = useState("");
+  const [bookingParrain, setBookingParrain] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingDone, setBookingDone] = useState(false);
   const [bookingError, setBookingError] = useState("");
@@ -62,7 +63,7 @@ export default function Formations() {
     const res = await fetch("/api/creneaux/reserver", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, musique: bookingMusique, promoCode: promoValid?.code, followUp: isFollowUp }),
+      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, musique: bookingMusique, parrain: bookingParrain, promoCode: promoValid?.code, followUp: isFollowUp }),
     });
     const data = await res.json();
     if (data.url) {
@@ -427,6 +428,13 @@ export default function Formations() {
                       placeholder="Quelle musique souhaites-tu remixer ? (artiste · titre)"
                       value={bookingMusique}
                       onChange={e => setBookingMusique(e.target.value)}
+                      className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Parrainé par (optionnel)"
+                      value={bookingParrain}
+                      onChange={e => setBookingParrain(e.target.value)}
                       className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
                     />
                     <textarea

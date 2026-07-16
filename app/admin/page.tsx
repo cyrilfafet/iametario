@@ -41,7 +41,7 @@ export default function Admin() {
   const [shopSuccess, setShopSuccess] = useState(false);
 
   // Coaching
-  type Creneau = { id: string; date: string; heure_debut: string; duree_min: number; disponible: boolean; reserve: boolean; pending: boolean; stripe_session_id: string | null; pending_expires_at: string | null; client_nom: string | null; client_email: string | null; client_message: string | null };
+  type Creneau = { id: string; date: string; heure_debut: string; duree_min: number; disponible: boolean; reserve: boolean; pending: boolean; stripe_session_id: string | null; pending_expires_at: string | null; client_nom: string | null; client_email: string | null; client_message: string | null; client_parrain: string | null };
   const [creneaux, setCreneaux] = useState<Creneau[]>([]);
   const [coachingLoading, setCoachingLoading] = useState(false);
   const [weekStart, setWeekStart] = useState<Date>(() => {
@@ -807,6 +807,9 @@ export default function Admin() {
                       <a href={`mailto:${selectedReservation.client_email}`} className="text-xs text-violet-500 hover:underline">{selectedReservation.client_email}</a>
                       {selectedReservation.client_message && (
                         <p className="text-xs text-zinc-400 italic mt-1">"{selectedReservation.client_message}"</p>
+                      )}
+                      {selectedReservation.client_parrain && (
+                        <p className="text-xs text-zinc-400 mt-1">Parrain : <span className="text-zinc-600 font-medium">{selectedReservation.client_parrain}</span></p>
                       )}
                     </div>
                     <button onClick={() => setSelectedReservation(null)} className="text-zinc-300 hover:text-zinc-500 text-xl leading-none flex-shrink-0">×</button>

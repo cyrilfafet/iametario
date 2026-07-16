@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const { code, nom, email, options, creneau_id, creneau_id_1, creneau_id_2, promo_id, musique } = session.metadata || {};
+    const { code, nom, email, options, creneau_id, creneau_id_1, creneau_id_2, promo_id, musique, parrain } = session.metadata || {};
 
     if (creneau_id) {
       // Paiement coaching — confirmer la réservation
@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
                 <p><strong>Email :</strong> <a href="mailto:${clientEmail}">${clientEmail}</a></p>
                 <p><strong>Date :</strong> ${dateStr} de ${heure} à ${heureFin}</p>
                 ${musique ? `<p><strong>Musique à remixer :</strong> ${musique}</p>` : ""}
+                ${parrain ? `<p><strong>Parrain :</strong> ${parrain}</p>` : ""}
                 <p><strong>Stripe session :</strong> ${session.id}</p>
               `,
             }),

@@ -5,7 +5,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
-  const { id, nom, email, message, musique, promoCode, followUp } = await req.json();
+  const { id, nom, email, message, musique, parrain, promoCode, followUp } = await req.json();
   if (!id || !nom || !email) return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
 
   const { data: slot, error: fetchError } = await supabaseAdmin
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
   const { error: pendingError } = await supabaseAdmin
     .from("creneaux")
-    .update({ pending: true, client_nom: nom, client_email: email, client_message: message || null, pending_expires_at: expiresAt })
+    .update({ pending: true, client_nom: nom, client_email: email, client_message: message || null, client_parrain: parrain || null, pending_expires_at: expiresAt })
     .in("id", allIds);
 
   if (pendingError) return NextResponse.json({ error: pendingError.message }, { status: 500 });
@@ -103,6 +103,7 @@ export async function POST(req: NextRequest) {
       email,
       message: message || "",
       musique: musique || "",
+      parrain: parrain || "",
       date: slot.date,
       heure_debut: slot.heure_debut,
       follow_up: followUp ? "1" : "0",
