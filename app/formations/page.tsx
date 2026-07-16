@@ -201,7 +201,7 @@ export default function Formations() {
                       <span className="text-xs text-zinc-400 font-mono">30 min</span>
                       <span className="text-sm font-semibold text-zinc-900">Exploration libre</span>
                     </div>
-                    <p className="text-sm text-zinc-500 leading-relaxed">Tu prends totalement les commandes. Je réponds à tes questions. Le but : que tu repars autonome.</p>
+                    <p className="text-sm text-zinc-500 leading-relaxed">Tu prends totalement les commandes. Je réponds à tes questions. Le but : que tu repartes autonome.</p>
                   </div>
                 </div>
 
