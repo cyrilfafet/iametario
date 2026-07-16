@@ -89,11 +89,10 @@ export default function Admin() {
       .then(data => { if (Array.isArray(data)) setCreneaux(data); });
   }, [authenticated]);
 
-  const fetchCreneaux = () => {
+  const fetchCreneaux = () =>
     fetch(`/api/admin/creneaux?password=${encodeURIComponent(password)}`)
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setCreneaux(data); });
-  };
 
   const fetchShopTracks = () => {
     fetch(`/api/admin/shop?password=${encodeURIComponent(password)}`)
@@ -634,7 +633,8 @@ export default function Admin() {
         {activeTab === "coaching" && (() => {
           const HOURS = ["09","10","11","12","13","14","15","16","17","18","19","20"];
           const DAY_LABELS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
-          const todayStr = new Date().toISOString().split("T")[0];
+          const localDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+          const todayStr = localDate(new Date());
 
           const weekDays = Array.from({ length: 7 }, (_, i) => {
             const d = new Date(weekStart);
@@ -645,7 +645,7 @@ export default function Admin() {
           const weekLabel = `${weekStart.toLocaleDateString("fr-FR", { day: "numeric", month: "short" })} — ${weekDays[6].toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}`;
 
           const getSlot = (day: Date, hour: string) => {
-            const dateStr = day.toISOString().split("T")[0];
+            const dateStr = localDate(day);
             return creneaux.find(c => c.date === dateStr && c.heure_debut.startsWith(hour + ":"));
           };
 
@@ -654,11 +654,12 @@ export default function Admin() {
             if (slot?.reserve || coachingLoading) return;
             setCoachingLoading(true);
             if (!slot) {
-              await fetch("/api/admin/creneaux", {
+              const res = await fetch("/api/admin/creneaux", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ password, date: day.toISOString().split("T")[0], heure_debut: hour + ":00" }),
+                body: JSON.stringify({ password, date: localDate(day), heure_debut: hour + ":00" }),
               });
+              if (!res.ok) { setCoachingLoading(false); return; }
             } else {
               await fetch(`/api/admin/creneaux/${slot.id}`, {
                 method: "DELETE",
@@ -666,7 +667,7 @@ export default function Admin() {
                 body: JSON.stringify({ password }),
               });
             }
-            fetchCreneaux();
+            await fetchCreneaux();
             setCoachingLoading(false);
           };
 
