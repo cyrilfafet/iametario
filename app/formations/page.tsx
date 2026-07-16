@@ -2,54 +2,11 @@
 import { useState } from "react";
 import Footer from "@/components/Footer";
 
-type Pillar = {
-  id: number;
-  label: string;
-  label2?: string;
-  color: string;
-  description: string;
-  path: string;
-  tx: number;
-  ty: number;
-};
-
-const pillars: Pillar[] = [
-  {
-    id: 0,
-    label: "Mixer",
-    color: "#60a5fa",
-    description: "Les bases du mixage jusqu'au set complet. Vidéo explicative + vidéo exercice par chapitre.",
-    path: "M 100 100 L 100 6 A 94 94 0 0 1 181.41 147 Z",
-    tx: 152, ty: 72,
-  },
-  {
-    id: 1,
-    label: "Psychologie",
-    label2: "& Réseau",
-    color: "#818cf8",
-    description: "La mentalité pour faire danser, évoluer dans le milieu et décrocher une résidence. Comment entrer en contact et être crédible auprès des pros.",
-    path: "M 100 100 L 181.41 147 A 94 94 0 0 1 18.59 147 Z",
-    tx: 100, ty: 158,
-  },
-  {
-    id: 2,
-    label: "Produire",
-    label2: "ton son",
-    color: "#a78bfa",
-    description: "Crée tes propres remix de A à Z. Les bases pour devenir producteur.",
-    path: "M 100 100 L 18.59 147 A 94 94 0 0 1 100 6 Z",
-    tx: 48, ty: 72,
-  },
-];
-
-export default function Teaching() {
+export default function Formations() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activePillar, setActivePillar] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const togglePillar = (id: number) => setActivePillar(prev => prev === id ? null : id);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +29,6 @@ export default function Teaching() {
           <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
           <a href="/services" className="hover:text-indigo-400 transition-colors">SERVICES</a>
           <a href="/formations" className="font-medium" style={{ color: "#a78bfa" }}>FORMATIONS</a>
-          
           <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">CONTACT</a>
         </div>
@@ -95,126 +51,184 @@ export default function Teaching() {
       <div className="flex-1 px-6 py-16 max-w-2xl mx-auto w-full">
 
         {/* Hero */}
-        <div className="mb-16 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-3">
-            Devenir DJ résident
+        <div className="mb-16">
+          <p className="text-zinc-400 text-xs uppercase tracking-widest mb-5">Formations</p>
+          <h1 className="text-3xl md:text-4xl font-bold leading-snug">
+            Partager ce que j'ai mis<br className="hidden md:block" /> 10 ans à apprendre.
           </h1>
-          <p className="text-zinc-400 text-sm mb-5">Formation disponible en septembre 2026.</p>
-          <p className="text-zinc-500 text-base leading-relaxed">
-            La plupart te vendent les jets privés et les paillettes, je te propose la stabilité. Une formation complète pour devenir DJ résident : la technique, la mentalité, la créativité.
-          </p>
         </div>
 
-        {/* Intro */}
-        <div className="text-center mb-20">
-          <a href="/" className="inline-block bg-violet-400 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-500 transition-colors">
-            Qui suis-je pour t'apprendre ?
+        {/* ── DISPONIBLE MAINTENANT ── */}
+        <div className="mb-4">
+          <div className="flex items-center gap-3 mb-8">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" style={{ boxShadow: "0 0 0 4px #d1fae511" }} />
+            <span className="text-xs font-semibold tracking-widest uppercase text-emerald-500">Disponible maintenant</span>
+          </div>
+
+          {/* Coaching card */}
+          <div className="border border-zinc-200 rounded-2xl overflow-hidden mb-6">
+            {/* Header */}
+            <div className="px-6 pt-6 pb-5 border-b border-zinc-100">
+              <p className="text-xs font-semibold tracking-widest uppercase text-violet-400 mb-2">Coaching individuel · Zoom</p>
+              <h2 className="text-xl font-bold text-zinc-900 mb-1">FL Studio · Afro House</h2>
+              <p className="text-zinc-500 text-sm leading-relaxed">
+                En 3h on crée ensemble ton premier remix Afro House — de zéro, sur FL Studio gratuit. L'Afro House c'est le style le plus en vogue en ce moment. Accessible, efficace, et gratifiant à produire même si t'as jamais ouvert un logiciel de musique. En 3 heures, tu repars avec un vrai morceau créé par toi.
+              </p>
+            </div>
+
+            {/* Programme */}
+            <div className="px-6 py-5 border-b border-zinc-100">
+              <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-5">Le programme</p>
+              <div className="flex flex-col gap-0">
+
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-violet-50 border border-violet-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-violet-400 text-xs font-bold">1</span>
+                    </div>
+                    <div className="w-px flex-1 bg-zinc-100 mt-1 mb-1" />
+                  </div>
+                  <div className="pb-6">
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="text-xs text-zinc-400 font-mono">30 min</span>
+                      <span className="text-sm font-semibold text-zinc-900">Découverte</span>
+                    </div>
+                    <p className="text-sm text-zinc-500 leading-relaxed">Prise en main de FL Studio — interface, repères visuels, personnalisation. Tu comprends où tu mets les pieds.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-violet-50 border border-violet-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-violet-400 text-xs font-bold">2</span>
+                    </div>
+                    <div className="w-px flex-1 bg-zinc-100 mt-1 mb-1" />
+                  </div>
+                  <div className="pb-6">
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="text-xs text-zinc-400 font-mono">2h</span>
+                      <span className="text-sm font-semibold text-zinc-900">On produit ensemble</span>
+                    </div>
+                    <p className="text-sm text-zinc-500 leading-relaxed">On crée en temps réel le drop de la musique de ton choix. Plugins natifs uniquement, pack de samples fourni. Tu es aux commandes, je te guide à la voix. On couvre le séquenceur, les patterns, le mixer, le BPM, la tonalité, l'équilibre des sons.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-violet-50 border border-violet-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-violet-400 text-xs font-bold">3</span>
+                    </div>
+                    <div className="w-px flex-1 bg-transparent mt-1" />
+                  </div>
+                  <div className="pb-2">
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="text-xs text-zinc-400 font-mono">30 min</span>
+                      <span className="text-sm font-semibold text-zinc-900">Exploration libre</span>
+                    </div>
+                    <p className="text-sm text-zinc-500 leading-relaxed">Tu prends totalement les commandes. Je réponds à tes questions. Le but : que tu repars autonome.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Ce qu'il te faut */}
+            <div className="px-6 py-5 border-b border-zinc-100 bg-zinc-50/50">
+              <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-3">Ce qu'il te faut</p>
+              <ul className="flex flex-col gap-1.5">
+                {["Une connexion stable", "Un casque", "FL Studio version démo (gratuit)"].map(item => (
+                  <li key={item} className="flex items-center gap-2 text-sm text-zinc-600">
+                    <span className="w-1 h-1 rounded-full bg-zinc-300 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-xs text-zinc-400 mt-3">C'est tout.</p>
+            </div>
+
+            {/* Tarif */}
+            <div className="px-6 py-5 border-b border-zinc-100">
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="text-xs text-zinc-400 uppercase tracking-widest mb-1">Tarif de lancement</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-zinc-900">90€</span>
+                    <span className="text-zinc-400 text-sm">/ session</span>
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-1">Pour les 10 premiers — prix définitif : 120€</p>
+                </div>
+                <a
+                  href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
+                  className="bg-zinc-900 text-white px-5 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors whitespace-nowrap"
+                >
+                  Réserver — 90€
+                </a>
+              </div>
+            </div>
+
+            {/* Programme Ambassadeur */}
+            <div className="px-6 py-5 border-b border-zinc-100">
+              <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-2">Programme Ambassadeur</p>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Tu as suivi le coaching et tu recommandes à un ami ? Si ton filleul complète sa session, tu reçois <span className="text-zinc-900 font-semibold">15€</span> — en virement direct ou en crédit pour une session de suivi.
+              </p>
+            </div>
+
+            {/* Session de suivi */}
+            <div className="px-6 py-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-1">Session de suivi</p>
+                  <p className="text-sm font-semibold text-zinc-900">1h · 40€</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">Réservée aux anciens élèves. Tu bloques sur un projet, tu veux perfectionner un mix ou approfondir un point technique — on se prend une heure pour débloquer.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA principal */}
+          <a
+            href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
+            className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
+          >
+            Réserver mon coaching — 90€
           </a>
         </div>
 
-        {/* Camembert centré */}
-        <div className="flex flex-col items-center mb-4">
-          <svg viewBox="0 0 200 200" width="300" height="300" className="drop-shadow-md">
-            {pillars.map(p => (
-              <path
-                key={p.id}
-                d={p.path}
-                fill={p.color}
-                stroke="#ffffff"
-                strokeWidth="2.5"
-                opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
-                className="cursor-pointer transition-opacity duration-200"
-                onClick={() => togglePillar(p.id)}
-              />
-            ))}
-            <circle cx="100" cy="100" r="32" fill="#ffffff" stroke="#e4e4e7" strokeWidth="1.5" />
-            <text x="100" y="97" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">DJ</text>
-            <text x="100" y="109" textAnchor="middle" fill="#111111" fontSize="7" fontWeight="700" letterSpacing="1.5">RÉSIDENT</text>
-            {pillars.map(p => (
-              <text
-                key={p.id}
-                x={p.tx}
-                y={p.ty}
-                textAnchor="middle"
-                fill="#fff"
-                fontSize="7.5"
-                fontWeight="700"
-                className="cursor-pointer select-none pointer-events-none"
-                opacity={activePillar === null || activePillar === p.id ? 1 : 0.3}
-              >
-                <tspan x={p.tx} dy="0">{p.label}</tspan>
-                {p.label2 && <tspan x={p.tx} dy="10">{p.label2}</tspan>}
-              </text>
-            ))}
-          </svg>
-          <p className="text-zinc-400 text-xs text-center mt-2">Clique sur un pilier pour en savoir plus</p>
-        </div>
+        {/* Séparateur */}
+        <div className="border-t border-zinc-100 my-16" />
 
-        {/* Description pilier actif */}
-        <div className="min-h-[60px] mb-12">
-          {activePillar !== null && (
-            <div
-              className="border rounded-xl px-5 py-4 transition-all"
-              style={{ borderColor: pillars[activePillar].color + "50", background: pillars[activePillar].color + "08" }}
-            >
-              <p className="text-xs uppercase tracking-widest mb-1" style={{ color: pillars[activePillar].color }}>
-                {pillars[activePillar].label}{pillars[activePillar].label2 ? " " + pillars[activePillar].label2 : ""}
-              </p>
-              <p className="text-zinc-500 text-sm leading-relaxed">
-                {pillars[activePillar].description}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Pricing */}
-        <div className="border-t border-zinc-200 pt-14 mb-20">
-          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-6 text-center">Tarifs</p>
-
-          {/* Formation complète */}
-          <div className="border-2 border-violet-400 rounded-2xl px-6 py-6 mb-6 text-center relative">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-400 text-white text-xs font-semibold px-3 py-1 rounded-full tracking-widest uppercase">Recommandé</span>
-            <p className="text-zinc-900 font-bold text-lg mb-4">Formation complète</p>
-            <div className="flex flex-wrap justify-center gap-2 mb-5">
-              <div className="rounded-xl px-3 py-2 text-center" style={{ background: "#60a5fa22", border: "1px solid #60a5fa55" }}>
-                <p className="text-[11px] font-semibold whitespace-nowrap" style={{ color: "#60a5fa" }}>Mixer</p>
-              </div>
-              <div className="rounded-xl px-3 py-2 text-center" style={{ background: "#a78bfa22", border: "1px solid #a78bfa55" }}>
-                <p className="text-[11px] font-semibold whitespace-nowrap" style={{ color: "#a78bfa" }}>Produire ton son</p>
-              </div>
-              <div className="rounded-xl px-3 py-2 text-center relative" style={{ background: "#818cf822", border: "1px solid #818cf855" }}>
-                <span className="absolute -top-2.5 right-1 text-xs leading-none">⭐</span>
-                <p className="text-[11px] font-semibold whitespace-nowrap" style={{ color: "#818cf8" }}>Psychologie & Réseau</p>
-              </div>
-            </div>
-            <p className="text-4xl font-bold text-zinc-900">169€</p>
+        {/* ── BIENTÔT ── */}
+        <div>
+          <div className="flex items-center gap-3 mb-8">
+            <span className="w-2 h-2 rounded-full bg-zinc-300 flex-shrink-0" />
+            <span className="text-xs font-semibold tracking-widest uppercase text-zinc-400">Bientôt</span>
           </div>
 
-          {/* Modules séparés */}
-          <p className="text-zinc-400 text-xs uppercase tracking-widest mb-4 text-center">Modules séparés</p>
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="border border-zinc-200 rounded-xl px-4 py-4 text-center">
-              <p className="text-zinc-900 font-semibold text-sm mb-1">Apprendre à mixer</p>
-              <p className="text-2xl font-bold text-zinc-900">79€</p>
+          {/* DJ Résident card */}
+          <div className="border border-zinc-100 rounded-2xl px-6 py-6 mb-8 opacity-70">
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-1">Formation complète</p>
+                <h2 className="text-xl font-bold text-zinc-900">Formation DJ Résident</h2>
+                <p className="text-xs text-zinc-400 mt-1">Technique · Psychologie · Réseau</p>
+              </div>
+              <span className="text-2xl font-bold text-zinc-300">99€</span>
             </div>
-            <div className="border border-zinc-200 rounded-xl px-4 py-4 text-center">
-              <p className="text-zinc-900 font-semibold text-sm mb-1">Produire ton son</p>
-              <p className="text-2xl font-bold text-zinc-900">79€</p>
+            <p className="text-sm text-zinc-400 mb-4">Disponible septembre 2026. Modules séparés disponibles.</p>
+            <div className="flex flex-wrap gap-2">
+              {["Apprendre à mixer", "Psychologie & Réseau", "Produire ton son"].map(m => (
+                <span key={m} className="text-xs text-zinc-400 border border-zinc-100 rounded-full px-3 py-1">{m}</span>
+              ))}
             </div>
           </div>
-          <p className="text-zinc-400 text-xs text-center">
-            Le module <span className="text-zinc-500 font-medium">Psychologie & Réseau</span> est uniquement disponible dans la formation complète.
-          </p>
-        </div>
 
-        {/* Early bird */}
-        <div className="border-t border-zinc-200 pt-14 pb-8">
+          {/* Newsletter early bird */}
           {submitted ? (
             <p className="text-violet-400 text-sm text-center">Tu bénéficieras de -10% à la sortie ✓</p>
           ) : (
             <>
-              <h2 className="text-xl font-bold text-center mb-2">Formation disponible en septembre 2026.</h2>
-              <p className="text-zinc-500 text-sm text-center mb-8">Inscris-toi maintenant et bénéficie de <span className="text-zinc-900 font-semibold">-10%</span> à la sortie.</p>
+              <p className="text-zinc-500 text-sm text-center mb-5">Inscris-toi maintenant et bénéficie de <span className="text-zinc-900 font-semibold">-10%</span> à la sortie.</p>
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
@@ -227,9 +241,9 @@ export default function Teaching() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-violet-400 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-500 transition-colors disabled:opacity-50 whitespace-nowrap"
+                  className="bg-zinc-900 text-white px-6 py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
-                  {loading ? "…" : "J'en profite"}
+                  {loading ? "…" : "Me prévenir"}
                 </button>
               </form>
               <p className="text-zinc-400 text-xs text-center mt-3">Aucun spam. Un seul email à la sortie.</p>
