@@ -631,7 +631,7 @@ export default function Admin() {
 
         {/* Onglet Coaching */}
         {activeTab === "coaching" && (() => {
-          const HOURS = ["09","10","11","12","13","14","15","16","17","18","19","20"];
+          const HOURS = ["09","10","11","12","13","14","15","16","17","18","19","20","21","22"];
           const DAY_LABELS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
           const localDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
           const todayStr = localDate(new Date());

@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from("creneaux")
-    .insert({ date, heure_debut, duree_min: 180, disponible: true })
+    .insert({ date, heure_debut, duree_min: 60, disponible: true })
     .select()
     .single();
 
