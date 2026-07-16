@@ -278,6 +278,27 @@ export default function Formations() {
               </div>
             ) : (
               <div className="border border-zinc-200 rounded-2xl overflow-hidden">
+                {/* Toggle session de suivi */}
+                <div className="px-5 py-4 border-b border-zinc-100">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isFollowUp}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setIsFollowUp(val);
+                        setSelectedId(null);
+                        fetchCreneaux(val);
+                      }}
+                      className="mt-0.5 accent-violet-500 flex-shrink-0"
+                    />
+                    <span className="text-sm text-zinc-600 leading-snug">
+                      J'ai déjà suivi le coaching 3h — je réserve une{" "}
+                      <span className="font-semibold text-zinc-900">session de suivi · 1h · 40€</span>
+                    </span>
+                  </label>
+                </div>
+
                 {/* Sélection du créneau */}
                 <div className="px-5 py-4 border-b border-zinc-100">
                   <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-3">Choisir un créneau</p>
@@ -366,25 +387,6 @@ export default function Formations() {
                     </div>
                     {promoError && <p className="text-red-400 text-xs -mt-1">{promoError}</p>}
                     {bookingError && <p className="text-red-400 text-xs">{bookingError}</p>}
-
-                    {/* Toggle session de suivi */}
-                    <label className="flex items-start gap-3 cursor-pointer border border-zinc-200 rounded-xl px-4 py-3 hover:border-violet-300 transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={isFollowUp}
-                        onChange={e => {
-                          const val = e.target.checked;
-                          setIsFollowUp(val);
-                          setSelectedId(null);
-                          fetchCreneaux(val);
-                        }}
-                        className="mt-0.5 accent-violet-500 flex-shrink-0"
-                      />
-                      <span className="text-sm text-zinc-600 leading-snug">
-                        J'ai déjà suivi le coaching 3h — je réserve une{" "}
-                        <span className="font-semibold text-zinc-900">session de suivi · 1h · 40€</span>
-                      </span>
-                    </label>
 
                     <button
                       type="submit"
