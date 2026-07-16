@@ -700,6 +700,31 @@ export default function Admin() {
             setCoachingLoading(false);
           };
 
+          const toggleDay = async (day: Date) => {
+            if (coachingLoading || localDate(day) < todayStr) return;
+            const dateStr = localDate(day);
+            const reserved = new Set(
+              creneaux.filter(c => c.date === dateStr && (c.reserve || c.pending)).map(c => parseInt(c.heure_debut.slice(0, 2)))
+            );
+            const freeableHours = HOURS.filter(h => !reserved.has(parseInt(h)));
+            const existingSlots = creneaux.filter(c => c.date === dateStr && !c.reserve && !c.pending && c.disponible);
+            const existingHours = new Set(existingSlots.map(c => parseInt(c.heure_debut.slice(0, 2))));
+            const allFilled = freeableHours.every(h => existingHours.has(parseInt(h)));
+            setCoachingLoading(true);
+            if (allFilled) {
+              await Promise.all(existingSlots.map(s =>
+                fetch(`/api/admin/creneaux/${s.id}`, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password }) })
+              ));
+            } else {
+              const missing = freeableHours.filter(h => !existingHours.has(parseInt(h)));
+              await Promise.all(missing.map(h =>
+                fetch("/api/admin/creneaux", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password, date: dateStr, heure_debut: h + ":00" }) })
+              ));
+            }
+            await fetchCreneaux();
+            setCoachingLoading(false);
+          };
+
           const handleCellClick = (day: Date, hour: string) => {
             if (coachingLoading) return;
             const slot = getSlot(day, hour);
@@ -801,9 +826,19 @@ export default function Admin() {
                     <div />
                     {weekDays.map((day, i) => {
                       const isToday = localDate(day) === todayStr;
+                      const isPastDay = localDate(day) < todayStr;
                       return (
-                        <div key={i} className={`text-center py-1.5 rounded-lg ${isToday ? "bg-zinc-900 text-white" : ""}`}>
-                          <p className={`text-[10px] font-semibold uppercase tracking-wide ${isToday ? "text-zinc-400" : "text-zinc-400"}`}>{DAY_LABELS[i]}</p>
+                        <div
+                          key={i}
+                          onClick={() => toggleDay(day)}
+                          title={isPastDay ? undefined : "Cliquer pour cocher / décocher toute la journée"}
+                          className={`text-center py-1.5 rounded-lg transition-colors ${
+                            isToday ? "bg-zinc-900 text-white hover:bg-zinc-700" :
+                            isPastDay ? "opacity-40 cursor-default" :
+                            "cursor-pointer hover:bg-emerald-50 hover:border hover:border-emerald-200"
+                          }`}
+                        >
+                          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">{DAY_LABELS[i]}</p>
                           <p className={`text-sm font-bold ${isToday ? "text-white" : "text-zinc-800"}`}>{day.getDate()}</p>
                         </div>
                       );
