@@ -54,6 +54,10 @@ export default function Admin() {
   const [selectedReservation, setSelectedReservation] = useState<Creneau | null>(null);
   const [rescheduleSource, setRescheduleSource] = useState<Creneau | null>(null);
 
+  // Config
+  const [placesRestantes, setPlacesRestantes] = useState("");
+  const [placesSaving, setPlacesSaving] = useState(false);
+
   // Promos
   type PromoCode = { id: string; code: string; reduction: number; actif: boolean; nb_utilisations: number; max_utilisations: number | null };
   const [promos, setPromos] = useState<PromoCode[]>([]);
@@ -105,6 +109,9 @@ export default function Admin() {
     fetch(`/api/admin/promo?password=${encodeURIComponent(password)}`)
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setPromos(data); });
+    fetch("/api/config/places_restantes")
+      .then(r => r.json())
+      .then(d => { if (d.value) setPlacesRestantes(d.value); });
   }, [authenticated]);
 
   const fetchCreneaux = () =>
@@ -962,6 +969,37 @@ export default function Admin() {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Places restantes */}
+            <div className="mt-6 border border-zinc-200 rounded-xl p-4 flex items-center gap-4">
+              <div className="flex-1">
+                <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-1">Places restantes (offre de lancement)</p>
+                <p className="text-xs text-zinc-400">Affiché sur la page formations sous le tarif.</p>
+              </div>
+              <input
+                type="number"
+                min="0"
+                max="10"
+                value={placesRestantes}
+                onChange={e => setPlacesRestantes(e.target.value)}
+                className="w-16 border border-zinc-200 rounded-lg px-3 py-2 text-sm text-center font-bold text-zinc-900 focus:outline-none focus:border-violet-400"
+              />
+              <button
+                onClick={async () => {
+                  setPlacesSaving(true);
+                  await fetch("/api/config/places_restantes", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password, value: placesRestantes }),
+                  });
+                  setPlacesSaving(false);
+                }}
+                className="px-4 py-2 bg-violet-500 text-white rounded-lg text-xs font-semibold hover:bg-violet-600 transition-colors disabled:opacity-50"
+                disabled={placesSaving}
+              >
+                {placesSaving ? "…" : "Sauver"}
+              </button>
             </div>
           );
         })()}

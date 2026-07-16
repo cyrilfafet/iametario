@@ -27,6 +27,7 @@ export default function Formations() {
   const [promoValid, setPromoValid] = useState<{ code: string; reduction: number } | null>(null);
   const [promoError, setPromoError] = useState("");
   const [isFollowUp, setIsFollowUp] = useState(false);
+  const [placesRestantes, setPlacesRestantes] = useState<string | null>(null);
   const [parrainageOpen, setParrainageOpen] = useState(false);
   const [calMonth, setCalMonth] = useState(() => new Date());
   const [calSelectedDate, setCalSelectedDate] = useState<string | null>(null);
@@ -43,6 +44,7 @@ export default function Formations() {
 
   useEffect(() => {
     fetchCreneaux(false);
+    fetch("/api/config/places_restantes").then(r => r.json()).then(d => { if (d.value) setPlacesRestantes(d.value); }).catch(() => {});
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "1") setBookingDone(true);
     if (params.get("cancelled") === "1") setPaymentCancelled(true);
@@ -223,12 +225,19 @@ export default function Formations() {
             {/* Tarif */}
             <div className="px-6 py-5 border-b border-zinc-100">
               <div>
-                <p className="text-xs text-zinc-400 uppercase tracking-widest mb-1">Tarif de lancement</p>
+                <span className="inline-flex items-center gap-1.5 bg-orange-100 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                  ⚡ Offre de lancement
+                </span>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-bold text-zinc-900">90€</span>
                   <span className="text-zinc-400 text-sm">/ session</span>
                 </div>
-                <p className="text-xs text-zinc-400 mt-1">Pour les 10 premiers — prix définitif : 120€</p>
+                <p className="text-xs text-zinc-400 mt-1">Prix définitif : 120€</p>
+                {placesRestantes && (
+                  <p className="text-xs font-semibold text-orange-500 mt-2">
+                    {placesRestantes} place{parseInt(placesRestantes) > 1 ? "s" : ""} restante{parseInt(placesRestantes) > 1 ? "s" : ""} sur 10
+                  </p>
+                )}
               </div>
             </div>
 
