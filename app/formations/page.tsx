@@ -27,6 +27,7 @@ export default function Formations() {
   const [promoValid, setPromoValid] = useState<{ code: string; reduction: number } | null>(null);
   const [promoError, setPromoError] = useState("");
   const [isFollowUp, setIsFollowUp] = useState(false);
+  const [parrainageOpen, setParrainageOpen] = useState(false);
   const [calMonth, setCalMonth] = useState(() => new Date());
   const [calSelectedDate, setCalSelectedDate] = useState<string | null>(null);
 
@@ -228,12 +229,25 @@ export default function Formations() {
               </div>
             </div>
 
-            {/* Programme Ambassadeur */}
-            <div className="px-6 py-5 border-b border-zinc-100">
-              <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-2">Programme Ambassadeur</p>
-              <p className="text-sm text-zinc-500 leading-relaxed">
-                Tu as suivi le coaching et tu recommandes à un ami ? Si ton filleul complète sa session, tu reçois <span className="text-zinc-900 font-semibold">15€</span> — en virement direct ou en crédit pour une session de suivi.
-              </p>
+            {/* Programme Parrainage */}
+            <div className="border-b border-zinc-100">
+              <button
+                type="button"
+                onClick={() => setParrainageOpen(o => !o)}
+                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-zinc-50/60 transition-colors"
+              >
+                <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400">Parrainage</p>
+                <span className="text-zinc-400 text-sm">{parrainageOpen ? "−" : "+"}</span>
+              </button>
+              {parrainageOpen && (
+                <div className="px-6 pb-5">
+                  <p className="text-sm font-semibold text-zinc-900 mb-2">Tu as aimé le coaching ? Parraine un ami.</p>
+                  <p className="text-sm text-zinc-500 leading-relaxed">
+                    Si tu recommandes un proche et qu'il réserve sa session, je t'offre <span className="text-zinc-900 font-semibold">15€</span>. Tu peux choisir de les recevoir par virement direct, ou de les utiliser en crédit pour une future session de suivi.
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-2">Le virement est effectué sous 7 jours après la réalisation de la session de ton filleul.</p>
+                </div>
+              )}
             </div>
 
             {/* Session de suivi */}
