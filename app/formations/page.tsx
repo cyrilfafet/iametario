@@ -233,7 +233,6 @@ export default function Formations() {
                   <span className="text-zinc-400 text-sm">/ session</span>
                 </div>
                 <p className="text-xs text-zinc-400 mt-1">Prix définitif : 120€</p>
-                <p className="text-xs text-zinc-400 mt-0.5">Annulation gratuite sous 24h</p>
                 {placesRestantes && (
                   <p className="text-xs font-semibold text-orange-500 mt-2">
                     {placesRestantes} place{parseInt(placesRestantes) > 1 ? "s" : ""} restante{parseInt(placesRestantes) > 1 ? "s" : ""} sur 10
@@ -291,7 +290,7 @@ export default function Formations() {
                 >
                   Réserver une session
                 </button>
-                <p className="text-zinc-400 text-xs text-center mt-2">Paiement sécurisé · Créneau choisi à l'étape suivante</p>
+                <p className="text-zinc-400 text-xs text-center mt-2">Paiement sécurisé · Créneau choisi à l'étape suivante · Annulation gratuite sous 24h</p>
               </div>
             ) : creneaux.length === 0 ? (
               <div className="border border-zinc-200 rounded-2xl px-6 py-6 text-center">
