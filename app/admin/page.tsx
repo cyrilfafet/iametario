@@ -969,8 +969,6 @@ export default function Admin() {
                   </div>
                 </div>
               )}
-            </div>
-
             {/* Places restantes */}
             <div className="mt-6 border border-zinc-200 rounded-xl p-4 flex items-center gap-4">
               <div className="flex-1">
@@ -1001,6 +999,7 @@ export default function Admin() {
                 {placesSaving ? "…" : "Sauver"}
               </button>
             </div>
+          </div>
           );
         })()}
 
