@@ -335,20 +335,29 @@ export default function Formations() {
                       rows={2}
                       className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors resize-none"
                     />
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Code promo (optionnel)"
-                        value={promoCode}
-                        onChange={e => { setPromoCode(e.target.value); setPromoValid(null); setPromoError(""); }}
-                        onBlur={e => checkPromo(e.target.value)}
-                        className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors uppercase"
-                      />
-                      {promoValid && (
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-600 font-medium">
-                          -{promoValid.reduction}% ✓
-                        </span>
-                      )}
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          placeholder="Code promo (optionnel)"
+                          value={promoCode}
+                          onChange={e => { setPromoCode(e.target.value); setPromoValid(null); setPromoError(""); }}
+                          onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); checkPromo(promoCode); } }}
+                          className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors uppercase"
+                        />
+                        {promoValid && (
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-600 font-medium">
+                            -{promoValid.reduction}% ✓
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => checkPromo(promoCode)}
+                        className="px-4 py-3 rounded-xl border border-zinc-200 text-xs font-semibold text-zinc-600 hover:border-violet-400 hover:text-violet-600 transition-colors whitespace-nowrap"
+                      >
+                        Appliquer
+                      </button>
                     </div>
                     {promoError && <p className="text-red-400 text-xs -mt-1">{promoError}</p>}
                     {bookingError && <p className="text-red-400 text-xs">{bookingError}</p>}
