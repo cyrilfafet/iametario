@@ -713,7 +713,7 @@ export default function Admin() {
                   <div className="grid mb-1" style={{ gridTemplateColumns: "36px repeat(7, 1fr)", gap: "3px" }}>
                     <div />
                     {weekDays.map((day, i) => {
-                      const isToday = day.toISOString().split("T")[0] === todayStr;
+                      const isToday = localDate(day) === todayStr;
                       return (
                         <div key={i} className={`text-center py-1.5 rounded-lg ${isToday ? "bg-zinc-900 text-white" : ""}`}>
                           <p className={`text-[10px] font-semibold uppercase tracking-wide ${isToday ? "text-zinc-400" : "text-zinc-400"}`}>{DAY_LABELS[i]}</p>
