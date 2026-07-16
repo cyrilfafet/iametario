@@ -19,6 +19,7 @@ export default function Formations() {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingDone, setBookingDone] = useState(false);
   const [bookingError, setBookingError] = useState("");
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/creneaux")
@@ -193,21 +194,13 @@ export default function Formations() {
 
             {/* Tarif */}
             <div className="px-6 py-5 border-b border-zinc-100">
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="text-xs text-zinc-400 uppercase tracking-widest mb-1">Tarif de lancement</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-zinc-900">90€</span>
-                    <span className="text-zinc-400 text-sm">/ session</span>
-                  </div>
-                  <p className="text-xs text-zinc-400 mt-1">Pour les 10 premiers — prix définitif : 120€</p>
+              <div>
+                <p className="text-xs text-zinc-400 uppercase tracking-widest mb-1">Tarif de lancement</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-zinc-900">90€</span>
+                  <span className="text-zinc-400 text-sm">/ session</span>
                 </div>
-                <a
-                  href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
-                  className="bg-zinc-900 text-white px-5 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors whitespace-nowrap"
-                >
-                  Réserver — 90€
-                </a>
+                <p className="text-xs text-zinc-400 mt-1">Pour les 10 premiers — prix définitif : 120€</p>
               </div>
             </div>
 
@@ -238,13 +231,23 @@ export default function Formations() {
                 <p className="text-emerald-600 font-semibold mb-1">Réservation confirmée ✓</p>
                 <p className="text-zinc-500 text-sm">Un email de confirmation t'a été envoyé. À très vite !</p>
               </div>
-            ) : creneaux.length === 0 ? (
-              <a
-                href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
+            ) : !bookingOpen ? (
+              <button
+                onClick={() => setBookingOpen(true)}
                 className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
               >
-                Réserver mon coaching — 90€
-              </a>
+                Réserver — 90€
+              </button>
+            ) : creneaux.length === 0 ? (
+              <div className="border border-zinc-200 rounded-2xl px-6 py-6 text-center">
+                <p className="text-zinc-500 text-sm mb-4">Aucun créneau disponible pour le moment.</p>
+                <a
+                  href="mailto:contact@iametario.com?subject=Coaching FL Studio Afro House — Réservation"
+                  className="inline-block bg-zinc-900 text-white px-5 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-zinc-700 transition-colors"
+                >
+                  Contacter par email
+                </a>
+              </div>
             ) : (
               <div className="border border-zinc-200 rounded-2xl overflow-hidden">
                 {/* Sélection du créneau */}
@@ -258,7 +261,8 @@ export default function Formations() {
                           <p className="text-xs text-zinc-400 mb-1.5 capitalize">{dateLabel}</p>
                           <div className="flex flex-wrap gap-2">
                             {slots.map(s => {
-                              const heure = s.heure_debut.slice(0, 5).replace(":", "h");
+                              const startH = parseInt(s.heure_debut.slice(0, 2));
+                              const label = `${startH}h–${startH + 3}h`;
                               const isSelected = selectedId === s.id;
                               return (
                                 <button
@@ -270,7 +274,7 @@ export default function Formations() {
                                       : "border border-zinc-200 text-zinc-700 hover:border-violet-400 hover:text-violet-600"
                                   }`}
                                 >
-                                  {heure} <span className="text-xs opacity-60">· 3h</span>
+                                  {label}
                                 </button>
                               );
                             })}
