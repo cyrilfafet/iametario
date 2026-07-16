@@ -244,11 +244,9 @@ export default function Formations() {
               </button>
               {parrainageOpen && (
                 <div className="px-6 pb-5">
-                  <p className="text-sm font-semibold text-zinc-900 mb-2">Tu as aimé le coaching ? Parraine un ami.</p>
                   <p className="text-sm text-zinc-500 leading-relaxed">
-                    Si tu recommandes un proche et qu'il réserve sa session, je t'offre <span className="text-zinc-900 font-semibold">15€</span>. Tu peux choisir de les recevoir par virement direct, ou de les utiliser en crédit pour une future session de suivi.
+                    Recommandé par un ancien élève ? Indique son prénom à la réservation — il reçoit <span className="text-zinc-900 font-semibold">15€</span>.
                   </p>
-                  <p className="text-xs text-zinc-400 mt-2">Le virement est effectué sous 7 jours après la réalisation de la session de ton filleul.</p>
                 </div>
               )}
             </div>
