@@ -26,6 +26,11 @@ export default function Formations() {
   const [promoValid, setPromoValid] = useState<{ code: string; reduction: number } | null>(null);
   const [promoError, setPromoError] = useState("");
   const [isFollowUp, setIsFollowUp] = useState(false);
+  const [calMonth, setCalMonth] = useState(() => new Date());
+  const [calSelectedDate, setCalSelectedDate] = useState<string | null>(null);
+
+  const localDate = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
   const fetchCreneaux = (followUp: boolean) => {
     fetch(`/api/creneaux${followUp ? "?followup=1" : ""}`)
@@ -71,12 +76,6 @@ export default function Formations() {
       setBookingLoading(false);
     }
   };
-
-  // Group slots by date
-  const byDate = creneaux.reduce<Record<string, Creneau[]>>((acc, c) => {
-    (acc[c.date] ??= []).push(c);
-    return acc;
-  }, {});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -300,23 +299,91 @@ export default function Formations() {
                   </label>
                 </div>
 
-                {/* Sélection du créneau */}
-                <div className="px-5 py-4 border-b border-zinc-100">
-                  <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-3">Choisir un créneau</p>
-                  <div className="flex flex-col gap-3">
-                    {Object.entries(byDate).map(([date, slots]) => {
-                      const dateLabel = new Date(date + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
-                      return (
-                        <div key={date}>
-                          <p className="text-xs text-zinc-400 mb-1.5 capitalize">{dateLabel}</p>
+                {/* Calendrier */}
+                {(() => {
+                  const year = calMonth.getFullYear();
+                  const month = calMonth.getMonth();
+                  const availableDates = new Set(creneaux.map(c => c.date));
+                  const todayStr = localDate(new Date());
+                  const firstDay = new Date(year, month, 1);
+                  const daysInMonth = new Date(year, month + 1, 0).getDate();
+                  const startOffset = (firstDay.getDay() + 6) % 7; // lundi = 0
+                  const cells: (number | null)[] = [
+                    ...Array(startOffset).fill(null),
+                    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+                  ];
+                  while (cells.length % 7 !== 0) cells.push(null);
+                  const monthLabel = new Date(year, month, 1).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+                  const slotsForSelected = calSelectedDate ? creneaux.filter(c => c.date === calSelectedDate) : [];
+
+                  return (
+                    <div className="px-5 py-4 border-b border-zinc-100">
+                      {/* Header mois */}
+                      <div className="flex items-center justify-between mb-4">
+                        <button
+                          type="button"
+                          onClick={() => { setCalMonth(new Date(year, month - 1, 1)); setCalSelectedDate(null); setSelectedId(null); }}
+                          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-zinc-100 text-zinc-400 hover:text-zinc-700 transition-colors text-sm"
+                        >‹</button>
+                        <p className="text-sm font-semibold text-zinc-700 capitalize">{monthLabel}</p>
+                        <button
+                          type="button"
+                          onClick={() => { setCalMonth(new Date(year, month + 1, 1)); setCalSelectedDate(null); setSelectedId(null); }}
+                          className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-zinc-100 text-zinc-400 hover:text-zinc-700 transition-colors text-sm"
+                        >›</button>
+                      </div>
+
+                      {/* Jours de la semaine */}
+                      <div className="grid grid-cols-7 mb-1">
+                        {["L","M","M","J","V","S","D"].map((d, i) => (
+                          <div key={i} className="text-center text-xs font-medium text-zinc-400 py-1">{d}</div>
+                        ))}
+                      </div>
+
+                      {/* Grille */}
+                      <div className="grid grid-cols-7 gap-y-1">
+                        {cells.map((day, i) => {
+                          if (!day) return <div key={i} />;
+                          const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                          const isAvailable = availableDates.has(dateStr);
+                          const isPast = dateStr < todayStr;
+                          const isSelected = calSelectedDate === dateStr;
+                          return (
+                            <button
+                              key={i}
+                              type="button"
+                              disabled={!isAvailable || isPast}
+                              onClick={() => { setCalSelectedDate(isSelected ? null : dateStr); setSelectedId(null); }}
+                              className={`relative mx-auto w-8 h-8 rounded-full text-xs font-medium transition-colors flex items-center justify-center
+                                ${isSelected ? "bg-violet-500 text-white" : ""}
+                                ${!isSelected && isAvailable && !isPast ? "text-zinc-900 hover:bg-violet-100 hover:text-violet-700 cursor-pointer" : ""}
+                                ${!isAvailable || isPast ? "text-zinc-300 cursor-default" : ""}
+                              `}
+                            >
+                              {day}
+                              {isAvailable && !isPast && !isSelected && (
+                                <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-400" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Créneaux du jour sélectionné */}
+                      {calSelectedDate && (
+                        <div className="mt-4 pt-4 border-t border-zinc-100">
+                          <p className="text-xs text-zinc-400 mb-2.5 capitalize">
+                            {new Date(calSelectedDate + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+                          </p>
                           <div className="flex flex-wrap gap-2">
-                            {slots.map(s => {
+                            {slotsForSelected.map(s => {
                               const startH = parseInt(s.heure_debut.slice(0, 2));
                               const label = isFollowUp ? `${startH}h–${startH + 1}h` : `${startH}h–${startH + 3}h`;
                               const isSelected = selectedId === s.id;
                               return (
                                 <button
                                   key={s.id}
+                                  type="button"
                                   onClick={() => setSelectedId(isSelected ? null : s.id)}
                                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                                     isSelected
@@ -330,10 +397,10 @@ export default function Formations() {
                             })}
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 {/* Formulaire — s'affiche quand un créneau est sélectionné */}
                 {selectedId && (
