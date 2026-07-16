@@ -21,6 +21,9 @@ export default function Formations() {
   const [bookingError, setBookingError] = useState("");
   const [bookingOpen, setBookingOpen] = useState(false);
   const [paymentCancelled, setPaymentCancelled] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoValid, setPromoValid] = useState<{ code: string; reduction: number } | null>(null);
+  const [promoError, setPromoError] = useState("");
 
   useEffect(() => {
     fetch("/api/creneaux")
@@ -32,6 +35,14 @@ export default function Formations() {
     if (params.get("cancelled") === "1") setPaymentCancelled(true);
   }, []);
 
+  const checkPromo = async (code: string) => {
+    if (!code.trim()) { setPromoValid(null); setPromoError(""); return; }
+    const res = await fetch(`/api/promo/${encodeURIComponent(code.trim())}`);
+    const data = await res.json();
+    if (data.valid) { setPromoValid({ code: data.code, reduction: data.reduction }); setPromoError(""); }
+    else { setPromoValid(null); setPromoError(data.message || "Code invalide"); }
+  };
+
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedId || !bookingNom || !bookingEmail) return;
@@ -40,7 +51,7 @@ export default function Formations() {
     const res = await fetch("/api/creneaux/reserver", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg }),
+      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, promoCode: promoValid?.code }),
     });
     const data = await res.json();
     if (data.url) {
@@ -324,13 +335,32 @@ export default function Formations() {
                       rows={2}
                       className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors resize-none"
                     />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Code promo (optionnel)"
+                        value={promoCode}
+                        onChange={e => { setPromoCode(e.target.value); setPromoValid(null); setPromoError(""); }}
+                        onBlur={e => checkPromo(e.target.value)}
+                        className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors uppercase"
+                      />
+                      {promoValid && (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-600 font-medium">
+                          -{promoValid.reduction}% ✓
+                        </span>
+                      )}
+                    </div>
+                    {promoError && <p className="text-red-400 text-xs -mt-1">{promoError}</p>}
                     {bookingError && <p className="text-red-400 text-xs">{bookingError}</p>}
                     <button
                       type="submit"
                       disabled={bookingLoading}
                       className="w-full bg-violet-500 text-white px-6 py-3.5 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors disabled:opacity-50"
                     >
-                      {bookingLoading ? "Redirection…" : "Payer 90€ avec Stripe →"}
+                      {bookingLoading ? "Redirection…" : promoValid
+                        ? `Payer ${Math.round(90 * (1 - promoValid.reduction / 100))}€ avec Stripe →`
+                        : "Payer 90€ avec Stripe →"
+                      }
                     </button>
                     <p className="text-zinc-400 text-xs text-center">Le règlement se fait par virement après confirmation.</p>
                   </form>

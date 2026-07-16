@@ -26,7 +26,7 @@ export default function Admin() {
   const [deliveryUrl, setDeliveryUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"livraisons" | "shop" | "coaching">("livraisons");
+  const [activeTab, setActiveTab] = useState<"livraisons" | "shop" | "coaching" | "promos">("livraisons");
 
   // Shop state
   const [shopTracks, setShopTracks] = useState<ShopTrack[]>([]);
@@ -53,6 +53,19 @@ export default function Admin() {
   });
   const [selectedReservation, setSelectedReservation] = useState<Creneau | null>(null);
   const [rescheduleSource, setRescheduleSource] = useState<Creneau | null>(null);
+
+  // Promos
+  type PromoCode = { id: string; code: string; reduction: number; actif: boolean; nb_utilisations: number; max_utilisations: number | null };
+  const [promos, setPromos] = useState<PromoCode[]>([]);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoReduction, setPromoReduction] = useState("");
+  const [promoMax, setPromoMax] = useState("");
+  const [promosLoading, setPromosLoading] = useState(false);
+
+  const fetchPromos = () =>
+    fetch(`/api/admin/promo?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setPromos(data); });
 
   // Edit mode
   const [editingTrack, setEditingTrack] = useState<ShopTrack | null>(null);
@@ -89,6 +102,9 @@ export default function Admin() {
     fetch(`/api/admin/creneaux?password=${encodeURIComponent(password)}`)
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setCreneaux(data); });
+    fetch(`/api/admin/promo?password=${encodeURIComponent(password)}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setPromos(data); });
   }, [authenticated]);
 
   const fetchCreneaux = () =>
@@ -377,6 +393,12 @@ export default function Admin() {
               className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-colors ${activeTab === "coaching" ? "bg-violet-500 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
             >
               Coaching
+            </button>
+            <button
+              onClick={() => setActiveTab("promos")}
+              className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-colors ${activeTab === "promos" ? "bg-violet-500 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
+            >
+              Promos
             </button>
           </div>
           <span className="text-zinc-400 text-xs uppercase tracking-widest">Back-office</span>
@@ -940,6 +962,114 @@ export default function Admin() {
             </div>
           );
         })()}
+
+        {/* Onglet Promos */}
+        {activeTab === "promos" && (
+          <div className="flex gap-8 items-start">
+            {/* Créer un code */}
+            <div className="w-64 flex-shrink-0">
+              <h2 className="text-sm font-semibold text-zinc-900 mb-4">Nouveau code</h2>
+              <div className="flex flex-col gap-3">
+                <input
+                  type="text"
+                  placeholder="Code (ex: SUMMER10)"
+                  value={promoCode}
+                  onChange={e => setPromoCode(e.target.value.toUpperCase())}
+                  className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 uppercase placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
+                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    placeholder="Réduction (%)"
+                    value={promoReduction}
+                    onChange={e => setPromoReduction(e.target.value)}
+                    min={1} max={100}
+                    className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 focus:outline-none focus:border-violet-400 transition-colors"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 text-sm">%</span>
+                </div>
+                <input
+                  type="number"
+                  placeholder="Nb max utilisations (optionnel)"
+                  value={promoMax}
+                  onChange={e => setPromoMax(e.target.value)}
+                  min={1}
+                  className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 focus:outline-none focus:border-violet-400 transition-colors"
+                />
+                <button
+                  disabled={!promoCode || !promoReduction || promosLoading}
+                  onClick={async () => {
+                    setPromosLoading(true);
+                    await fetch("/api/admin/promo", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ password, code: promoCode, reduction: promoReduction, max_utilisations: promoMax || null }),
+                    });
+                    setPromoCode(""); setPromoReduction(""); setPromoMax("");
+                    await fetchPromos();
+                    setPromosLoading(false);
+                  }}
+                  className="w-full bg-violet-500 text-white px-4 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors disabled:opacity-40"
+                >
+                  {promosLoading ? "…" : "Créer"}
+                </button>
+              </div>
+            </div>
+
+            {/* Liste des codes */}
+            <div className="flex-1">
+              <h2 className="text-sm font-semibold text-zinc-900 mb-4">Codes actifs ({promos.length})</h2>
+              {promos.length === 0 ? (
+                <p className="text-zinc-400 text-sm">Aucun code pour l'instant.</p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {promos.map(p => (
+                    <div key={p.id} className={`flex items-center gap-4 border rounded-xl px-4 py-3 transition-colors ${p.actif ? "border-zinc-200" : "border-zinc-100 opacity-50"}`}>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-sm font-semibold font-mono text-zinc-900">{p.code}</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-600 font-medium">-{p.reduction}%</span>
+                          {!p.actif && <span className="text-xs text-zinc-400">Désactivé</span>}
+                        </div>
+                        <p className="text-xs text-zinc-400">
+                          {p.nb_utilisations} utilisation{p.nb_utilisations !== 1 ? "s" : ""}
+                          {p.max_utilisations ? ` / ${p.max_utilisations}` : " (illimité)"}
+                        </p>
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <button
+                          onClick={async () => {
+                            await fetch(`/api/admin/promo/${p.id}`, {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ password, actif: !p.actif }),
+                            });
+                            fetchPromos();
+                          }}
+                          className="text-xs border border-zinc-200 rounded-lg px-2.5 py-1.5 text-zinc-500 hover:border-zinc-400 transition-colors"
+                        >
+                          {p.actif ? "Désactiver" : "Activer"}
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`Supprimer le code ${p.code} ?`)) return;
+                            await fetch(`/api/admin/promo/${p.id}`, {
+                              method: "DELETE",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ password }),
+                            });
+                            fetchPromos();
+                          }}
+                          className="text-xs border border-red-100 rounded-lg px-2.5 py-1.5 text-red-400 hover:border-red-300 transition-colors"
+                        >✕</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
       </div>
     </main>

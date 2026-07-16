@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const { code, nom, email, options, creneau_id, creneau_id_1, creneau_id_2 } = session.metadata || {};
+    const { code, nom, email, options, creneau_id, creneau_id_1, creneau_id_2, promo_id } = session.metadata || {};
 
     if (creneau_id) {
       // Paiement coaching — confirmer la réservation
@@ -31,6 +31,11 @@ export async function POST(req: NextRequest) {
         .from("creneaux")
         .update({ reserve: true, pending: false, stripe_session_id: session.id, pending_expires_at: null })
         .in("id", allIds);
+
+      if (promo_id) {
+        const { data: promo } = await supabaseAdmin.from("promo_codes").select("nb_utilisations").eq("id", promo_id).single();
+        if (promo) await supabaseAdmin.from("promo_codes").update({ nb_utilisations: promo.nb_utilisations + 1 }).eq("id", promo_id);
+      }
 
       const clientNom = nom || session.customer_details?.name || "";
       const clientEmail = email || session.customer_details?.email;

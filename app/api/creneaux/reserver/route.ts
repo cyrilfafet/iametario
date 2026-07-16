@@ -5,7 +5,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
-  const { id, nom, email, message } = await req.json();
+  const { id, nom, email, message, promoCode } = await req.json();
   if (!id || !nom || !email) return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
 
   const { data: slot, error: fetchError } = await supabaseAdmin
@@ -46,11 +46,31 @@ export async function POST(req: NextRequest) {
 
   if (pendingError) return NextResponse.json({ error: pendingError.message }, { status: 500 });
 
+  // Valider le code promo
+  let promoReduction = 0;
+  let promoId: string | null = null;
+  if (promoCode) {
+    const { data: promo } = await supabaseAdmin
+      .from("promo_codes")
+      .select("id, reduction, nb_utilisations, max_utilisations")
+      .eq("code", (promoCode as string).toUpperCase().trim())
+      .eq("actif", true)
+      .single();
+    if (promo && (!promo.max_utilisations || promo.nb_utilisations < promo.max_utilisations)) {
+      promoReduction = promo.reduction;
+      promoId = promo.id;
+    }
+  }
+
+  const basePrice = 9000;
+  const finalPrice = Math.round(basePrice * (1 - promoReduction / 100));
+
   const dateStr = new Date(slot.date + "T12:00:00").toLocaleDateString("fr-FR", {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
   const heure = `${startHour}h`;
   const heureFin = `${startHour + 3}h`;
+  const promoLabel = promoReduction > 0 ? ` · Code ${(promoCode as string).toUpperCase()} (-${promoReduction}%)` : "";
 
   const base = process.env.NEXT_PUBLIC_URL || "https://www.iametario.com";
 
@@ -61,10 +81,10 @@ export async function POST(req: NextRequest) {
       {
         price_data: {
           currency: "eur",
-          unit_amount: 9000,
+          unit_amount: finalPrice,
           product_data: {
             name: "Coaching FL Studio · Afro House",
-            description: `Session individuelle 3h — ${dateStr} de ${heure} à ${heureFin}`,
+            description: `Session individuelle 3h — ${dateStr} de ${heure} à ${heureFin}${promoLabel}`,
           },
         },
         quantity: 1,
@@ -79,6 +99,7 @@ export async function POST(req: NextRequest) {
       message: message || "",
       date: slot.date,
       heure_debut: slot.heure_debut,
+      ...(promoId ? { promo_id: promoId } : {}),
     },
     success_url: `${base}/formations?success=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${base}/formations?cancelled=1`,
