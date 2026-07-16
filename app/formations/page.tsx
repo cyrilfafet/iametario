@@ -207,7 +207,7 @@ export default function Formations() {
             <div className="px-6 py-5 border-b border-zinc-100 bg-zinc-50/50">
               <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-3">Ce qu'il te faut</p>
               <ul className="flex flex-col gap-1.5">
-                {["Une connexion stable", "Un casque", "FL Studio version démo (gratuit)"].map(item => (
+                {["Une connexion stable", "Un casque", "FL Studio version démo (gratuit)", "Le fichier MP3 de la musique que tu veux remixer"].map(item => (
                   <li key={item} className="flex items-center gap-2 text-sm text-zinc-600">
                     <span className="w-1 h-1 rounded-full bg-zinc-300 flex-shrink-0" />
                     {item}
