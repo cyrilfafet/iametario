@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Formation DJ Résident — Technique, Mentalité & Réseau · E-Tario",
-  description: "Apprends à mixer, créer des mashups et décrocher ta première résidence. Formation complète disponible septembre 2026.",
+  title: "Formations - FL Studio - DJ Résident · E-Tario",
+  description: "Coaching individuel FL Studio en live sur Zoom — crée ton premier remix en 3h. Formation DJ Résident disponible septembre 2026.",
   openGraph: {
-    title: "Formation DJ Résident — Technique, Mentalité & Réseau · E-Tario",
-    description: "Apprends à mixer, créer des mashups et décrocher ta première résidence. Formation complète disponible septembre 2026.",
-    url: "https://www.iametario.com/teaching",
+    title: "Formations - FL Studio - DJ Résident · E-Tario",
+    description: "Coaching individuel FL Studio en live sur Zoom — crée ton premier remix en 3h. Formation DJ Résident disponible septembre 2026.",
+    url: "https://www.iametario.com/formations",
   },
 };
 
