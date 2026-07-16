@@ -5,18 +5,25 @@ export async function GET() {
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 
+  // Libérer les créneaux pending expirés
+  await supabaseAdmin
+    .from("creneaux")
+    .update({ pending: false, stripe_session_id: null, client_nom: null, client_email: null, client_message: null, pending_expires_at: null })
+    .eq("pending", true)
+    .lt("pending_expires_at", new Date().toISOString());
+
   const { data, error } = await supabaseAdmin
     .from("creneaux")
     .select("id, date, heure_debut")
     .eq("disponible", true)
     .eq("reserve", false)
+    .eq("pending", false)
     .gte("date", todayStr)
     .order("date", { ascending: true })
     .order("heure_debut", { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Group by date, find valid 3h start slots
   const byDate: Record<string, { id: string; heure_debut: string }[]> = {};
   for (const row of (data ?? [])) {
     (byDate[row.date] ??= []).push({ id: row.id, heure_debut: row.heure_debut });

@@ -41,7 +41,7 @@ export default function Admin() {
   const [shopSuccess, setShopSuccess] = useState(false);
 
   // Coaching
-  type Creneau = { id: string; date: string; heure_debut: string; duree_min: number; disponible: boolean; reserve: boolean; client_nom: string | null; client_email: string | null; client_message: string | null };
+  type Creneau = { id: string; date: string; heure_debut: string; duree_min: number; disponible: boolean; reserve: boolean; pending: boolean; stripe_session_id: string | null; pending_expires_at: string | null; client_nom: string | null; client_email: string | null; client_message: string | null };
   const [creneaux, setCreneaux] = useState<Creneau[]>([]);
   const [coachingLoading, setCoachingLoading] = useState(false);
   const [weekStart, setWeekStart] = useState<Date>(() => {
@@ -51,6 +51,8 @@ export default function Admin() {
     d.setHours(0, 0, 0, 0);
     return d;
   });
+  const [selectedReservation, setSelectedReservation] = useState<Creneau | null>(null);
+  const [rescheduleSource, setRescheduleSource] = useState<Creneau | null>(null);
 
   // Edit mode
   const [editingTrack, setEditingTrack] = useState<ShopTrack | null>(null);
@@ -651,7 +653,7 @@ export default function Admin() {
 
           const toggleSlot = async (day: Date, hour: string) => {
             const slot = getSlot(day, hour);
-            if (slot?.reserve || coachingLoading) return;
+            if (coachingLoading) return;
             setCoachingLoading(true);
             if (!slot) {
               const res = await fetch("/api/admin/creneaux", {
@@ -671,8 +673,54 @@ export default function Admin() {
             setCoachingLoading(false);
           };
 
-          const upcomingReservations = creneaux
-            .filter(c => c.reserve && c.date >= todayStr)
+          const cancelReservation = async (slot: Creneau) => {
+            if (!confirm(`Annuler le RDV de ${slot.client_nom} ?`)) return;
+            setCoachingLoading(true);
+            await fetch(`/api/admin/creneaux/${slot.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ password, action: "cancel_reservation" }),
+            });
+            setSelectedReservation(null);
+            await fetchCreneaux();
+            setCoachingLoading(false);
+          };
+
+          const handleReschedule = async (day: Date, hour: string) => {
+            if (!rescheduleSource || coachingLoading) return;
+            setCoachingLoading(true);
+            const res = await fetch(`/api/admin/creneaux/${rescheduleSource.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ password, action: "reschedule", new_date: localDate(day), new_heure_debut: hour + ":00" }),
+            });
+            if (!res.ok) alert("Ce créneau n'est pas disponible (les 3 heures doivent être libres)");
+            setRescheduleSource(null);
+            await fetchCreneaux();
+            setCoachingLoading(false);
+          };
+
+          const handleCellClick = (day: Date, hour: string) => {
+            if (coachingLoading) return;
+            const slot = getSlot(day, hour);
+            const isPastDay = localDate(day) < todayStr;
+            if (rescheduleSource) {
+              if (slot && !slot.reserve && !slot.pending && !isPastDay) handleReschedule(day, hour);
+              return;
+            }
+            if (slot?.reserve || slot?.pending) { setSelectedReservation(slot); return; }
+            if (!isPastDay) toggleSlot(day, hour);
+          };
+
+          // Dédupliquer : une seule ligne par réservation (la première heure du bloc)
+          const reservationMap = new Map<string, Creneau>();
+          for (const c of creneaux) {
+            if (!(c.reserve || c.pending) || c.date < todayStr) continue;
+            const key = `${c.client_email}-${c.date}`;
+            const existing = reservationMap.get(key);
+            if (!existing || c.heure_debut < existing.heure_debut) reservationMap.set(key, c);
+          }
+          const upcomingReservations = [...reservationMap.values()]
             .sort((a, b) => a.date.localeCompare(b.date) || a.heure_debut.localeCompare(b.heure_debut));
 
           return (
@@ -690,19 +738,11 @@ export default function Admin() {
                     className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 hover:border-zinc-400 transition-colors"
                   >›</button>
                 </div>
-                <div className="flex items-center gap-5 text-xs text-zinc-400">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded bg-emerald-200 inline-block border border-emerald-300" />
-                    Disponible (clic pour retirer)
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded bg-violet-200 inline-block border border-violet-300" />
-                    Réservé par un client
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded bg-white inline-block border border-zinc-200" />
-                    Vide (clic pour ouvrir)
-                  </span>
+                <div className="flex items-center gap-4 text-xs text-zinc-400 flex-wrap">
+                  <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-200 inline-block border border-emerald-300" />Dispo</span>
+                  <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-200 inline-block border border-amber-300" />En attente paiement</span>
+                  <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-violet-200 inline-block border border-violet-300" />Confirmé</span>
+                  <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-white inline-block border border-zinc-200" />Vide</span>
                 </div>
               </div>
 
@@ -732,20 +772,28 @@ export default function Admin() {
                           const slot = getSlot(day, hour);
                           const isPast = localDate(day) < todayStr;
                           const isReserved = !!slot?.reserve;
-                          const isAvail = !!slot && !isReserved;
+                          const isPending = !!slot?.pending && !isReserved;
+                          const isAvail = !!slot && !isReserved && !isPending;
+                          const isRescheduleTarget = !!rescheduleSource && isAvail && !isPast;
 
                           return (
                             <div
                               key={di}
-                              onClick={() => !isPast && !isReserved && toggleSlot(day, hour)}
-                              title={isReserved ? `${slot?.client_nom ?? ""} · ${slot?.client_email ?? ""}` : undefined}
+                              onClick={() => handleCellClick(day, hour)}
+                              title={(isReserved || isPending) ? `${slot?.client_nom ?? ""} · ${slot?.client_email ?? ""}` : undefined}
                               className={`h-9 rounded-md border flex items-center justify-center overflow-hidden transition-all select-none ${
                                 isReserved
-                                  ? "bg-violet-100 border-violet-300 cursor-default"
+                                  ? "bg-violet-100 border-violet-300 cursor-pointer hover:bg-violet-200"
+                                  : isPending
+                                  ? "bg-amber-100 border-amber-300 cursor-pointer hover:bg-amber-200"
+                                  : isRescheduleTarget
+                                  ? "bg-blue-50 border-blue-300 cursor-pointer hover:bg-blue-100"
                                   : isAvail
                                   ? "bg-emerald-100 border-emerald-300 cursor-pointer hover:bg-emerald-200"
                                   : isPast
                                   ? "bg-zinc-50 border-zinc-100 cursor-default opacity-30"
+                                  : rescheduleSource
+                                  ? "bg-zinc-50 border-zinc-100 cursor-default opacity-40"
                                   : "bg-white border-zinc-200 cursor-pointer hover:bg-emerald-50 hover:border-emerald-300"
                               }`}
                             >
@@ -754,8 +802,16 @@ export default function Admin() {
                                   {slot.client_nom.split(" ")[0]}
                                 </span>
                               )}
-                              {isAvail && (
+                              {isPending && slot?.client_nom && (
+                                <span className="text-[9px] text-amber-600 font-semibold px-0.5 truncate leading-none">
+                                  {slot.client_nom.split(" ")[0]}
+                                </span>
+                              )}
+                              {isAvail && !rescheduleSource && (
                                 <span className="text-[10px] text-emerald-600 font-bold leading-none">✓</span>
+                              )}
+                              {isRescheduleTarget && (
+                                <span className="text-[10px] text-blue-400 leading-none">→</span>
                               )}
                             </div>
                           );
@@ -766,6 +822,54 @@ export default function Admin() {
                 </div>
               </div>
 
+              {/* Mode décalage */}
+              {rescheduleSource && (
+                <div className="mt-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between gap-3">
+                  <p className="text-sm text-blue-700">
+                    Décalage de <strong>{rescheduleSource.client_nom}</strong> — clique sur un créneau vert disponible
+                  </p>
+                  <button onClick={() => setRescheduleSource(null)} className="text-xs text-blue-500 hover:text-blue-700 flex-shrink-0">Annuler</button>
+                </div>
+              )}
+
+              {/* Panneau réservation sélectionnée */}
+              {selectedReservation && !rescheduleSource && (
+                <div className="mt-4 border border-zinc-200 rounded-xl p-4">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <p className="text-sm font-semibold text-zinc-900">{selectedReservation.client_nom}</p>
+                      <a href={`mailto:${selectedReservation.client_email}`} className="text-xs text-violet-500 hover:underline">{selectedReservation.client_email}</a>
+                      {selectedReservation.client_message && (
+                        <p className="text-xs text-zinc-400 italic mt-1">"{selectedReservation.client_message}"</p>
+                      )}
+                      <p className="text-xs mt-2">
+                        {selectedReservation.reserve
+                          ? <span className="text-violet-600 font-medium">✓ Paiement Stripe confirmé</span>
+                          : <span className="text-amber-600 font-medium">⏳ En attente de paiement</span>
+                        }
+                      </p>
+                    </div>
+                    <button onClick={() => setSelectedReservation(null)} className="text-zinc-300 hover:text-zinc-500 text-xl leading-none flex-shrink-0">×</button>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => cancelReservation(selectedReservation)}
+                      className="flex-1 text-xs border border-red-200 text-red-400 rounded-lg py-2 hover:border-red-300 hover:text-red-500 transition-colors"
+                    >
+                      Annuler le RDV
+                    </button>
+                    {selectedReservation.reserve && (
+                      <button
+                        onClick={() => { setRescheduleSource(selectedReservation); setSelectedReservation(null); }}
+                        className="flex-1 text-xs border border-zinc-200 text-zinc-600 rounded-lg py-2 hover:border-zinc-400 transition-colors"
+                      >
+                        Décaler →
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Réservations à venir */}
               {upcomingReservations.length > 0 && (
                 <div className="mt-8 pt-6 border-t border-zinc-100">
@@ -773,17 +877,26 @@ export default function Admin() {
                   <div className="flex flex-col gap-2">
                     {upcomingReservations.map(c => {
                       const dateLabel = new Date(c.date + "T12:00:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
-                      const heure = c.heure_debut.slice(0, 5).replace(":", "h");
+                      const startH = parseInt(c.heure_debut.slice(0, 2));
+                      const heureLabel = `${startH}h–${startH + 3}h`;
                       return (
-                        <div key={c.id} className="flex items-center gap-3 border border-violet-100 bg-violet-50/50 rounded-xl px-4 py-3">
-                          <span className="w-2 h-2 rounded-full bg-violet-400 flex-shrink-0" />
+                        <div
+                          key={c.id}
+                          onClick={() => setSelectedReservation(c)}
+                          className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-colors ${
+                            c.reserve
+                              ? "border-violet-100 bg-violet-50/50 hover:bg-violet-50"
+                              : "border-amber-100 bg-amber-50/50 hover:bg-amber-50"
+                          }`}
+                        >
+                          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${c.reserve ? "bg-violet-400" : "bg-amber-400"}`} />
                           <div className="flex-1 min-w-0">
-                            <span className="text-sm font-medium text-zinc-900 capitalize">{dateLabel} · {heure}</span>
+                            <span className="text-sm font-medium text-zinc-900 capitalize">{dateLabel} · {heureLabel}</span>
                             <span className="text-xs text-zinc-400 ml-2">{c.client_nom}</span>
                           </div>
-                          {c.client_email && (
-                            <a href={`mailto:${c.client_email}`} className="text-xs text-violet-500 hover:underline flex-shrink-0">{c.client_email}</a>
-                          )}
+                          <span className={`text-xs flex-shrink-0 ${c.reserve ? "text-violet-500" : "text-amber-500"}`}>
+                            {c.reserve ? "Confirmé" : "En attente"}
+                          </span>
                         </div>
                       );
                     })}

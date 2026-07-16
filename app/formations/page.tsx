@@ -20,12 +20,16 @@ export default function Formations() {
   const [bookingDone, setBookingDone] = useState(false);
   const [bookingError, setBookingError] = useState("");
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [paymentCancelled, setPaymentCancelled] = useState(false);
 
   useEffect(() => {
     fetch("/api/creneaux")
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setCreneaux(data); })
       .catch(() => {});
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "1") setBookingDone(true);
+    if (params.get("cancelled") === "1") setPaymentCancelled(true);
   }, []);
 
   const handleBook = async (e: React.FormEvent) => {
@@ -39,13 +43,16 @@ export default function Formations() {
       body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg }),
     });
     const data = await res.json();
-    if (data.success) {
-      setBookingDone(true);
-    } else {
-      setBookingError(data.error === "Créneau non disponible" ? "Ce créneau vient d'être pris. Choisis-en un autre." : "Une erreur est survenue, réessaie.");
+    if (data.url) {
+      window.location.href = data.url;
+    } else if (res.status === 409) {
+      setBookingError("Ce créneau vient d'être pris. Choisis-en un autre.");
       setSelectedId(null);
+      setBookingLoading(false);
+    } else {
+      setBookingError("Une erreur est survenue, réessaie.");
+      setBookingLoading(false);
     }
-    setBookingLoading(false);
   };
 
   // Group slots by date
@@ -232,12 +239,17 @@ export default function Formations() {
                 <p className="text-zinc-500 text-sm">Un email de confirmation t'a été envoyé. À très vite !</p>
               </div>
             ) : !bookingOpen ? (
-              <button
-                onClick={() => setBookingOpen(true)}
-                className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
-              >
-                Réserver — 90€
-              </button>
+              <div>
+                {paymentCancelled && (
+                  <p className="text-amber-500 text-xs text-center mb-3">Paiement annulé — le créneau a été libéré.</p>
+                )}
+                <button
+                  onClick={() => { setBookingOpen(true); setPaymentCancelled(false); }}
+                  className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
+                >
+                  Réserver — 90€
+                </button>
+              </div>
             ) : creneaux.length === 0 ? (
               <div className="border border-zinc-200 rounded-2xl px-6 py-6 text-center">
                 <p className="text-zinc-500 text-sm mb-4">Aucun créneau disponible pour le moment.</p>
@@ -318,7 +330,7 @@ export default function Formations() {
                       disabled={bookingLoading}
                       className="w-full bg-violet-500 text-white px-6 py-3.5 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors disabled:opacity-50"
                     >
-                      {bookingLoading ? "Réservation…" : "Confirmer — 90€"}
+                      {bookingLoading ? "Redirection…" : "Payer 90€ avec Stripe →"}
                     </button>
                     <p className="text-zinc-400 text-xs text-center">Le règlement se fait par virement après confirmation.</p>
                   </form>

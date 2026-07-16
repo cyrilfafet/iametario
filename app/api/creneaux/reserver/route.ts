@@ -1,85 +1,88 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
   const { id, nom, email, message } = await req.json();
   if (!id || !nom || !email) return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
 
-  // Récupérer le créneau de départ
   const { data: slot, error: fetchError } = await supabaseAdmin
     .from("creneaux")
     .select("*")
     .eq("id", id)
     .eq("disponible", true)
     .eq("reserve", false)
+    .eq("pending", false)
     .single();
 
   if (fetchError || !slot) return NextResponse.json({ error: "Créneau non disponible" }, { status: 409 });
 
-  // Calculer les 2 heures suivantes
   const startHour = parseInt((slot.heure_debut as string).slice(0, 2));
   const h1 = `${String(startHour + 1).padStart(2, "0")}:00:00`;
   const h2 = `${String(startHour + 2).padStart(2, "0")}:00:00`;
 
-  // Vérifier que les 2 heures suivantes sont toujours libres (race condition proof)
   const { data: nextSlots, error: nextError } = await supabaseAdmin
     .from("creneaux")
-    .select("id, heure_debut")
+    .select("id")
     .eq("date", slot.date)
     .in("heure_debut", [h1, h2])
     .eq("disponible", true)
-    .eq("reserve", false);
+    .eq("reserve", false)
+    .eq("pending", false);
 
   if (nextError || !nextSlots || nextSlots.length < 2) {
     return NextResponse.json({ error: "Créneau non disponible" }, { status: 409 });
   }
 
-  // Bloquer les 3 heures
-  const allIds = [slot.id, ...nextSlots.map(s => s.id)];
-  const { error: updateError } = await supabaseAdmin
+  const allIds = [slot.id, ...nextSlots.map((s: { id: string }) => s.id)];
+  const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+
+  const { error: pendingError } = await supabaseAdmin
     .from("creneaux")
-    .update({ reserve: true, client_nom: nom, client_email: email, client_message: message || null })
+    .update({ pending: true, client_nom: nom, client_email: email, client_message: message || null, pending_expires_at: expiresAt })
     .in("id", allIds);
 
-  if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 });
+  if (pendingError) return NextResponse.json({ error: pendingError.message }, { status: 500 });
 
   const dateStr = new Date(slot.date + "T12:00:00").toLocaleDateString("fr-FR", {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
-  const heure = (slot.heure_debut as string).slice(0, 5).replace(":", "h");
-  const heureFin = `${String(startHour + 3).padStart(2, "0")}h`;
+  const heure = `${startHour}h`;
+  const heureFin = `${startHour + 3}h`;
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  await Promise.allSettled([
-    resend.emails.send({
-      from: "E-Tario <contact@iametario.com>",
-      to: email,
-      subject: "Coaching FL Studio · Réservation confirmée",
-      html: `
-        <h2>C'est confirmé !</h2>
-        <p>Bonjour ${nom},</p>
-        <p>Ta session de coaching <strong>FL Studio · Afro House</strong> est réservée.</p>
-        <p><strong>Date :</strong> ${dateStr}</p>
-        <p><strong>Heure :</strong> ${heure} — ${heureFin}</p>
-        <p><strong>Durée :</strong> 3 heures</p>
-        <p>Je te recontacte quelques jours avant pour te communiquer le lien Zoom et répondre à tes questions.</p>
-        <p>À très vite,<br/>E-Tario</p>
-      `,
-    }),
-    resend.emails.send({
-      from: "E-Tario <contact@iametario.com>",
-      to: "contact@iametario.com",
-      subject: `Nouvelle réservation coaching — ${nom}`,
-      html: `
-        <h2>Nouvelle réservation de coaching</h2>
-        <p><strong>Client :</strong> ${nom}</p>
-        <p><strong>Email :</strong> <a href="mailto:${email}">${email}</a></p>
-        <p><strong>Date :</strong> ${dateStr} de ${heure} à ${heureFin}</p>
-        ${message ? `<p><strong>Message :</strong> ${message}</p>` : ""}
-      `,
-    }),
-  ]);
+  const base = process.env.NEXT_PUBLIC_URL || "https://www.iametario.com";
 
-  return NextResponse.json({ success: true });
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "eur",
+          unit_amount: 9000,
+          product_data: {
+            name: "Coaching FL Studio · Afro House",
+            description: `Session individuelle 3h — ${dateStr} de ${heure} à ${heureFin}`,
+          },
+        },
+        quantity: 1,
+      },
+    ],
+    metadata: {
+      creneau_id: slot.id,
+      creneau_id_1: nextSlots[0].id,
+      creneau_id_2: nextSlots[1].id,
+      nom,
+      email,
+      message: message || "",
+      date: slot.date,
+      heure_debut: slot.heure_debut,
+    },
+    success_url: `${base}/formations?success=1&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${base}/formations?cancelled=1`,
+  });
+
+  return NextResponse.json({ url: session.url });
 }
