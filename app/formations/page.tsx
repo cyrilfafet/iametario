@@ -424,7 +424,7 @@ export default function Formations() {
                     />
                     <input
                       type="text"
-                      placeholder="Quelle musique souhaites-tu remixer ?"
+                      placeholder="Quelle musique souhaites-tu remixer ? (artiste · titre)"
                       value={bookingMusique}
                       onChange={e => setBookingMusique(e.target.value)}
                       className="border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-violet-400 transition-colors"
