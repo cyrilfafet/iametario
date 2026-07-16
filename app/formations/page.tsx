@@ -475,7 +475,6 @@ export default function Formations() {
                         return `Payer ${price}€ avec Stripe →`;
                       })()}
                     </button>
-                    <p className="text-zinc-400 text-xs text-center">Le règlement se fait par virement après confirmation.</p>
                   </form>
                 )}
               </div>
