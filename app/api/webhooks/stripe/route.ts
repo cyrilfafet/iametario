@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
                   <li>Connexion internet stable (fibre ou très bon réseau)</li>
                   <li>Casque ou écouteurs obligatoires</li>
                   <li>FL Studio installé — la version démo gratuite suffit : <a href="https://www.image-line.com/fl-studio/download">https://www.image-line.com/fl-studio/download</a></li>
-                  <li>Pack de samples téléchargé à ce lien :</li>
+                  <li>Pack de samples téléchargé à ce lien : <a href="https://drive.google.com/drive/folders/13xb385e38qMoibU2bPWEY44_i7z-3QBv?usp=sharing">Google Drive</a></li>
                   <li>Le fichier MP3 du morceau que tu veux remixer</li>
                   <li>Logiciel de visio Zoom installé : <a href="https://zoom.us/download">https://zoom.us/download</a></li>
                 </ul>
