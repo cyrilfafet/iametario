@@ -263,7 +263,7 @@ export default function Formations() {
                   onClick={() => { setBookingOpen(true); setPaymentCancelled(false); }}
                   className="block w-full text-center bg-violet-500 text-white px-6 py-4 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors"
                 >
-                  Réserver — 90€
+                  Réserver une session
                 </button>
               </div>
             ) : creneaux.length === 0 ? (
