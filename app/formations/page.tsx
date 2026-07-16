@@ -123,7 +123,7 @@ export default function Formations() {
         <div className="mb-16">
           <p className="text-zinc-400 text-xs uppercase tracking-widest mb-5">Formations</p>
           <h1 className="text-3xl md:text-4xl font-bold leading-snug">
-            Partager ce que j'ai mis<br className="hidden md:block" /> 10 ans à apprendre.
+            Partager ce que j'ai mis<br className="hidden md:block" /> 15 ans à apprendre.
           </h1>
         </div>
 
