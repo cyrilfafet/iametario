@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
                 </ul>
                 <p>Des questions d'ici là ? Réponds directement à ce mail.</p>
                 <p>À très vite,<br/>Cyril / E-Tario</p>
+                <p><em>PS : Tu as des amis qui veulent se lancer dans la prod ? Si tu les parraines, je t'offre 15 € dès que leur session est terminée !</em></p>
               `,
             }),
             resend.emails.send({
