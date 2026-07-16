@@ -730,8 +730,7 @@ export default function Admin() {
                         <div className="flex items-center justify-end pr-1.5 text-[11px] text-zinc-400 font-mono select-none">{hour}h</div>
                         {weekDays.map((day, di) => {
                           const slot = getSlot(day, hour);
-                          const dateStr = day.toISOString().split("T")[0];
-                          const isPast = dateStr < todayStr;
+                          const isPast = localDate(day) < todayStr;
                           const isReserved = !!slot?.reserve;
                           const isAvail = !!slot && !isReserved;
 
