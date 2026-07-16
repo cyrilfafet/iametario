@@ -24,12 +24,17 @@ export default function Formations() {
   const [promoCode, setPromoCode] = useState("");
   const [promoValid, setPromoValid] = useState<{ code: string; reduction: number } | null>(null);
   const [promoError, setPromoError] = useState("");
+  const [isFollowUp, setIsFollowUp] = useState(false);
 
-  useEffect(() => {
-    fetch("/api/creneaux")
+  const fetchCreneaux = (followUp: boolean) => {
+    fetch(`/api/creneaux${followUp ? "?followup=1" : ""}`)
       .then(r => r.json())
       .then(data => { if (Array.isArray(data)) setCreneaux(data); })
       .catch(() => {});
+  };
+
+  useEffect(() => {
+    fetchCreneaux(false);
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "1") setBookingDone(true);
     if (params.get("cancelled") === "1") setPaymentCancelled(true);
@@ -51,7 +56,7 @@ export default function Formations() {
     const res = await fetch("/api/creneaux/reserver", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, promoCode: promoValid?.code }),
+      body: JSON.stringify({ id: selectedId, nom: bookingNom, email: bookingEmail, message: bookingMsg, promoCode: promoValid?.code, followUp: isFollowUp }),
     });
     const data = await res.json();
     if (data.url) {
@@ -285,7 +290,7 @@ export default function Formations() {
                           <div className="flex flex-wrap gap-2">
                             {slots.map(s => {
                               const startH = parseInt(s.heure_debut.slice(0, 2));
-                              const label = `${startH}h–${startH + 3}h`;
+                              const label = isFollowUp ? `${startH}h–${startH + 1}h` : `${startH}h–${startH + 3}h`;
                               const isSelected = selectedId === s.id;
                               return (
                                 <button
@@ -361,15 +366,37 @@ export default function Formations() {
                     </div>
                     {promoError && <p className="text-red-400 text-xs -mt-1">{promoError}</p>}
                     {bookingError && <p className="text-red-400 text-xs">{bookingError}</p>}
+
+                    {/* Toggle session de suivi */}
+                    <label className="flex items-start gap-3 cursor-pointer border border-zinc-200 rounded-xl px-4 py-3 hover:border-violet-300 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={isFollowUp}
+                        onChange={e => {
+                          const val = e.target.checked;
+                          setIsFollowUp(val);
+                          setSelectedId(null);
+                          fetchCreneaux(val);
+                        }}
+                        className="mt-0.5 accent-violet-500 flex-shrink-0"
+                      />
+                      <span className="text-sm text-zinc-600 leading-snug">
+                        J'ai déjà suivi le coaching 3h — je réserve une{" "}
+                        <span className="font-semibold text-zinc-900">session de suivi · 1h · 40€</span>
+                      </span>
+                    </label>
+
                     <button
                       type="submit"
                       disabled={bookingLoading}
                       className="w-full bg-violet-500 text-white px-6 py-3.5 rounded-xl text-sm font-semibold tracking-widest uppercase hover:bg-violet-600 transition-colors disabled:opacity-50"
                     >
-                      {bookingLoading ? "Redirection…" : promoValid
-                        ? `Payer ${Math.round(90 * (1 - promoValid.reduction / 100))}€ avec Stripe →`
-                        : "Payer 90€ avec Stripe →"
-                      }
+                      {(() => {
+                        if (bookingLoading) return "Redirection…";
+                        const base = isFollowUp ? 40 : 90;
+                        const price = promoValid ? Math.round(base * (1 - promoValid.reduction / 100)) : base;
+                        return `Payer ${price}€ avec Stripe →`;
+                      })()}
                     </button>
                     <p className="text-zinc-400 text-xs text-center">Le règlement se fait par virement après confirmation.</p>
                   </form>

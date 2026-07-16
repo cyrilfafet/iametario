@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
 
     if (creneau_id) {
       // Paiement coaching — confirmer la réservation
-      const allIds = [creneau_id, creneau_id_1, creneau_id_2].filter(Boolean);
+      const { follow_up } = session.metadata || {};
+      const allIds = follow_up === "1"
+        ? [creneau_id]
+        : [creneau_id, creneau_id_1, creneau_id_2].filter(Boolean);
       await supabaseAdmin
         .from("creneaux")
         .update({ reserve: true, pending: false, stripe_session_id: session.id, pending_expires_at: null })

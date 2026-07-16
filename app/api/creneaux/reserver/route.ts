@@ -5,7 +5,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
-  const { id, nom, email, message, promoCode } = await req.json();
+  const { id, nom, email, message, promoCode, followUp } = await req.json();
   if (!id || !nom || !email) return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
 
   const { data: slot, error: fetchError } = await supabaseAdmin
@@ -20,24 +20,30 @@ export async function POST(req: NextRequest) {
   if (fetchError || !slot) return NextResponse.json({ error: "Créneau non disponible" }, { status: 409 });
 
   const startHour = parseInt((slot.heure_debut as string).slice(0, 2));
-  const h1 = `${String(startHour + 1).padStart(2, "0")}:00:00`;
-  const h2 = `${String(startHour + 2).padStart(2, "0")}:00:00`;
-
-  const { data: nextSlots, error: nextError } = await supabaseAdmin
-    .from("creneaux")
-    .select("id")
-    .eq("date", slot.date)
-    .in("heure_debut", [h1, h2])
-    .eq("disponible", true)
-    .eq("reserve", false)
-    .eq("pending", false);
-
-  if (nextError || !nextSlots || nextSlots.length < 2) {
-    return NextResponse.json({ error: "Créneau non disponible" }, { status: 409 });
-  }
-
-  const allIds = [slot.id, ...nextSlots.map((s: { id: string }) => s.id)];
   const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+
+  let allIds: string[];
+
+  if (followUp) {
+    allIds = [slot.id];
+  } else {
+    const h1 = `${String(startHour + 1).padStart(2, "0")}:00:00`;
+    const h2 = `${String(startHour + 2).padStart(2, "0")}:00:00`;
+
+    const { data: nextSlots, error: nextError } = await supabaseAdmin
+      .from("creneaux")
+      .select("id")
+      .eq("date", slot.date)
+      .in("heure_debut", [h1, h2])
+      .eq("disponible", true)
+      .eq("reserve", false)
+      .eq("pending", false);
+
+    if (nextError || !nextSlots || nextSlots.length < 2) {
+      return NextResponse.json({ error: "Créneau non disponible" }, { status: 409 });
+    }
+    allIds = [slot.id, ...nextSlots.map((s: { id: string }) => s.id)];
+  }
 
   const { error: pendingError } = await supabaseAdmin
     .from("creneaux")
@@ -62,14 +68,14 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const basePrice = 9000;
+  const basePrice = followUp ? 4000 : 9000;
   const finalPrice = Math.round(basePrice * (1 - promoReduction / 100));
 
   const dateStr = new Date(slot.date + "T12:00:00").toLocaleDateString("fr-FR", {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
   const heure = `${startHour}h`;
-  const heureFin = `${startHour + 3}h`;
+  const heureFin = followUp ? `${startHour + 1}h` : `${startHour + 3}h`;
   const promoLabel = promoReduction > 0 ? ` · Code ${(promoCode as string).toUpperCase()} (-${promoReduction}%)` : "";
 
   const base = process.env.NEXT_PUBLIC_URL || "https://www.iametario.com";
@@ -83,8 +89,8 @@ export async function POST(req: NextRequest) {
           currency: "eur",
           unit_amount: finalPrice,
           product_data: {
-            name: "Coaching FL Studio · Afro House",
-            description: `Session individuelle 3h — ${dateStr} de ${heure} à ${heureFin}${promoLabel}`,
+            name: followUp ? "Session de suivi · FL Studio" : "Coaching FL Studio · Afro House",
+            description: `${followUp ? "Session de suivi 1h" : "Session individuelle 3h"} — ${dateStr} à ${heure}${promoLabel}`,
           },
         },
         quantity: 1,
@@ -92,13 +98,13 @@ export async function POST(req: NextRequest) {
     ],
     metadata: {
       creneau_id: slot.id,
-      creneau_id_1: nextSlots[0].id,
-      creneau_id_2: nextSlots[1].id,
+      ...(followUp ? {} : { creneau_id_1: allIds[1], creneau_id_2: allIds[2] }),
       nom,
       email,
       message: message || "",
       date: slot.date,
       heure_debut: slot.heure_debut,
+      follow_up: followUp ? "1" : "0",
       ...(promoId ? { promo_id: promoId } : {}),
     },
     success_url: `${base}/formations?success=1&session_id={CHECKOUT_SESSION_ID}`,

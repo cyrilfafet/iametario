@@ -1,7 +1,8 @@
 import { supabaseAdmin } from "@/lib/supabase";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const followup = new URL(req.url).searchParams.get("followup") === "1";
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 
@@ -23,6 +24,11 @@ export async function GET() {
     .order("heure_debut", { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  if (followup) {
+    const slots = (data ?? []).map(row => ({ id: row.id, date: row.date, heure_debut: row.heure_debut, duree_min: 60 }));
+    return NextResponse.json(slots);
+  }
 
   const byDate: Record<string, { id: string; heure_debut: string }[]> = {};
   for (const row of (data ?? [])) {
