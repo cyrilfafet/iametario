@@ -31,6 +31,7 @@ export default function Formations() {
   const [parrainageOpen, setParrainageOpen] = useState(false);
   const [calMonth, setCalMonth] = useState(() => new Date());
   const [calSelectedDate, setCalSelectedDate] = useState<string | null>(null);
+  const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
   const localDate = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -512,6 +513,41 @@ export default function Formations() {
                 )}
               </div>
             )}
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <div className="mt-16">
+          <p className="text-xs font-semibold tracking-widest uppercase text-zinc-400 mb-6">Questions fréquentes</p>
+          <div className="flex flex-col divide-y divide-zinc-100">
+            {[
+              { q: "Quel niveau vais-je atteindre à l'issue du coaching ?", r: "Tu repartiras avec une vraie compréhension de FL Studio — comment s'y repérer, découper, éditer et composer. Tu sais comment fonctionne un logiciel de production musicale. C'est la base sur laquelle tout se construit." },
+              { q: "Est-ce que je pourrai sortir mon premier titre après cette session ?", r: "Non — et je préfère être honnête là-dessus. La production musicale demande des dizaines, voire des centaines d'heures de pratique. Ce que cette session t'apporte, c'est ce que j'ai mis près de 2 ans à apprendre, condensé en 3 heures. Ensuite, c'est à toi de pratiquer et d'évoluer à ton rythme." },
+              { q: "Puis-je sauvegarder le travail qu'on effectue ensemble ?", r: "Non — la version démo de FL Studio ne permet pas de sauvegarder un projet. Mais ce n'est pas un problème : la session est enregistrée et tu la reçois à la fin de l'appel. Tu peux la revisionner autant de fois que tu veux pour tout reproduire chez toi." },
+              { q: "Et si j'oublie ce que tu m'as expliqué ?", r: "La session Zoom est intégralement enregistrée et t'est envoyée à la fin. Tu peux la revisionner à tout moment." },
+              { q: "Je suis complètement débutant, est-ce que je peux suivre le coaching ?", r: "Oui — c'est précisément pour ça qu'il est conçu. Aucun prérequis, aucune expérience nécessaire." },
+              { q: "On m'a dit qu'Ableton ou Logic Pro étaient meilleurs que FL Studio ?", r: "Ces trois logiciels sont les plus utilisés sur le marché et sont de qualité équivalente. Le choix de FL Studio s'explique par deux raisons simples : la version démo est entièrement gratuite, et la quantité de tutoriels disponibles sur YouTube est massive. C'est le meilleur point d'entrée pour un débutant." },
+              { q: "Est-ce que je peux choisir n'importe quel morceau à remixer ?", r: "Presque. La grande majorité des morceaux fonctionnent. Dans de rares cas — tempo très instable ou absence totale d'éléments exploitables — on trouvera ensemble une alternative. Tu me communiques ton choix 48h avant la session pour qu'on valide ensemble." },
+              { q: "Je ne pense pas que 3h me suffiront.", r: "Pas de problème — des sessions de suivi d'1h à 40€ sont disponibles pour les participants ayant déjà suivi le coaching. On continue là où on s'est arrêtés." },
+              { q: "Que se passe-t-il en cas de problème technique le jour de la session ?", r: "La session est reportée sans frais supplémentaires. On trouve ensemble un nouveau créneau." },
+              { q: "La session est-elle remboursable ?", r: "Oui, dans les 24h suivant la réservation." },
+              { q: "Le coaching est-il en groupe ?", r: "Non — c'est du one-to-one exclusivement. La session est réservée à une seule personne à la fois." },
+              { q: "Si je recommande des amis, est-ce que j'y gagne quelque chose ?", r: "Oui — à condition d'avoir déjà suivi le coaching de 3h. Je veux m'assurer que tu saches de quoi tu parles avant d'en parler autour de toi. Pour chaque ami qui réserve en mentionnant ton prénom, tu reçois 15€ par virement." },
+            ].map(({ q, r }, i) => (
+              <div key={i}>
+                <button
+                  type="button"
+                  onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                  className="w-full flex items-center justify-between gap-4 py-4 text-left hover:text-violet-600 transition-colors"
+                >
+                  <span className="text-sm font-medium text-zinc-900">{q}</span>
+                  <span className="text-zinc-400 flex-shrink-0 text-sm">{faqOpen === i ? "−" : "+"}</span>
+                </button>
+                {faqOpen === i && (
+                  <p className="text-sm text-zinc-500 leading-relaxed pb-4">{r}</p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
