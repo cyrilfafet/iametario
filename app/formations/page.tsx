@@ -220,7 +220,6 @@ export default function Formations() {
                   </li>
                 ))}
               </ul>
-              <p className="text-xs text-zinc-400 mt-3">C'est tout.</p>
             </div>
 
             {/* Tarif */}
