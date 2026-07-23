@@ -588,9 +588,15 @@ export default function Artist() {
                   >
                     {bookingLoading ? t.booking.form_sending : t.booking.form_submit}
                   </button>
-                  <a href="https://drive.google.com/uc?export=download&id=1xowmsJTHkLvqYLHxzJVAOicnJe2BESYH" target="_blank" className="text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
-                    {t.booking.presskit}
-                  </a>
+                  <div className="flex items-center gap-3">
+                    <a href="https://drive.google.com/uc?export=download&id=1xowmsJTHkLvqYLHxzJVAOicnJe2BESYH" target="_blank" className="flex items-center gap-1.5 text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
+                      <span>🇫🇷</span> {t.booking.presskit}
+                    </a>
+                    <span className="text-zinc-200">·</span>
+                    <span className="flex items-center gap-1.5 text-zinc-300 text-xs cursor-not-allowed">
+                      <span>🇬🇧</span> Press kit
+                    </span>
+                  </div>
                 </div>
               </form>
             )}
