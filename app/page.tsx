@@ -588,7 +588,7 @@ export default function Artist() {
                   >
                     {bookingLoading ? t.booking.form_sending : t.booking.form_submit}
                   </button>
-                  <a href="/presskit.pdf" target="_blank" className="text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
+                  <a href="https://drive.google.com/uc?export=download&id=1xowmsJTHkLvqYLHxzJVAOicnJe2BESYH" target="_blank" className="text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
                     {t.booking.presskit}
                   </a>
                 </div>
