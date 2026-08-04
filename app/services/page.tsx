@@ -10,7 +10,6 @@ const demos = [
     title: "Movin' On — Orchestral Edit",
     file: "/Movin_On_Techno_DEMO.mp3",
     tag: "Intro Festival DJ",
-    price: "120€",
   },
   {
     client: "Karim B.",
@@ -18,7 +17,6 @@ const demos = [
     title: "Alors la Zone — Festival intro",
     file: "/Alors_La_Zone_DEMO.mp3",
     tag: "Intro Festival",
-    price: "75€",
   },
   {
     client: "Discothèque la D****",
@@ -26,7 +24,6 @@ const demos = [
     title: "Soirée 60-2010 — Halloween Intro",
     file: "/Halloween_Soiree_60_2010_DEMO.mp3",
     tag: "Intro Soirée",
-    price: "130€",
   },
   {
     client: "Camille D.",
@@ -34,7 +31,6 @@ const demos = [
     title: "Women × Jatti × Shakira — Wedding Mix",
     file: "/Women_Jatti_Shakira_Wedding_Mix.mp3",
     tag: "Chorée Mariage",
-    price: "70€",
   },
 ];
 
@@ -314,7 +310,6 @@ function CreationInner() {
                           onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
                         />
                       </div>
-                      <span className="text-base font-semibold text-zinc-500 border border-zinc-300 rounded-full px-3 py-1 flex-shrink-0">{demo.price}</span>
                     </div>
 
                   </div>
