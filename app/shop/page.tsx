@@ -64,6 +64,10 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
   const tags = track.genre.split(",").map(g => g.trim()).filter(Boolean);
 
   const handleBuy = async () => {
+    if (track.prix === 0) {
+      window.location.href = `/api/shop/free-download/${track.id}`;
+      return;
+    }
     setLoadingCheckout(true);
     const res = await fetch("/api/shop/checkout", {
       method: "POST",
@@ -123,13 +127,15 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
 
         {/* Prix + achat */}
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
-          <span className="text-base font-bold text-zinc-900">{(track.prix / 100).toFixed(0)}€</span>
+          <span className="text-base font-bold text-zinc-900">
+            {track.prix === 0 ? "Free" : `${(track.prix / 100).toFixed(0)}€`}
+          </span>
           <button
             onClick={handleBuy}
             disabled={loadingCheckout}
             className="bg-blue-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 min-w-[60px]"
           >
-            {loadingCheckout ? "…" : "Buy"}
+            {loadingCheckout ? "…" : track.prix === 0 ? "Download" : "Buy"}
           </button>
         </div>
       </div>
