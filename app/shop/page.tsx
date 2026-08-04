@@ -259,7 +259,27 @@ export default function ShopPage() {
         <p className="text-zinc-500 text-base mb-12">High quality WAV files. Instant download after payment.</p>
 
         {loading ? (
-          <p className="text-zinc-400 text-sm animate-pulse text-center py-12">Loading…</p>
+          <div className="flex flex-col gap-3">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="border border-zinc-200 rounded-2xl p-4 animate-pulse">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-16 h-16 flex-shrink-0 rounded-xl bg-zinc-100" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 bg-zinc-100 rounded-full w-2/3" />
+                    <div className="h-3 bg-zinc-100 rounded-full w-1/3" />
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="h-4 bg-zinc-100 rounded-full w-10" />
+                    <div className="h-9 bg-zinc-100 rounded-xl w-16" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-zinc-100 flex-shrink-0" />
+                  <div className="flex-1 h-10 bg-zinc-100 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : tracks.length === 0 ? (
           <p className="text-zinc-400 text-sm text-center py-12">No audio available yet.</p>
         ) : (
