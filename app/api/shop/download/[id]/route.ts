@@ -28,5 +28,11 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
     { expiresIn: 3600 }
   );
 
+  // Incrémenter le compteur de téléchargements
+  const { data: track } = await supabaseAdmin.from("shop_tracks").select("nb_telechargements").eq("id", id).single();
+  if (track) {
+    await supabaseAdmin.from("shop_tracks").update({ nb_telechargements: (track.nb_telechargements ?? 0) + 1 }).eq("id", id);
+  }
+
   return NextResponse.json({ url });
 }

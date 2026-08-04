@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 type Client = { nom: string; email: string };
 type Livraison = { code: string; prenom: string; nom_projet: string; solde: number; paiement_solde: boolean; created_at: string };
-type ShopTrack = { id: string; titre: string; genre: string; prix: number; fichier_preview_url: string; fichier_wav_url: string; stripe_payment_link: string; cover_url: string | null; published: boolean; created_at: string };
+type ShopTrack = { id: string; titre: string; genre: string; prix: number; fichier_preview_url: string; fichier_wav_url: string; stripe_payment_link: string; cover_url: string | null; published: boolean; created_at: string; nb_telechargements: number };
 
 export default function Admin() {
   const [password, setPassword] = useState("");
@@ -503,6 +503,9 @@ export default function Admin() {
                           <p className="text-sm font-medium text-zinc-900 truncate">{track.titre}</p>
                           <p className="text-xs text-zinc-400">{track.genre}</p>
                         </div>
+                        <span className="text-xs text-zinc-400 flex-shrink-0" title="Téléchargements">
+                          ↓ {track.nb_telechargements ?? 0}
+                        </span>
                         <div className="flex items-center gap-1.5 flex-shrink-0">
                           <button
                             onClick={() => startEditing(track)}
