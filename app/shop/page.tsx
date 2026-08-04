@@ -128,7 +128,7 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
         {/* Prix + achat */}
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <span className="text-base font-bold text-zinc-900">
-            {track.prix === 0 ? "Free" : `${(track.prix / 100).toFixed(0)}€`}
+            {track.prix === 0 ? "Free" : `${track.prix % 100 === 0 ? track.prix / 100 : (track.prix / 100).toFixed(2).replace(".", ",")}€`}
           </span>
           <button
             onClick={handleBuy}
