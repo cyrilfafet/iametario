@@ -23,6 +23,7 @@ export default function Admin() {
 
   const [loading, setLoading] = useState(false);
   const [progressLabel, setProgressLabel] = useState("");
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [deliveryUrl, setDeliveryUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -257,8 +258,22 @@ export default function Admin() {
     if (!urlRes.ok) throw new Error(`URL upload ${type} : ${urlData.error}`);
     const { url } = urlData;
     if (!url || typeof url !== "string") throw new Error(`URL d'upload manquante pour ${type}`);
-    const uploadRes = await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": file.type || "application/octet-stream" } });
-    if (!uploadRes.ok) throw new Error(`Upload ${type} échoué : ${uploadRes.status}`);
+    setUploadProgress(0);
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("PUT", url);
+      xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) resolve();
+        else reject(new Error(`Upload ${type} échoué : ${xhr.status}`));
+      };
+      xhr.onerror = () => reject(new Error(`Upload ${type} échoué`));
+      xhr.send(file);
+    });
+    setUploadProgress(null);
   };
 
   const createDelivery = async () => {
@@ -623,6 +638,20 @@ export default function Admin() {
                 >
                   {loading ? progressLabel || "Chargement…" : "Créer la livraison"}
                 </button>
+                {loading && uploadProgress !== null && (
+                  <div className="mt-3">
+                    <div className="flex justify-between text-xs text-zinc-400 mb-1">
+                      <span>{progressLabel}</span>
+                      <span>{uploadProgress}%</span>
+                    </div>
+                    <div className="w-full bg-zinc-100 rounded-full h-1.5 overflow-hidden">
+                      <div
+                        className="bg-blue-500 h-1.5 rounded-full transition-all duration-150"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
