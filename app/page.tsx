@@ -337,14 +337,31 @@ export default function Artist() {
           type TLItem = { period: string; title: string; description: string; bullets: string[] };
           const items = t.timeline as TLItem[];
 
+          const thumbPct = MAX_IDX > 0 ? (tlIndex / MAX_IDX) * 100 : 0;
+
           return (
             <div style={{ width: "100%", maxWidth: 896, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0" }}>
               <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1A1410", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
               <p style={{ fontSize: 11, textAlign: "center", marginBottom: 20, color: "#9A8E7E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
 
+              <div style={{ position: "relative", display: "flex", alignItems: "stretch" }}>
+                {/* Barre de défilement décorative */}
+                <div style={{
+                  position: "absolute", right: 20, top: 16, bottom: 16,
+                  width: 2, borderRadius: 2, background: "#C8BAA4", zIndex: 10,
+                }}>
+                  <div style={{
+                    position: "absolute", left: 0, right: 0,
+                    height: "28%",
+                    top: `${thumbPct * 0.72}%`,
+                    background: "#B8936A", borderRadius: 2,
+                    transition: "top 0.28s cubic-bezier(.4,0,.2,1)",
+                  }} />
+                </div>
+
               <div
                 ref={tlPickerRef}
-                style={{ position: "relative", height: TOTAL_H, overflow: "hidden", cursor: "ns-resize" }}
+                style={{ position: "relative", height: TOTAL_H, overflow: "hidden", cursor: "ns-resize", flex: 1 }}
               >
                 {/* masques haut/bas */}
                 <div style={{ position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none",
@@ -426,6 +443,7 @@ export default function Artist() {
                   );
                 })}
               </div>
+              </div>{/* end flex wrapper */}
             </div>
           );
         })()}
