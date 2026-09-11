@@ -305,55 +305,103 @@ export default function Artist() {
           <span dangerouslySetInnerHTML={{__html: t.bio.p4}} />
         </p>
 
-        {/* Timeline */}
-        <div className="w-full max-w-xl mt-14">
-          <h2 className="text-2xl font-bold text-zinc-900 text-center mb-10">{t.timeline_title}</h2>
-          <div className="relative">
-            {/* Ligne verticale */}
-            <div style={{ position: "absolute", left: 52, top: 6, bottom: 6, width: 1, background: "#E4DDD1" }} />
-            <div className="flex flex-col">
-              {t.timeline.map((item) => {
-                const isMilestone = TL_MILESTONES[item.year] != null;
-                const badge = TL_MILESTONES[item.year];
-                return (
-                  <div key={item.year} style={{ display: "flex", alignItems: "flex-start", gap: 20, paddingBottom: 28 }}>
-                    {/* Année */}
-                    <div style={{ width: 44, flexShrink: 0, textAlign: "right", paddingTop: 1 }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".08em", color: isMilestone ? "#B8936A" : "#A89D8E", fontVariantNumeric: "tabular-nums" }}>
+        {/* Timeline — picker scroll */}
+        {(() => {
+          const ITEM_H = 72;
+          const VISIBLE = 2; // items visibles de chaque côté
+          const step = (dir: number) => {
+            setTlIndex(i => Math.min(Math.max(0, i + dir), t.timeline.length - 1));
+          };
+
+          const handleWheel = (e: React.WheelEvent) => {
+            e.preventDefault();
+            if (tlDir.current === 0) return;
+            tlDir.current = 0;
+            step(e.deltaY > 0 ? 1 : -1);
+            setTimeout(() => { tlDir.current = 1; }, 320);
+          };
+
+          return (
+            <div className="w-full max-w-xl mt-14">
+              <h2 className="text-2xl font-bold text-zinc-900 text-center mb-2">{t.timeline_title}</h2>
+              <p className="text-xs text-center mb-6" style={{ color: "#A89D8E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
+              <div
+                style={{ position: "relative", height: ITEM_H * (VISIBLE * 2 + 1), overflow: "hidden", cursor: "ns-resize" }}
+                onWheel={handleWheel}
+              >
+                {/* Masque dégradé haut/bas */}
+                <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+                  background: "linear-gradient(to bottom, #F5EFE4 0%, transparent 28%, transparent 72%, #F5EFE4 100%)" }} />
+
+                {/* Ligne centrale */}
+                <div style={{ position: "absolute", left: 0, right: 0, top: "50%", marginTop: -ITEM_H / 2,
+                  height: ITEM_H, borderTop: "1px solid #E4DDD1", borderBottom: "1px solid #E4DDD1", zIndex: 0 }} />
+
+                {t.timeline.map((item, i) => {
+                  const dist = i - tlIndex;
+                  if (Math.abs(dist) > VISIBLE + 0.5) return null;
+                  const absDist = Math.abs(dist);
+                  const scale = 1 - absDist * 0.1;
+                  const opacity = 1 - absDist * 0.38;
+                  const blur = absDist * 2;
+                  const isMilestone = TL_MILESTONES[item.year] != null;
+                  const isCenter = dist === 0;
+
+                  return (
+                    <div
+                      key={item.year}
+                      onClick={() => step(dist)}
+                      style={{
+                        position: "absolute", left: 0, right: 0,
+                        top: "50%",
+                        transform: `translateY(calc(-50% + ${dist * ITEM_H}px)) scale(${scale})`,
+                        opacity,
+                        filter: blur > 0 ? `blur(${blur}px)` : "none",
+                        transition: "all 0.28s cubic-bezier(.4,0,.2,1)",
+                        display: "flex", alignItems: "center", gap: 16,
+                        padding: "0 8px",
+                        cursor: isCenter ? "default" : "pointer",
+                        zIndex: 10 - absDist,
+                      }}
+                    >
+                      <span style={{
+                        width: 44, flexShrink: 0, textAlign: "right",
+                        fontSize: isCenter ? 13 : 11, fontWeight: 700, letterSpacing: ".08em",
+                        color: isCenter && isMilestone ? "#B8936A" : isCenter ? "#1A1410" : "#A89D8E",
+                        fontVariantNumeric: "tabular-nums", transition: "all .28s",
+                      }}>
                         {item.year}
                       </span>
-                    </div>
-                    {/* Point */}
-                    <div style={{ flexShrink: 0, position: "relative", zIndex: 1, marginTop: 4 }}>
-                      <div style={{
-                        width: isMilestone ? 9 : 6, height: isMilestone ? 9 : 6,
-                        borderRadius: "50%",
-                        background: isMilestone ? "#B8936A" : "#CFC6B8",
-                        boxShadow: isMilestone ? "0 0 0 3px #F3E8D4" : "none",
-                        marginLeft: isMilestone ? -1.5 : 0,
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
+                        background: isCenter ? (isMilestone ? "#B8936A" : "#1A1410") : "#CFC6B8",
+                        boxShadow: isCenter && isMilestone ? "0 0 0 3px #F3E8D4" : "none",
+                        transition: "all .28s",
                       }} />
-                    </div>
-                    {/* Texte */}
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: 14, color: "#1A1410", lineHeight: 1.55, fontWeight: isMilestone ? 600 : 400, margin: 0 }}>
-                        {item.event}
-                      </p>
-                      {badge && (
-                        <span style={{
-                          display: "inline-block", marginTop: 5, fontSize: 9, fontWeight: 700, letterSpacing: ".12em",
-                          textTransform: "uppercase", color: "#B8936A", background: "#F3E8D4", borderRadius: 100,
-                          padding: "2px 8px",
+                      <div style={{ flex: 1 }}>
+                        <p style={{
+                          fontSize: isCenter ? 15 : 13, fontWeight: isCenter ? (isMilestone ? 700 : 500) : 400,
+                          color: isCenter ? "#1A1410" : "#857A6E", lineHeight: 1.45, margin: 0,
+                          transition: "all .28s",
                         }}>
-                          {badge}
-                        </span>
-                      )}
+                          {item.event}
+                        </p>
+                        {isCenter && isMilestone && TL_MILESTONES[item.year] && (
+                          <span style={{
+                            display: "inline-block", marginTop: 4, fontSize: 9, fontWeight: 700,
+                            letterSpacing: ".12em", textTransform: "uppercase",
+                            color: "#B8936A", background: "#F3E8D4", borderRadius: 100, padding: "2px 8px",
+                          }}>
+                            {TL_MILESTONES[item.year]}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </div>
+          );
+        })()}
 
       </section>
 
