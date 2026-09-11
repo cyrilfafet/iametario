@@ -329,7 +329,7 @@ export default function Artist() {
           };
 
           return (
-            <div style={{ width: "100%", marginTop: 56, background: "#1E1710", borderRadius: 20, padding: "40px 0 40px" }}>
+            <div style={{ width: "100%", marginTop: 56, background: "#3D2B18", borderRadius: 20, padding: "40px 0 40px" }}>
               <h2 style={{ fontSize: 22, fontWeight: 700, color: "#F5EFE4", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
               <p className="text-xs text-center mb-6" style={{ color: "#7A6D5F", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
               <div
@@ -380,7 +380,7 @@ export default function Artist() {
                         {item.year}
                       </span>
                       <div style={{ width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
-                        background: isCenter ? "#B8936A" : "#3A2E22",
+                        background: isCenter ? "#B8936A" : "#5A4230",
                         boxShadow: isCenter ? "0 0 0 3px #2E2418" : "none",
                         transition: "all .28s",
                       }} />
@@ -396,7 +396,7 @@ export default function Artist() {
                           <span style={{
                             display: "inline-block", marginTop: 4, fontSize: 9, fontWeight: 700,
                             letterSpacing: ".12em", textTransform: "uppercase",
-                            color: "#B8936A", background: "#2E2418", borderRadius: 100, padding: "2px 8px",
+                            color: "#B8936A", background: "#4A3420", borderRadius: 100, padding: "2px 8px",
                           }}>
                             {TL_MILESTONES[item.year]}
                           </span>
