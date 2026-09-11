@@ -552,15 +552,15 @@ export default function Artist() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
-            <div className="bg-zinc-50 rounded-2xl px-7 py-8">
+            <div className="border border-zinc-200 rounded-2xl px-7 py-8">
               <p className="text-zinc-900 font-semibold mb-3">{t.booking.card1_title}</p>
               <p className="text-zinc-500 text-sm leading-relaxed">{t.booking.card1_text}</p>
             </div>
-            <div className="bg-zinc-50 rounded-2xl px-7 py-8">
+            <div className="border border-zinc-200 rounded-2xl px-7 py-8">
               <p className="text-zinc-900 font-semibold mb-3">{t.booking.card2_title}</p>
               <p className="text-zinc-500 text-sm leading-relaxed">{t.booking.card2_text}</p>
             </div>
-            <div className="bg-zinc-50 rounded-2xl px-7 py-8">
+            <div className="border border-zinc-200 rounded-2xl px-7 py-8">
               <p className="text-zinc-900 font-semibold mb-3">{t.booking.card3_title}</p>
               <p className="text-zinc-500 text-sm leading-relaxed">{t.booking.card3_text}</p>
             </div>

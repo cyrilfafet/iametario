@@ -68,7 +68,7 @@ export const en: Translations = {
     subtitle: "Available for clubs, festivals, and private events.",
     cta: "Book a date",
     card1_title: "Clubs & Residencies",
-    card1_text: "Clubbing expertise. Real-time crowd reading and exclusive mashups. Current resident at Baltazar.",
+    card1_text: "Premium clubbing expertise. Crowd reading, energy control, and exclusive mashups.",
     card2_title: "Festivals & Open-Air",
     card2_text: "Large stage format. Adaptability and energy for your outdoor events and festival lineups.",
     card3_title: "Private & Corporate",

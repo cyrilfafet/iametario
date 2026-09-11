@@ -66,7 +66,7 @@ export const fr = {
     subtitle: "Disponible pour clubs, festivals et événements privés.",
     cta: "Booker une date",
     card1_title: "Clubs & Résidences",
-    card1_text: "L'expertise du clubbing. Lecture de foule en temps réel et mashups exclusifs. Résident au Baltazar.",
+    card1_text: "L'expertise du clubbing haut de gamme. Lecture de foule, contrôle de l'énergie et mashups exclusifs.",
     card2_title: "Festivals & Open-Air",
     card2_text: "Format grande scène. Adaptabilité et énergie pour vos événements extérieurs et programmations festives.",
     card3_title: "Privé & Corporate",
