@@ -11,7 +11,7 @@ export const en: Translations = {
   booking_btn: "Booking",
   bio: {
     highlight: "Phlegmatic DJ & Producer · 1,500+ sets since 2014.",
-    p1: "Since 2014, I've performed over 1,500 DJ sets — from altitude clubs to international stages, from Ibiza to prestigious hotel residencies. This journey has shaped my identity: that of a <strong style=\"color:#111111;font-weight:700\">Phlegmatic DJ</strong>, blending House, Electro and French Touch with a calm, precise, and controlled stage presence.",
+    p1: "Since 2014, I've performed over 1,500 DJ sets — from altitude clubs to international stages, from Ibiza to prestigious hotel residencies. This journey has shaped my identity: that of a <em>Phlegmatic DJ</em>, blending House, Electro and French Touch with a calm, precise, and controlled stage presence.",
     p2: "Sharing the bill with artists like <strong class=\"text-zinc-900\">Joachim Garraud</strong> and <strong class=\"text-zinc-900\">Willy William</strong>, I've carried that same standard into production. My Peggy Gou remix (+70k plays) traveled from ZuTv airwaves in Romania all the way to India at the <strong class=\"text-zinc-900\">Sunburn Festival</strong>.",
     p3: "Formerly resident at <strong class=\"text-zinc-900\">Bal'tazar</strong> (Dijon) and a regular on outdoor stages, I now focus my performances on premium venues, beach clubs, and international events.",
     p4: "<em>« Life hangs by a toothpick. »</em>",
