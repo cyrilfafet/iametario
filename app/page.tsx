@@ -283,6 +283,9 @@ export default function Artist() {
         <div className="flex flex-col items-center">
           <img src="/DSC_1607.png" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" />
           <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95 -mt-16 md:-mt-30" />
+          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F", marginTop: 10, textTransform: "uppercase" }}>
+            Phlegmatic DJ &amp; Producer
+          </p>
         </div>
 
         {/* Réseaux + Booking */}
@@ -309,7 +312,7 @@ export default function Artist() {
 
         {/* Bio */}
         <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-4xl mt-6 md:mt-8 text-center">
-          <span style={{color: '#111111', fontSize: '1.25rem', fontWeight: 800}}>{t.bio.highlight}</span>
+          <span style={{color: '#111111', fontSize: '1.25rem', fontWeight: 800}}>+1500 sets, une décennie d'expériences.</span>
           <br /><br />
           <span dangerouslySetInnerHTML={{__html: t.bio.p1}} />
           <br /><br />
