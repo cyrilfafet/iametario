@@ -621,9 +621,9 @@ export default function Artist() {
                       <span>🇫🇷</span> {t.booking.presskit}
                     </a>
                     <span className="text-zinc-200">·</span>
-                    <span className="flex items-center gap-1.5 text-zinc-300 text-xs cursor-not-allowed">
+                    <a href="https://drive.google.com/file/d/1EMQiTEdGsh3BnQioadN4WMm7lvgkDejq/view?usp=drive_link" target="_blank" className="flex items-center gap-1.5 text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
                       <span>🇬🇧</span> Press kit
-                    </span>
+                    </a>
                   </div>
                 </div>
               </form>
