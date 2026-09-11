@@ -312,7 +312,7 @@ export default function Artist() {
 
         {/* Bio */}
         <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-4xl mt-6 md:mt-8 text-center">
-          <span style={{color: '#111111', fontSize: '1.25rem', fontWeight: 800}}>+1500 sets, une décennie d'expériences.</span>
+          <span style={{color: '#111111', fontSize: '1.25rem', fontWeight: 800}}>Une décennie d'expérience, plus de 1500 sets.</span>
           <br /><br />
           <span dangerouslySetInnerHTML={{__html: t.bio.p1}} />
           <br /><br />
