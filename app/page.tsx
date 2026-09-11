@@ -329,16 +329,16 @@ export default function Artist() {
           };
 
           return (
-            <div style={{ width: "100%", maxWidth: 520, margin: "56px auto 0", background: "#3D2B18", borderRadius: 16, padding: "28px 0 28px" }}>
-              <h2 style={{ fontSize: 22, fontWeight: 700, color: "#F5EFE4", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
-              <p className="text-xs text-center mb-6" style={{ color: "#7A6D5F", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
+            <div style={{ width: "100%", maxWidth: 520, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0 28px" }}>
+              <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1A1410", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
+              <p className="text-xs text-center mb-6" style={{ color: "#9A8E7E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
               <div
                 ref={tlPickerRef}
                 style={{ position: "relative", height: ITEM_H * (VISIBLE * 2 + 1), overflow: "hidden", cursor: "ns-resize" }}
               >
                 {/* Masque dégradé haut/bas */}
                 <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-                  background: "linear-gradient(to bottom, #1E1710 0%, transparent 28%, transparent 72%, #1E1710 100%)" }} />
+                  background: "linear-gradient(to bottom, #DDD0BE 0%, transparent 28%, transparent 72%, #DDD0BE 100%)" }} />
 
                 {/* Ligne centrale */}
                 <div style={{ position: "absolute", left: 0, right: 0, top: "50%", marginTop: -ITEM_H / 2,
@@ -374,20 +374,20 @@ export default function Artist() {
                       <span style={{
                         width: 44, flexShrink: 0, textAlign: "right",
                         fontSize: isCenter ? 13 : 11, fontWeight: 700, letterSpacing: ".08em",
-                        color: isCenter ? "#B8936A" : "#4A4035",
+                        color: isCenter ? "#B8936A" : "#7A6E5F",
                         fontVariantNumeric: "tabular-nums", transition: "all .28s",
                       }}>
                         {item.year}
                       </span>
                       <div style={{ width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
-                        background: isCenter ? "#B8936A" : "#5A4230",
+                        background: isCenter ? "#B8936A" : "#C8BAA4",
                         boxShadow: isCenter ? "0 0 0 3px #2E2418" : "none",
                         transition: "all .28s",
                       }} />
                       <div style={{ flex: 1 }}>
                         <p style={{
                           fontSize: isCenter ? 15 : 13, fontWeight: isCenter ? 700 : 400,
-                          color: isCenter ? "#F5EFE4" : "#4A4035", lineHeight: 1.45, margin: 0,
+                          color: isCenter ? "#1A1410" : "#7A6E5F", lineHeight: 1.45, margin: 0,
                           transition: "all .28s",
                         }}>
                           {item.event}
@@ -396,7 +396,7 @@ export default function Artist() {
                           <span style={{
                             display: "inline-block", marginTop: 4, fontSize: 9, fontWeight: 700,
                             letterSpacing: ".12em", textTransform: "uppercase",
-                            color: "#B8936A", background: "#4A3420", borderRadius: 100, padding: "2px 8px",
+                            color: "#B8936A", background: "#F0E8DA", borderRadius: 100, padding: "2px 8px",
                           }}>
                             {TL_MILESTONES[item.year]}
                           </span>
