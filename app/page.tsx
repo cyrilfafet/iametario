@@ -617,7 +617,7 @@ export default function Artist() {
                     {bookingLoading ? t.booking.form_sending : t.booking.form_submit}
                   </button>
                   <div className="flex items-center gap-3">
-                    <a href="https://drive.google.com/uc?export=download&id=1xowmsJTHkLvqYLHxzJVAOicnJe2BESYH" target="_blank" className="flex items-center gap-1.5 text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
+                    <a href="https://drive.google.com/file/d/1arBCB3lIxc3WMxNI-0ysMbxHshVbkRhB/view?usp=drive_link" target="_blank" className="flex items-center gap-1.5 text-zinc-400 text-xs hover:text-zinc-600 transition-colors">
                       <span>🇫🇷</span> {t.booking.presskit}
                     </a>
                     <span className="text-zinc-200">·</span>
