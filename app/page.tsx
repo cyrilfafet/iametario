@@ -374,19 +374,19 @@ export default function Artist() {
                       <span style={{
                         width: 44, flexShrink: 0, textAlign: "right",
                         fontSize: isCenter ? 13 : 11, fontWeight: 700, letterSpacing: ".08em",
-                        color: isCenter && isMilestone ? "#B8936A" : isCenter ? "#1A1410" : "#A89D8E",
+                        color: isCenter ? "#B8936A" : "#A89D8E",
                         fontVariantNumeric: "tabular-nums", transition: "all .28s",
                       }}>
                         {item.year}
                       </span>
                       <div style={{ width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
-                        background: isCenter ? (isMilestone ? "#B8936A" : "#1A1410") : "#CFC6B8",
-                        boxShadow: isCenter && isMilestone ? "0 0 0 3px #F3E8D4" : "none",
+                        background: isCenter ? "#B8936A" : "#CFC6B8",
+                        boxShadow: isCenter ? "0 0 0 3px #F3E8D4" : "none",
                         transition: "all .28s",
                       }} />
                       <div style={{ flex: 1 }}>
                         <p style={{
-                          fontSize: isCenter ? 15 : 13, fontWeight: isCenter ? (isMilestone ? 700 : 500) : 400,
+                          fontSize: isCenter ? 15 : 13, fontWeight: isCenter ? 700 : 400,
                           color: isCenter ? "#1A1410" : "#857A6E", lineHeight: 1.45, margin: 0,
                           transition: "all .28s",
                         }}>
