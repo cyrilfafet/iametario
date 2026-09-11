@@ -329,7 +329,7 @@ export default function Artist() {
           };
 
           return (
-            <div style={{ width: "100%", maxWidth: 520, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0 28px" }}>
+            <div style={{ width: "100%", maxWidth: 896, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0 28px" }}>
               <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1A1410", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
               <p className="text-xs text-center mb-6" style={{ color: "#9A8E7E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
               <div
