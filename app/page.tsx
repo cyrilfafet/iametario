@@ -351,7 +351,6 @@ export default function Artist() {
                   const scale = 1 - absDist * 0.1;
                   const opacity = 1 - absDist * 0.38;
                   const blur = absDist * 2;
-                  const isMilestone = TL_MILESTONES[item.year] != null;
                   const isCenter = dist === 0;
 
                   return (
@@ -392,15 +391,7 @@ export default function Artist() {
                         }}>
                           {item.event}
                         </p>
-                        {isCenter && isMilestone && TL_MILESTONES[item.year] && (
-                          <span style={{
-                            display: "inline-block", marginTop: 4, fontSize: 9, fontWeight: 700,
-                            letterSpacing: ".12em", textTransform: "uppercase",
-                            color: "#B8936A", background: "#F0E8DA", borderRadius: 100, padding: "2px 8px",
-                          }}>
-                            {TL_MILESTONES[item.year]}
-                          </span>
-                        )}
+
                       </div>
                     </div>
                   );
