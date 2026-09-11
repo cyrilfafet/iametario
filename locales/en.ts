@@ -18,15 +18,48 @@ export const en: Translations = {
   },
   timeline_title: "My Journey",
   timeline: [
-    { year: 2012, event: "I get my first turntables." },
-    { year: 2017, event: "17th out of 18 at my very first DJ competition." },
-    { year: 2018, event: "I win 3 consecutive DJ competitions." },
-    { year: 2019, event: "First residency at Club Beverly in Dijon as DJ and Music Director." },
-    { year: 2021, event: "Full season as resident DJ at Club Med, performing for international audiences every night." },
-    { year: 2023, event: "My Peggy Gou remix surpasses 70,000 plays, airs on ZuTv in Romania, and resonates at the Sunburn Festival in India." },
-    { year: 2024, event: "I start creating content and surpass 500k cumulative views on social media." },
-    { year: 2025, event: "Release of my first original track \"Your Stage\" and a spot on the Amani Ibiza lineup." },
-    { year: 2026, event: "Resident at Bal'tazar, and guest on Fun Radio Bourgogne.", detail: "Interview on Fun Radio Bourgogne" },
+    {
+      period: "2014",
+      title: "The Acceleration",
+      description: "DJ competition win and official clubbing debut — the start of a momentum leading to 1,500+ performances.",
+      bullets: [] as string[],
+    },
+    {
+      period: "2018–2020",
+      title: "Artistic Direction & The Mountain",
+      description: "",
+      bullets: [
+        "Dijon: Residency and Artistic Direction at Beverly.",
+        "Les Arcs 1800: First major winter season residency at Le Carré.",
+      ],
+    },
+    {
+      period: "2021–2023",
+      title: "Export & Big Stages",
+      description: "",
+      bullets: [
+        "Club Med Artist: Integration into the program, residencies at altitude resorts (Peisey-Vallandry, Valmorel).",
+        "Festivals: Performance at Electrosaône alongside Adrien Toma and Sound of Legend.",
+      ],
+    },
+    {
+      period: "2023–2025",
+      title: "Production & International Reach",
+      description: "",
+      bullets: [
+        "Remix & Radio: Peggy Gou remix hits +70k plays, aired on TV/Radio (ZuTv) and played by international DJs.",
+        "Ibiza & Debut Single: First original release \"Your Stage\" and a spot on the Amani Ibiza lineup.",
+        "Key figures: 1,500 sets milestone, 500k+ views on social media.",
+      ],
+    },
+    {
+      period: "2026",
+      title: "Premium Anchoring",
+      description: "",
+      bullets: [
+        "Residency at Bal'tazar (Dijon) and rollout of the Phlegmatic DJ identity on outdoor stages and premium residencies.",
+      ],
+    },
   ],
   booking: {
     label: "Booking",

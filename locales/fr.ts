@@ -16,15 +16,48 @@ export const fr = {
   },
   timeline_title: "Mon Parcours",
   timeline: [
-    { year: 2012, event: "J'achète mes premières platines." },
-    { year: 2017, event: "17ème sur 18 à mon tout premier concours DJ." },
-    { year: 2018, event: "Je remporte 3 concours DJ consécutifs." },
-    { year: 2019, event: "Première résidence au club Beverly à Dijon en tant que DJ et DA." },
-    { year: 2021, event: "Saison comme DJ résident au Club Med, devant des publics internationaux chaque soir." },
-    { year: 2023, event: "Mon remix de Peggy Gou dépasse les 70 000 plays, passe sur ZuTv en Roumanie et résonne au Sunburn Festival en Inde." },
-    { year: 2024, event: "Je crée du contenu et dépasse les 500k vues cumulées sur les réseaux sociaux." },
-    { year: 2025, event: "Sortie de mon premier titre original \"Your Stage\" et présence au line-up de l'Amani à Ibiza." },
-    { year: 2026, event: "Résident au Bal'tazar, et invité sur Fun Radio Bourgogne.", detail: "Interview chez Fun Radio Bourgogne" },
+    {
+      period: "2014",
+      title: "L'Accélération",
+      description: "Victoire en tremplin DJ et débuts officiels en clubbing. Le lancement d'une dynamique qui mène à plus de 1500 performances.",
+      bullets: [] as string[],
+    },
+    {
+      period: "2018–2020",
+      title: "La Direction Artistique & La Montagne",
+      description: "",
+      bullets: [
+        "Dijon : Résidence et Direction Artistique au Beverly.",
+        "Les Arcs 1800 : Première grande saison d'hiver en résidence au Carré.",
+      ],
+    },
+    {
+      period: "2021–2023",
+      title: "L'Export & Les Grandes Scènes",
+      description: "",
+      bullets: [
+        "Club Med Artist : Intégration du programme et résidences en resorts d'altitude (Peisey-Vallandry, Valmorel).",
+        "Festivals : Passage à l'Electrosaône aux côtés d'Adrien Toma et Sound of Legend.",
+      ],
+    },
+    {
+      period: "2023–2025",
+      title: "Production & Rayonnement International",
+      description: "",
+      bullets: [
+        "Remix & Radios : Le remix de Peggy Gou atteint +70k plays, diffusé sur les ondes TV/Radios (ZuTv) et joué par des DJs internationaux.",
+        "Ibiza & Premier Single : Premier release original « Your Stage » et passage sur le line-up Amani à Ibiza.",
+        "Chiffres clés : Cap des 1500 sets franchi, +500k vues sur les réseaux sociaux.",
+      ],
+    },
+    {
+      period: "2026",
+      title: "L'Ancrage Premium",
+      description: "",
+      bullets: [
+        "Résidence au Bal'tazar (Dijon) et déploiement de l'identité Phlegmatic DJ sur les scènes outdoor et résidences haut de gamme.",
+      ],
+    },
   ],
   booking: {
     label: "Booking",
