@@ -224,7 +224,10 @@ export default function Artist() {
       )}
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
+      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative">
+        <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden", borderRadius: 0 }}>
+          <img src="/bannieretest.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 60%", opacity: 0.18 }} />
+        </div>
 
         {/* Images gauche */}
         <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
