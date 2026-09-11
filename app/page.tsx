@@ -200,9 +200,9 @@ export default function Artist() {
           <LangToggle />
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm text-zinc-500">
-          <a href="/" className="text-blue-500">{t.nav.perform}</a>
-          <a href="/services" className="hover:text-indigo-400 transition-colors">{t.nav.create}</a>
-          <a href="/formations" className="hover:text-violet-400 transition-colors">{t.nav.teach}</a>
+          <a href="/" className="font-medium text-zinc-900">{t.nav.perform}</a>
+          <a href="/services" className="hover:text-zinc-900 transition-colors">{t.nav.create}</a>
+          <a href="/formations" className="hover:text-zinc-900 transition-colors">{t.nav.teach}</a>
           <a href="/shop" className="hover:text-zinc-900 transition-colors">{t.nav.shop}</a>
           <a href="/contact" className="hover:text-zinc-600 transition-colors">{t.nav.contact}</a>
         </div>
@@ -514,9 +514,9 @@ export default function Artist() {
                     }}
                     className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
                   >
-                    <div className="h-1 w-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                    <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
                     <div className="px-5 pt-4 pb-3 flex-shrink-0">
-                      <p className="text-xs uppercase tracking-widest mb-1" style={{ color: item.color }}>{item.type}</p>
+                      <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
                       <p className="text-zinc-900 font-semibold text-base truncate">{item.title}</p>
                       <p className="text-zinc-400 text-xs mt-0.5">{item.subtitle}</p>
                     </div>
@@ -532,7 +532,7 @@ export default function Artist() {
               {mediaItems.map((_, i) => (
                 <button key={i} onClick={() => setMediaIndex(i)}
                   className="w-1.5 h-1.5 rounded-full transition-colors"
-                  style={{ backgroundColor: i === mediaIndex ? "#3B82F6" : "#d4d4d8" }}
+                  style={{ backgroundColor: i === mediaIndex ? "#B8936A" : "#d4d4d8" }}
                 />
               ))}
             </div>
