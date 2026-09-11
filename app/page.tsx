@@ -102,6 +102,7 @@ export default function Artist() {
   const [tlPhase, setTlPhase] = useState<"idle"|"exit"|"enter">("idle");
   const tlDir = useRef(1);
   const tlTouchX = useRef(0);
+  const tlPickerRef = useRef<HTMLDivElement>(null);
   const [mediaIndex, setMediaIndex] = useState(0);
   const [vw, setVw] = useState(375);
   const touchStartX = useRef(0);
@@ -122,6 +123,20 @@ export default function Artist() {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = tlPickerRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (tlDir.current === 0) return;
+      tlDir.current = 0;
+      setTlIndex(i => Math.min(Math.max(0, i + (e.deltaY > 0 ? 1 : -1)), 8));
+      setTimeout(() => { tlDir.current = 1; }, 320);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
   const handleBooking = async (e: React.FormEvent) => {
@@ -313,21 +328,13 @@ export default function Artist() {
             setTlIndex(i => Math.min(Math.max(0, i + dir), t.timeline.length - 1));
           };
 
-          const handleWheel = (e: React.WheelEvent) => {
-            e.preventDefault();
-            if (tlDir.current === 0) return;
-            tlDir.current = 0;
-            step(e.deltaY > 0 ? 1 : -1);
-            setTimeout(() => { tlDir.current = 1; }, 320);
-          };
-
           return (
             <div className="w-full max-w-xl mt-14">
               <h2 className="text-2xl font-bold text-zinc-900 text-center mb-2">{t.timeline_title}</h2>
               <p className="text-xs text-center mb-6" style={{ color: "#A89D8E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
               <div
+                ref={tlPickerRef}
                 style={{ position: "relative", height: ITEM_H * (VISIBLE * 2 + 1), overflow: "hidden", cursor: "ns-resize" }}
-                onWheel={handleWheel}
               >
                 {/* Masque dégradé haut/bas */}
                 <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
