@@ -48,9 +48,10 @@ body {
     radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224, 213, 197, 0.25) 0%, transparent 55%),
     linear-gradient(rgba(245, 239, 228, 0.70), rgba(245, 239, 228, 0.70)),
     url(/bannieretest.jpg);
-  background-size: auto, auto, auto, auto, cover;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, cover;
   background-position: 0 0, 0 0, 0 0, 0 0, center 40%;
-  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   color: #1A1410;
   font-family: var(--font-geist-sans), sans-serif;
 }
