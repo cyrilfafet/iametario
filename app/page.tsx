@@ -281,7 +281,7 @@ export default function Artist() {
 
         {/* Photo + Logo */}
         <div className="flex flex-col items-center">
-          <img src="/mainphoto.png" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" />
+          <img src="/mainphotoV2.png" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" />
           <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95 -mt-16 md:-mt-30" />
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F", marginTop: 10, textTransform: "uppercase" }}>
             Phlegmatic DJ &amp; Producer
