@@ -46,7 +46,7 @@ body {
     radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184, 147, 106, 0.10) 0%, transparent 65%),
     radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201, 169, 110, 0.08) 0%, transparent 65%),
     radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224, 213, 197, 0.25) 0%, transparent 55%),
-    linear-gradient(rgba(245, 239, 228, 0.84), rgba(245, 239, 228, 0.84)),
+    linear-gradient(rgba(245, 239, 228, 0.70), rgba(245, 239, 228, 0.70)),
     url(/bannieretest.jpg);
   background-size: auto, auto, auto, auto, cover;
   background-position: 0 0, 0 0, 0 0, 0 0, center 40%;
