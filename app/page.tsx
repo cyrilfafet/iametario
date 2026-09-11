@@ -224,7 +224,7 @@ export default function Artist() {
       )}
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center hero-bg">
+      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
 
         {/* Images gauche */}
         <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
