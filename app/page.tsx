@@ -192,10 +192,6 @@ export default function Artist() {
 
   return (
     <main className="min-h-screen text-zinc-900 flex flex-col [overflow-x:clip]">
-      {/* Background image — fixed, behind everything */}
-      <div aria-hidden style={{ position: "fixed", inset: 0, zIndex: -1, pointerEvents: "none" }}>
-        <img src="/bannieretest.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%", opacity: 0.12 }} />
-      </div>
 
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
