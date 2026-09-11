@@ -470,6 +470,10 @@ export default function Artist() {
             content: (active: boolean) => <YouTubeCard videoId="i67MKS6Vnz4" active={active} />,
           },
           {
+            type: "Vidéo", color: "#818cf8", title: "Mix House @Mimi Dole", subtitle: "2025",
+            content: (active: boolean) => <YouTubeCard videoId="Y4scDZipvCU" active={active} />,
+          },
+          {
             type: "Vidéo", color: "#a78bfa", title: "E-Tario @ Almanach Festival", subtitle: "Set Live",
             content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/extrait-pjanoo-linkin.mp4" active={active} />,
           },
