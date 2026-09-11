@@ -322,92 +322,106 @@ export default function Artist() {
 
         {/* Timeline — picker scroll */}
         {(() => {
-          const ITEM_H = 56;
-          const VISIBLE = 1;
+          // Centre = item expanded (period + title + content), sides = compact single line
+          const SIDE_H = 44;
+          const CENTER_H = 180;
+          const TOTAL_H = SIDE_H + CENTER_H + SIDE_H;
           const MAX_IDX = t.timeline.length - 1;
           const step = (dir: number) => {
             setTlIndex(i => Math.min(Math.max(0, i + dir), MAX_IDX));
           };
-          const current = t.timeline[tlIndex] as { period: string; title: string; description: string; bullets: string[] };
+
+          type TLItem = { period: string; title: string; description: string; bullets: string[] };
+          const items = t.timeline as TLItem[];
 
           return (
-            <div style={{ width: "100%", maxWidth: 896, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 32px 32px" }}>
+            <div style={{ width: "100%", maxWidth: 896, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0" }}>
               <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1A1410", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
-              <p className="text-xs text-center mb-5" style={{ color: "#9A8E7E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
+              <p style={{ fontSize: 11, textAlign: "center", marginBottom: 20, color: "#9A8E7E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
 
-              {/* Picker */}
               <div
                 ref={tlPickerRef}
-                style={{ position: "relative", height: ITEM_H * (VISIBLE * 2 + 1), overflow: "hidden", cursor: "ns-resize" }}
+                style={{ position: "relative", height: TOTAL_H, overflow: "hidden", cursor: "ns-resize" }}
               >
-                <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
-                  background: "linear-gradient(to bottom, #DDD0BE 0%, transparent 30%, transparent 70%, #DDD0BE 100%)" }} />
-                <div style={{ position: "absolute", left: 0, right: 0, top: "50%", marginTop: -ITEM_H / 2,
-                  height: ITEM_H, borderTop: "1px solid #C8BAA4", borderBottom: "1px solid #C8BAA4", zIndex: 0 }} />
+                {/* masques haut/bas */}
+                <div style={{ position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none",
+                  background: `linear-gradient(to bottom, #DDD0BE 0%, transparent ${SIDE_H}px, transparent ${SIDE_H + CENTER_H}px, #DDD0BE 100%)` }} />
 
-                {(t.timeline as { period: string; title: string }[]).map((item, i) => {
+                {/* lignes encadrant le centre */}
+                <div style={{ position: "absolute", left: 32, right: 32, top: SIDE_H, height: 1, background: "#C8BAA4", zIndex: 1 }} />
+                <div style={{ position: "absolute", left: 32, right: 32, top: SIDE_H + CENTER_H, height: 1, background: "#C8BAA4", zIndex: 1 }} />
+
+                {items.map((item, i) => {
                   const dist = i - tlIndex;
-                  if (Math.abs(dist) > VISIBLE + 0.5) return null;
-                  const absDist = Math.abs(dist);
+                  if (Math.abs(dist) > 1.5) return null;
                   const isCenter = dist === 0;
+                  const offsetY = dist === 0 ? SIDE_H
+                               : dist === -1 ? 0
+                               : SIDE_H + CENTER_H;
+
                   return (
                     <div
                       key={item.period}
-                      onClick={() => step(dist)}
+                      onClick={() => !isCenter && step(dist)}
                       style={{
-                        position: "absolute", left: 0, right: 0, top: "50%",
-                        transform: `translateY(calc(-50% + ${dist * ITEM_H}px)) scale(${1 - absDist * 0.08})`,
-                        opacity: 1 - absDist * 0.45,
-                        filter: absDist > 0 ? `blur(${absDist * 1.5}px)` : "none",
-                        transition: "all 0.28s cubic-bezier(.4,0,.2,1)",
-                        display: "flex", alignItems: "center", gap: 14,
+                        position: "absolute", left: 0, right: 0,
+                        top: offsetY,
+                        height: isCenter ? CENTER_H : SIDE_H,
+                        opacity: isCenter ? 1 : 0.4,
+                        filter: isCenter ? "none" : "blur(1px)",
+                        transition: "all 0.3s cubic-bezier(.4,0,.2,1)",
                         cursor: isCenter ? "default" : "pointer",
-                        zIndex: 10 - absDist,
+                        display: "flex",
+                        alignItems: isCenter ? "flex-start" : "center",
+                        gap: 14,
+                        padding: isCenter ? "18px 32px" : "0 32px",
+                        zIndex: isCenter ? 2 : 1,
                       }}
                     >
-                      <span style={{
-                        width: 64, flexShrink: 0, textAlign: "right",
-                        fontSize: isCenter ? 13 : 11, fontWeight: 700, letterSpacing: ".06em",
-                        color: isCenter ? "#B8936A" : "#7A6E5F",
-                        fontVariantNumeric: "tabular-nums", transition: "all .28s",
-                        whiteSpace: "nowrap",
-                      }}>
-                        {item.period}
-                      </span>
-                      <div style={{ width: 5, height: 5, borderRadius: "50%", flexShrink: 0,
-                        background: isCenter ? "#B8936A" : "#C8BAA4",
-                        boxShadow: isCenter ? "0 0 0 3px #EFE6D4" : "none",
-                        transition: "all .28s",
-                      }} />
-                      <span style={{
-                        fontSize: isCenter ? 15 : 13, fontWeight: isCenter ? 700 : 400,
-                        color: isCenter ? "#1A1410" : "#7A6E5F",
-                        transition: "all .28s", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-                      }}>
-                        {item.title}
-                      </span>
+                      {isCenter ? (
+                        /* Item centré : hiérarchie complète */
+                        <div key={tlIndex} style={{ width: "100%", animation: "tlFadeIn .25s ease" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".1em", color: "#B8936A", whiteSpace: "nowrap" }}>
+                              {item.period}
+                            </span>
+                            <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#B8936A", flexShrink: 0 }} />
+                            <span style={{ fontSize: 16, fontWeight: 700, color: "#1A1410" }}>{item.title}</span>
+                          </div>
+                          {item.description ? (
+                            <p style={{ fontSize: 13, color: "#4A3A2A", lineHeight: 1.7, margin: 0 }}>{item.description}</p>
+                          ) : (
+                            <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+                              {item.bullets.map((b, j) => {
+                                const [label, ...rest] = b.split(" : ");
+                                const hasLabel = rest.length > 0;
+                                return (
+                                  <li key={j} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                                    <span style={{ color: "#B8936A", flexShrink: 0, marginTop: 3, fontSize: 8 }}>◆</span>
+                                    <span style={{ fontSize: 13, color: "#4A3A2A", lineHeight: 1.65 }}>
+                                      {hasLabel ? <><strong style={{ color: "#1A1410" }}>{label}</strong>{" : "}{rest.join(" : ")}</> : b}
+                                    </span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </div>
+                      ) : (
+                        /* Item voisin : période + titre sur une ligne */
+                        <>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: "#7A6E5F", letterSpacing: ".06em", whiteSpace: "nowrap" }}>
+                            {item.period}
+                          </span>
+                          <div style={{ width: 3, height: 3, borderRadius: "50%", background: "#C8BAA4", flexShrink: 0 }} />
+                          <span style={{ fontSize: 13, color: "#7A6E5F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                            {item.title}
+                          </span>
+                        </>
+                      )}
                     </div>
                   );
                 })}
-              </div>
-
-              {/* Détail de l'item centré */}
-              <div key={tlIndex} style={{
-                marginTop: 20, paddingTop: 20, borderTop: "1px solid #C8BAA4",
-                animation: "tlFadeIn .3s ease",
-              }}>
-                {current.description ? (
-                  <p style={{ fontSize: 14, color: "#3A2E22", lineHeight: 1.65, margin: 0 }}>{current.description}</p>
-                ) : (
-                  <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-                    {current.bullets.map((b, i) => (
-                      <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                        <span style={{ color: "#B8936A", flexShrink: 0, marginTop: 2, fontSize: 10 }}>◆</span>
-                        <span style={{ fontSize: 14, color: "#3A2E22", lineHeight: 1.65 }}>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             </div>
           );
