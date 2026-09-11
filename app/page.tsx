@@ -322,14 +322,14 @@ export default function Artist() {
 
         {/* Timeline — picker scroll */}
         {(() => {
-          const ITEM_H = 72;
-          const VISIBLE = 2; // items visibles de chaque côté
+          const ITEM_H = 64;
+          const VISIBLE = 1; // items visibles de chaque côté
           const step = (dir: number) => {
             setTlIndex(i => Math.min(Math.max(0, i + dir), t.timeline.length - 1));
           };
 
           return (
-            <div style={{ width: "100%", marginTop: 56, background: "#3D2B18", borderRadius: 20, padding: "40px 0 40px" }}>
+            <div style={{ width: "100%", maxWidth: 520, margin: "56px auto 0", background: "#3D2B18", borderRadius: 16, padding: "28px 0 28px" }}>
               <h2 style={{ fontSize: 22, fontWeight: 700, color: "#F5EFE4", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
               <p className="text-xs text-center mb-6" style={{ color: "#7A6D5F", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
               <div
