@@ -5,8 +5,8 @@ html {
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F5EFE4;
+  --foreground: #1A1410;
 }
 
 @theme inline {
@@ -14,16 +14,40 @@ html {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Accent cuivré/or — remplace le bleu partout */
+  --color-blue-50:  #FBF6EE;
+  --color-blue-100: #F3E8D4;
+  --color-blue-200: #E8D4B4;
+  --color-blue-300: #D9BB8E;
+  --color-blue-400: #C9A96E;
+  --color-blue-500: #B8936A;
+  --color-blue-600: #A07850;
+  --color-blue-700: #85603A;
+  --color-blue-800: #6B4C2C;
+  --color-blue-900: #503820;
+
+  /* Zinc légèrement chaud */
+  --color-zinc-50:  #FAF8F5;
+  --color-zinc-100: #F2EDE5;
+  --color-zinc-200: #E4DDD1;
+  --color-zinc-300: #CFC6B8;
+  --color-zinc-400: #A89D8E;
+  --color-zinc-500: #857A6E;
+  --color-zinc-600: #655C52;
+  --color-zinc-700: #4A4239;
+  --color-zinc-800: #332D26;
+  --color-zinc-900: #1A1410;
 }
 
 body {
-  background-color: #ffffff;
+  background-color: #F5EFE4;
   background-image:
-    radial-gradient(ellipse 90% 80% at 10% 15%, rgba(99, 179, 237, 0.13) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 90% at 90% 80%, rgba(167, 139, 250, 0.11) 0%, transparent 65%),
-    radial-gradient(ellipse 100% 70% at 50% 110%, rgba(209, 213, 219, 0.2) 0%, transparent 55%);
+    radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184, 147, 106, 0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201, 169, 110, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224, 213, 197, 0.25) 0%, transparent 55%);
   background-attachment: fixed;
-  color: #171717;
+  color: #1A1410;
   font-family: var(--font-geist-sans), sans-serif;
 }
 
@@ -35,4 +59,3 @@ nav a {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-

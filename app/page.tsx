@@ -59,7 +59,7 @@ function VideoCard({ src, active, objectPosition = "center" }: { src: string; ac
       </video>
       <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${paused ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         style={{ background: "rgba(0,0,0,0.25)" }}>
-        <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow">
+        <div className="w-10 h-10 rounded-full bg-zinc-50/90 flex items-center justify-center shadow">
           <span className="w-0 h-0 border-t-[6px] border-b-[6px] border-l-[11px] border-transparent border-l-zinc-800 ml-1" />
         </div>
       </div>
@@ -179,7 +179,7 @@ export default function Artist() {
     <main className="min-h-screen text-zinc-900 flex flex-col [overflow-x:clip]">
 
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
+      <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
         <div className="flex items-center gap-3">
           <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
           <LangToggle />
@@ -443,11 +443,11 @@ export default function Artist() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
-                  className="w-10 h-10 rounded-full border border-zinc-200 bg-white flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
+                  className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
                 >‹</button>
                 <button
                   onClick={() => setMediaIndex(i => (i + 1) % mediaItems.length)}
-                  className="w-10 h-10 rounded-full border border-zinc-200 bg-white flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
+                  className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
                 >›</button>
               </div>
             </div>
@@ -559,7 +559,7 @@ export default function Artist() {
                   value={bookingNom}
                   onChange={e => setBookingNom(e.target.value)}
                   required
-                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-white"
+                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-zinc-50"
                 />
                 <input
                   type="email"
@@ -567,14 +567,14 @@ export default function Artist() {
                   value={bookingEmail}
                   onChange={e => setBookingEmail(e.target.value)}
                   required
-                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-white"
+                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-zinc-50"
                 />
                 <input
                   type="text"
                   placeholder={t.booking.form_date}
                   value={bookingDate}
                   onChange={e => setBookingDate(e.target.value)}
-                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-white"
+                  className="border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors bg-zinc-50"
                 />
                 <textarea
                   placeholder={t.booking.form_message}
@@ -582,7 +582,7 @@ export default function Artist() {
                   onChange={e => setBookingMessage(e.target.value)}
                   rows={5}
                   required
-                  className="border border-zinc-200 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors resize-none bg-white"
+                  className="border border-zinc-200 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-400 transition-colors resize-none bg-zinc-50"
                 />
                 <div className="flex flex-col items-start gap-3 mt-6">
                   <button

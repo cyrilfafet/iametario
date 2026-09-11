@@ -149,7 +149,7 @@ function CreationInner() {
   return (
     <main className="min-h-screen text-zinc-900">
 
-    <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100/60">
+    <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
   <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
   <div className="hidden md:flex gap-8 text-sm text-zinc-500">
     <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
@@ -438,7 +438,7 @@ function CreationInner() {
                     onKeyDown={e => e.key === "Enter" && sendChatMessage()}
                     placeholder="Votre réponse…"
                     disabled={chatLoading}
-                    className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors disabled:opacity-50"
+                    className="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors disabled:opacity-50"
                   />
                   <button
                     onClick={sendChatMessage}
@@ -490,7 +490,7 @@ function CreationInner() {
         required
         value={nom}
         onChange={e => setNom(e.target.value)}
-        className="bg-white border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
+        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
       />
       <input
         name="email"
@@ -499,7 +499,7 @@ function CreationInner() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="bg-white border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
+        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
       />
       <textarea
         name="description"
@@ -508,7 +508,7 @@ function CreationInner() {
         required
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="bg-white border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors resize-none"
+        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors resize-none"
       />
       <div className="border border-zinc-200 px-5 py-4">
         <input
