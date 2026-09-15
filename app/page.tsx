@@ -103,6 +103,7 @@ export default function Artist() {
   const tlDir = useRef(1);
   const tlTouchX = useRef(0);
   const tlPickerRef = useRef<HTMLDivElement>(null);
+  const bioRef = useRef<HTMLParagraphElement>(null);
   const [mediaIndex, setMediaIndex] = useState(0);
   const [vw, setVw] = useState(375);
   const touchStartX = useRef(0);
@@ -137,6 +138,16 @@ export default function Artist() {
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  useEffect(() => {
+    const el = bioRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; obs.disconnect(); }
+    }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   const handleBooking = async (e: React.FormEvent) => {
@@ -280,7 +291,7 @@ export default function Artist() {
         </div>
 
         {/* Photo + Logo */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center" style={{ willChange: "transform", transform: `translateY(${scrollY * 0.12}px)` }}>
           <img src="/mainphotov3.png" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" />
           <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95 -mt-16 md:-mt-30" />
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F", marginTop: 10, textTransform: "uppercase" }}>
@@ -311,7 +322,7 @@ export default function Artist() {
         </div>
 
         {/* Bio */}
-        <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-4xl mt-6 md:mt-8 text-center">
+        <p ref={bioRef} className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-4xl mt-6 md:mt-8 text-center" style={{ opacity: 0, transform: "translateY(32px)", transition: "opacity 0.9s ease, transform 0.9s ease" }}>
           <span style={{color: '#111111', fontSize: '1.25rem', fontWeight: 800}}>Une décennie d'expérience, plus de 1500 sets.</span>
           <br /><br />
           <span dangerouslySetInnerHTML={{__html: t.bio.p1}} />
@@ -340,7 +351,11 @@ export default function Artist() {
           const thumbPct = MAX_IDX > 0 ? (tlIndex / MAX_IDX) * 100 : 0;
 
           return (
-            <div style={{ width: "100%", maxWidth: 896, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0" }}>
+            <div
+              style={{ width: "100%", maxWidth: 896, margin: "56px auto 0", background: "#DDD0BE", borderRadius: 16, padding: "28px 0" }}
+              ref={(el) => { if (el) { const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { (el as HTMLElement).style.opacity="1"; (el as HTMLElement).style.transform="translateY(0)"; obs.disconnect(); }}, {threshold:0.1}); obs.observe(el); } }}
+              className="reveal-block"
+            >
               <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1A1410", textAlign: "center", marginBottom: 6, letterSpacing: ".04em" }}>{t.timeline_title}</h2>
               <p style={{ fontSize: 11, textAlign: "center", marginBottom: 20, color: "#9A8E7E", letterSpacing: ".1em" }}>↑ ↓ défiler</p>
 
@@ -563,7 +578,10 @@ export default function Artist() {
       })()}
 
       {/* Booking */}
-      <section className="px-6 py-12 md:py-24 max-w-4xl mx-auto w-full">
+      <section
+        className="px-6 py-12 md:py-24 max-w-4xl mx-auto w-full reveal-block"
+        ref={(el) => { if (el) { const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { (el as HTMLElement).style.opacity="1"; (el as HTMLElement).style.transform="translateY(0)"; obs.disconnect(); }}, {threshold:0.05}); obs.observe(el); } }}
+      >
         <div className="border-t border-zinc-200 pt-16">
 
           <div className="text-center mb-14">

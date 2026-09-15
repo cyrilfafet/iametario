@@ -51,7 +51,7 @@ body {
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 50vh, 100% 50vh;
   background-position: 0 0, 0 0, 0 0, center top, center top;
   background-repeat: no-repeat;
-  background-attachment: scroll;
+  background-attachment: scroll, scroll, scroll, scroll, fixed;
   color: #1A1410;
   font-family: var(--font-geist-sans), sans-serif;
 }
@@ -63,6 +63,12 @@ nav a {
 @keyframes ticker {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+
+.reveal-block {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
 }
 
 @keyframes tlFadeIn {
