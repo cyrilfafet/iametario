@@ -18,6 +18,14 @@ const demos = [
     tag: "Intro Festival",
     price: "69€",
   },
+  {
+    client: "Camille D.",
+    brief: "Bonjour ! Je suis témoin de mariage, on prépare une chorée surprise pour la mariée avec les autres témoins. Il nous faudrait un montage 3 titres : Women de Doja Cat à partir de 0:38, ensuite Jatti De Nain de Millind Gaba à partir de 1:01 avec une transition fluide, et pour finir le show Shakira & JLo Super Bowl 2020 entre 4:34 et 5:52. Pour la fin, carte blanche si t'arrives à faire quelque chose de naturel !",
+    title: "Women × Jatti × Shakira — Wedding Mix",
+    file: "",
+    tag: "Chorée Mariage",
+    price: "80€",
+  },
 ];
 
 export default function Creation() {
@@ -131,11 +139,12 @@ export default function Creation() {
                 </div>
                 {/* Lecteur audio */}
                 <div className="ml-11 flex items-center gap-4">
-                  <div className="flex-1 border border-zinc-800 rounded-2xl px-5 py-4 hover:border-blue-400 transition-colors">
+                  <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-800 hover:border-blue-400" : "border-zinc-900 opacity-60"}`}>
                     <div className="flex items-center gap-4 mb-3">
                       <button
-                        onClick={() => togglePlay(index)}
-                        className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center hover:border-blue-400 transition-colors flex-shrink-0"
+                        onClick={() => demo.file && togglePlay(index)}
+                        disabled={!demo.file}
+                        className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center hover:border-blue-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {playing === index ? (
                           <span className="w-3 h-3 flex gap-0.5">
