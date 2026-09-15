@@ -308,13 +308,12 @@ export default function Artist() {
           <img src="/soireeibiza1.png" className="w-80 grayscale -mt-30 -mr-0" style={sideStyle(45, 20, -6)} />
         </div>
 
-        {/* Photo — shrinks and fades in phase 1 */}
+        {/* Photo — reste fixe, disparaît en fondu (effet parallaxe) */}
         <img src="/mainphotov3.png" alt="E-Tario" className="w-36 md:w-130" style={{
           position: "absolute", left: "50%", top: "50%",
-          transform: `translate(-50%, calc(-50% - 4rem)) scale(${1 - p1 * 0.45})`,
-          transformOrigin: "center center",
+          transform: "translate(-50%, calc(-50% - 4rem))",
           opacity: Math.max(0, 1 - p1 * 2),
-          transition: "none", willChange: "transform", zIndex: 2,
+          transition: "none", zIndex: 2,
         }} />
 
         {/* Logo — SVG viewBox zoom into A (phase 2). No CSS scale = perfectly sharp. */}
@@ -328,8 +327,9 @@ export default function Artist() {
           // viewBox at p2=1: zoomed 70× into A center
           const vbWE = vbWS / 70;
           const vbHE = vbHS / 70;
-          const vbW = vbWS + (vbWE - vbWS) * p2;
-          const vbH = vbHS + (vbHE - vbHS) * p2;
+          // Zoom exponentiel : vitesse perçue constante (chaque % de scroll = même facteur)
+          const vbW = vbWS * Math.pow(vbWE / vbWS, p2);
+          const vbH = vbHS * Math.pow(vbHE / vbHS, p2);
           // A center in SVG space, with vertical offset matching original position
           const aCX = 1499;
           const aCY = 1464;
