@@ -223,7 +223,7 @@ export default function Artist() {
       {/* Navigation */}
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
         <div className="flex items-center gap-3">
-          <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
+          <a href="/"><img src="/logo-etario.svg" alt="E-Tario" className="h-4 md:h-6" /></a>
           <LangToggle />
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm text-zinc-500">
@@ -317,13 +317,13 @@ export default function Artist() {
         }} />
 
         {/* Logo — zooms into A in phase 2, fades in phase 3 */}
-        <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95" style={{
+        <img src="/logo-etario.svg" alt="E-Tario" className="w-56 md:w-95" style={{
           position: "absolute",
-          left: "calc(50% - 12.35rem)",
+          left: "calc(50% - 11.875rem)",
           top: "calc(50% + 3.5rem)",
           display: "block",
           transform: `scale(${1 + p2 * 70})`,
-          transformOrigin: "52% 50%",
+          transformOrigin: "50% 50%",
           opacity: Math.max(0, 1 - p3),
           transition: "none", willChange: "transform", zIndex: 3,
         }} />
