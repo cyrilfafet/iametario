@@ -96,7 +96,8 @@ function YouTubeCard({ videoId, active }: { videoId: string; active: boolean }) 
 export default function Artist() {
   const { t, lang, setLang } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
+  const [heroProgress, setHeroProgress] = useState(0);
+  const heroRef = useRef<HTMLElement>(null);
   const [tlIndex, setTlIndex] = useState(0);
   const [tlShown, setTlShown] = useState(8);
   const [tlPhase, setTlPhase] = useState<"idle"|"exit"|"enter">("idle");
@@ -120,8 +121,16 @@ export default function Artist() {
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
+    const onScroll = () => {
+      const el = heroRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const scrolled = -rect.top;
+      const total = rect.height - window.innerHeight;
+      setHeroProgress(Math.max(0, Math.min(1, scrolled / total)));
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -172,16 +181,34 @@ export default function Artist() {
     }, 210);
   };
 
-  const progress = Math.min(1, scrollY / 350);
-  const opacity = 0.5 * (1 - progress);
-  const blur = `grayscale(1) blur(${progress * 10}px)`;
+  // Phase 1 (0→30%): photo shrinks/rises, sides start fading
+  const p1 = Math.min(1, heroProgress / 0.30);
+  // Phase 2 (30→70%): logo zooms into A, sides fully gone
+  const p2 = Math.min(1, Math.max(0, (heroProgress - 0.30) / 0.40));
+  // Phase 3 (70→100%): bio typewriter, logo fades
+  const p3 = Math.min(1, Math.max(0, (heroProgress - 0.70) / 0.30));
 
-  const imgStyle = (x: number, y: number, rot: number) => ({
-    transform: `translateX(${progress * x}px) translateY(${progress * y}px) rotate(${progress * rot}deg)`,
-    opacity,
-    filter: blur,
+  const sidesOp = 0.5 * Math.max(0, 1 - p1 * 0.6 - p2);
+  const sideStyle = (x: number, y: number, rot: number) => ({
+    transform: `translateX(${p1 * x}px) translateY(${p1 * y}px) rotate(${p1 * rot}deg)`,
+    opacity: sidesOp,
+    filter: `grayscale(1) blur(${p1 * 3}px)`,
     transition: "none",
   });
+
+  const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "");
+  const bioText = [
+    "Une décennie d'expérience, plus de 1500 sets.",
+    "",
+    stripHtml(t.bio.p1),
+    "",
+    stripHtml(t.bio.p2),
+    "",
+    stripHtml(t.bio.p3),
+    "",
+    stripHtml(t.bio.p4),
+  ].join("\n");
+  const bioDisplayed = bioText.slice(0, Math.floor(p3 * bioText.length));
 
   const LangToggle = () => (
     <div className="flex items-center gap-2">
@@ -223,17 +250,18 @@ export default function Artist() {
         </div>
       )}
 
-      {/* Hero */}
-      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
+      {/* Hero — scroll storytelling, 400vh */}
+      <section ref={heroRef} style={{ height: "400vh", position: "relative" }}>
+        <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
 
         {/* Images gauche */}
         <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
-          <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" style={imgStyle(-55, -20, -4)} />
-          <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" style={imgStyle(-90, 15, 6)} />
+          <img src="/clubmed.png" className="w-107 grayscale -mt-30 -ml-20" style={sideStyle(-55, -20, -4)} />
+          <img src="/color_dole.png" className="w-80 grayscale -mt-10 -ml-74" style={sideStyle(-90, 15, 6)} />
           <div
             className="w-80 h-80 -mt-10 -ml-19 flex-shrink-0"
             style={{
-              ...imgStyle(-65, -10, -8),
+              ...sideStyle(-65, -10, -8),
               WebkitMaskImage: "url('/baltazar.png')",
               maskImage: "url('/baltazar.png')",
               WebkitMaskSize: "100% 100%",
@@ -258,7 +286,7 @@ export default function Artist() {
           <div
             className="w-88 h-88 -mt-25 -mr-18 flex-shrink-0"
             style={{
-              ...imgStyle(70, -15, 5),
+              ...sideStyle(70, -15, 5),
               WebkitMaskImage: "url('/montagne.png')",
               maskImage: "url('/montagne.png')",
               WebkitMaskSize: "100% 100%",
@@ -276,20 +304,56 @@ export default function Artist() {
               className="w-full h-full object-cover"
             />
           </div>
-          <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" style={imgStyle(45, 20, -6)} />
+          <img src="/soireeibiza1.png" className="w-80 grayscale -mt-30 -mr-0" style={sideStyle(45, 20, -6)} />
         </div>
 
-        {/* Photo + Logo */}
-        <div className="flex flex-col items-center">
-          <img src="/mainphotov3.png" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" />
-          <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95 -mt-16 md:-mt-30" />
-          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F", marginTop: 10, textTransform: "uppercase" }}>
-            Phlegmatic DJ &amp; Producer
-          </p>
-        </div>
+        {/* Photo — shrinks and fades in phase 1 */}
+        <img src="/mainphotov3.png" alt="E-Tario" className="w-36 md:w-130" style={{
+          position: "absolute", left: "50%", top: "50%",
+          transform: `translate(-50%, calc(-50% - 4rem)) scale(${1 - p1 * 0.45})`,
+          transformOrigin: "center center",
+          opacity: Math.max(0, 1 - p1 * 2),
+          transition: "none", willChange: "transform", zIndex: 2,
+        }} />
 
-        {/* Réseaux + Booking */}
-        <div className="flex flex-col items-center gap-4 mt-6 md:flex-row md:gap-8 md:mt-8">
+        {/* Logo — zooms into A in phase 2, fades in phase 3 */}
+        <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95" style={{
+          position: "absolute",
+          left: "calc(50% - 12.35rem)",
+          top: "calc(50% + 3.5rem)",
+          display: "block",
+          transform: `scale(${1 + p2 * 70})`,
+          transformOrigin: "52% 50%",
+          opacity: Math.max(0, 1 - p3),
+          transition: "none", willChange: "transform", zIndex: 3,
+        }} />
+
+        {/* Tagline */}
+        <p style={{
+          position: "absolute", left: "50%", top: "calc(50% + 8rem)",
+          transform: "translateX(-50%)",
+          fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F",
+          textTransform: "uppercase", whiteSpace: "nowrap",
+          opacity: Math.max(0, 1 - p1 * 3), zIndex: 4,
+        }}>Phlegmatic DJ &amp; Producer</p>
+
+        {/* Bio typewriter — phase 3 */}
+        {p3 > 0 && (
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "min(680px, calc(100vw - 48px))",
+            opacity: p3, zIndex: 10, padding: "0 24px", textAlign: "center",
+          }}>
+            <p style={{ color: "#1A1410", fontSize: "clamp(0.8rem, 1.5vw, 0.92rem)", lineHeight: 1.9, whiteSpace: "pre-line" }}>
+              {bioDisplayed}{p3 < 1 && <span className="bio-cursor" />}
+            </p>
+          </div>
+        )}
+
+        {/* Réseaux + Booking — fades in phase 1 */}
+        <div style={{ position: "absolute", bottom: "6vh", left: "50%", transform: "translateX(-50%)", opacity: Math.max(0, 1 - p1 * 3), zIndex: 5, pointerEvents: p1 > 0.3 ? "none" : "auto" }}
+          className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
           <div className="flex gap-6 items-center flex-wrap justify-center">
             <a href="https://www.instagram.com/etario_music" target="_blank" className="text-zinc-500 hover:text-zinc-900 transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -308,22 +372,12 @@ export default function Artist() {
           <a href="#booking-form" onClick={() => setMenuOpen(false)} className="bg-blue-500 text-white px-5 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors">
             {t.booking_btn}
           </a>
-        </div>
+        </div>{/* end social */}
 
-        {/* Bio */}
-        <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-4xl mt-6 md:mt-8 text-center">
-          <span style={{color: '#111111', fontSize: '1.25rem', fontWeight: 800}}>Une décennie d'expérience, plus de 1500 sets.</span>
-          <br /><br />
-          <span dangerouslySetInnerHTML={{__html: t.bio.p1}} />
-          <br /><br />
-          <span dangerouslySetInnerHTML={{__html: t.bio.p2}} />
-          <br /><br />
-          <span dangerouslySetInnerHTML={{__html: t.bio.p3}} />
-          <br /><br />
-          <span dangerouslySetInnerHTML={{__html: t.bio.p4}} />
-        </p>
+        </div>{/* end sticky inner */}
+      </section>{/* end 400vh hero */}
 
-        {/* Timeline — picker scroll */}
+      {/* Timeline — picker scroll */}
         {(() => {
           // Centre = item expanded (period + title + content), sides = compact single line
           const SIDE_H = 44;
@@ -447,8 +501,6 @@ export default function Artist() {
             </div>
           );
         })()}
-
-      </section>
 
       {/* Médias */}
       {(() => {
