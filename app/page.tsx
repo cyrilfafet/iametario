@@ -182,10 +182,10 @@ export default function Artist() {
     }, 210);
   };
 
-  // Phase 1 (0→15%): photo shrinks/rises, sides start fading
-  const p1 = Math.min(1, heroProgress / 0.15);
-  // Phase 2 (15→70%): logo zooms into A, sides fully gone
-  const p2 = Math.min(1, Math.max(0, (heroProgress - 0.15) / 0.55));
+  // Phase 1 (0→10%): photo shrinks/rises, sides start fading
+  const p1 = Math.min(1, heroProgress / 0.10);
+  // Phase 2 (0→70%): logo zooms into A dès le premier scroll
+  const p2 = Math.min(1, Math.max(0, heroProgress / 0.70));
   // Phase 3 (70→100%): bio typewriter, logo fades
   const p3 = Math.min(1, Math.max(0, (heroProgress - 0.70) / 0.30));
 
