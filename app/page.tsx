@@ -1,4 +1,37 @@
+"use client";
+import { useEffect, useRef } from "react";
+
 export default function Artist() {
+  const leftImgRef = useRef<HTMLDivElement>(null);
+  const rightImgRef = useRef<HTMLDivElement>(null);
+  const heroPhotoRef = useRef<HTMLDivElement>(null);
+  const bioRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (leftImgRef.current)  leftImgRef.current.style.transform  = `translateY(${y * 0.18}px)`;
+        if (rightImgRef.current) rightImgRef.current.style.transform = `translateY(${y * -0.12}px)`;
+        if (heroPhotoRef.current) heroPhotoRef.current.style.transform = `translateY(${y * 0.08}px)`;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, []);
+
+  useEffect(() => {
+    const el = bioRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; obs.disconnect(); }
+    }, { threshold: 0.15 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
 
@@ -17,19 +50,19 @@ export default function Artist() {
 <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
   
   {/* Images gauche */}
-<div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
+<div ref={leftImgRef} className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none" style={{ willChange: "transform" }}>
   <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" />
   <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" />
   <img src="/baltazar.png" className="w-80 grayscale opacity-50 -mt-10 -ml-19" />
 </div>
 
 {/* Images droite */}
-<div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
+<div ref={rightImgRef} className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none" style={{ willChange: "transform" }}>
   <img src="/montagne.png" className="w-88 grayscale opacity-50 -mt-25 -mr-18" />
   <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" />
 </div>
   {/* Photo + Logo - centre */}
-<div className="flex flex-col items-center">
+<div ref={heroPhotoRef} className="flex flex-col items-center" style={{ willChange: "transform" }}>
   <img src="/mainphoto.png" alt="E-Tario" className="w-50 md:w-130 -mt-20" />
   <img src="/Logo_2k26v2.png" alt="E-Tario" className="w-85 md:w-95 -mt-30" />
 </div>
@@ -56,7 +89,7 @@ export default function Artist() {
 </a>
 </div>
 
-  <p className="text-zinc-400 text-base leading-relaxed max-w-4xl mt-8 text-center">
+  <p ref={bioRef} className="text-zinc-400 text-base leading-relaxed max-w-4xl mt-8 text-center" style={{ opacity: 0, transform: "translateY(28px)", transition: "opacity 0.8s ease, transform 0.8s ease" }}>
     <span style={{color: 'white', fontSize: '1.25rem', fontWeight: 800}}>1500 scènes. Une décennie de vibrations.</span>
     <br /><br />
     Depuis <strong style={{color: 'white', fontWeight: 700}}>2014</strong>, j'ai parcouru plus de 1500 scènes — des clubs français aux festivals, d'Ibiza aux hôtels de renom, en passant par les saisons en montagne. Ce parcours, forgé sur le terrain, a défini mon ADN musical : un mix dynamique entre House, Electro et French Touch.
