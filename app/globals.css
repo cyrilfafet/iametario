@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F5EFE4;
+  --foreground: #1A1410;
 }
 
 @theme inline {
@@ -10,17 +14,65 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Accent cuivré/or — remplace le bleu partout */
+  --color-blue-50:  #FBF6EE;
+  --color-blue-100: #F3E8D4;
+  --color-blue-200: #E8D4B4;
+  --color-blue-300: #D9BB8E;
+  --color-blue-400: #C9A96E;
+  --color-blue-500: #B8936A;
+  --color-blue-600: #A07850;
+  --color-blue-700: #85603A;
+  --color-blue-800: #6B4C2C;
+  --color-blue-900: #503820;
+
+  /* Zinc légèrement chaud */
+  --color-zinc-50:  #FAF8F5;
+  --color-zinc-100: #F2EDE5;
+  --color-zinc-200: #E4DDD1;
+  --color-zinc-300: #CFC6B8;
+  --color-zinc-400: #A89D8E;
+  --color-zinc-500: #857A6E;
+  --color-zinc-600: #655C52;
+  --color-zinc-700: #4A4239;
+  --color-zinc-800: #332D26;
+  --color-zinc-900: #1A1410;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #F5EFE4;
+  background-image:
+    radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184, 147, 106, 0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201, 169, 110, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224, 213, 197, 0.25) 0%, transparent 55%),
+    linear-gradient(to bottom, rgba(245, 239, 228, 0) 0%, rgba(245, 239, 228, 0) 70%, rgba(245, 239, 228, 1) 100%),
+    url(/bannieretest.jpg);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 50vh, 100% 50vh;
+  background-position: 0 0, 0 0, 0 0, center top, center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll, scroll, scroll, scroll, fixed;
+  color: #1A1410;
+  font-family: var(--font-geist-sans), sans-serif;
 }
+
+nav a {
+  font-family: var(--font-syne), sans-serif;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.reveal-block {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+@keyframes tlFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

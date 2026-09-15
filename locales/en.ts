@@ -1,0 +1,92 @@
+import type { Translations } from "./fr";
+
+export const en: Translations = {
+  nav: {
+    perform: "HOME",
+    teach: "COURSES",
+    create: "SERVICES",
+    shop: "SHOP",
+    contact: "CONTACT",
+  },
+  booking_btn: "Booking",
+  bio: {
+    highlight: "Phlegmatic DJ & Producer · 1,500+ sets since 2014.",
+    p1: "Since 2014, I've performed over 1,500 DJ sets — from altitude clubs to international stages, from Ibiza to prestigious hotel residencies. This journey has shaped my identity: that of a <em>Phlegmatic DJ</em>, blending House, Electro and French Touch with a calm, precise, and controlled stage presence.",
+    p2: "Sharing the bill with artists like <strong class=\"text-zinc-900\">Joachim Garraud</strong> and <strong class=\"text-zinc-900\">Willy William</strong>, I've carried that same standard into production. My Peggy Gou remix (+70k plays) traveled from ZuTv airwaves in Romania all the way to India at the <strong class=\"text-zinc-900\">Sunburn Festival</strong>.",
+    p3: "Formerly resident at <strong class=\"text-zinc-900\">Bal'tazar</strong> (Dijon) and a regular on outdoor stages, I now focus my performances on premium venues, beach clubs, and international events.",
+    p4: "<em>« Life hangs by a toothpick. »</em>",
+  },
+  timeline_title: "My Journey",
+  timeline: [
+    {
+      period: "2014",
+      title: "The Acceleration",
+      description: "DJ competition win and official clubbing debut — the start of a momentum leading to 1,500+ performances.",
+      bullets: [] as string[],
+    },
+    {
+      period: "2018–2020",
+      title: "Artistic Direction & The Mountain",
+      description: "",
+      bullets: [
+        "Dijon: Residency and Artistic Direction at Beverly.",
+        "Les Arcs 1800: First major winter season residency at Le Carré.",
+      ],
+    },
+    {
+      period: "2021–2023",
+      title: "Export & Big Stages",
+      description: "",
+      bullets: [
+        "Club Med Artist: Integration into the program, residencies at altitude resorts (Peisey-Vallandry, Valmorel).",
+        "Festivals: Performance at Electrosaône alongside Adrien Toma and Sound of Legend.",
+      ],
+    },
+    {
+      period: "2023–2025",
+      title: "Production & International Reach",
+      description: "",
+      bullets: [
+        "Remix & Radio: Peggy Gou remix hits +70k plays, aired on TV/Radio (ZuTv) and played by international DJs.",
+        "Ibiza & Debut Single: First original release \"Your Stage\" and a spot on the Amani Ibiza lineup.",
+        "Key figures: 1,500 sets milestone, 500k+ views on social media.",
+      ],
+    },
+    {
+      period: "2026",
+      title: "Premium Anchoring",
+      description: "",
+      bullets: [
+        "Residency at Bal'tazar (Dijon) and rollout of the Phlegmatic DJ identity on outdoor stages and premium residencies.",
+      ],
+    },
+  ],
+  booking: {
+    label: "Booking",
+    title: "Give your event a real signature.",
+    credibility: "+1,500 sets · Clubs · Festivals · Ibiza · Sunburn Festival",
+    subtitle: "Available for clubs, festivals, and private events.",
+    cta: "Book a date",
+    card1_title: "Clubs & Residencies",
+    card1_text: "Premium clubbing expertise. Crowd reading, energy control, and exclusive mashups.",
+    card2_title: "Festivals & Open-Air",
+    card2_text: "Large stage format. Adaptability and energy for your outdoor events and festival lineups.",
+    card3_title: "Private & Corporate",
+    card3_text: "Musical elegance. A sharp selection and refined technique for your exclusive events and private parties.",
+    form_name: "Name / Company",
+    form_email: "Email",
+    form_type: "Event type",
+    form_type_club: "Club",
+    form_type_festival: "Festival",
+    form_type_private: "Private Event & Corporate",
+    form_type_other: "Other",
+    form_date: "Intended date",
+    form_budget: "Approximate budget (optional)",
+    form_message: "Message",
+    form_submit: "Send my request",
+    form_sending: "Sending…",
+    success_title: "Request sent ✓",
+    success_text: "I'll get back to you shortly.",
+    presskit: "Download my presskit →",
+  },
+};

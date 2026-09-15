@@ -1,0 +1,92 @@
+export const fr = {
+  nav: {
+    perform: "ACCUEIL",
+    teach: "FORMATIONS",
+    create: "SERVICES",
+    shop: "SHOP",
+    contact: "CONTACT",
+  },
+  booking_btn: "Booking",
+  bio: {
+    highlight: "Phlegmatic DJ & Producteur · +1500 sets depuis 2014.",
+    p1: "Depuis 2014, j'ai réalisé plus de 1500 DJ sets : des clubs d'altitude aux scènes internationales, d'Ibiza aux résidences hôtelières de renom. Ce parcours a forgé mon identité : celle d'un <em>Phlegmatic DJ</em>, associant une sélection House, Electro et French Touch à une présence scénique calme, précise et sous contrôle.",
+    p2: "Partageant l'affiche avec des artistes comme <strong class=\"text-zinc-900\">Joachim Garraud</strong> ou <strong class=\"text-zinc-900\">Willy William</strong>, j'ai décliné cette exigence dans la production. Mon remix de Peggy Gou (+70k plays) a notamment voyagé des ondes de ZuTv en Roumanie jusqu'en Inde lors du <strong class=\"text-zinc-900\">Sunburn Festival</strong>.",
+    p3: "Anciennement résident au <strong class=\"text-zinc-900\">Bal'tazar</strong> (Dijon) et habitué des résidences outdoor, j'oriente aujourd'hui mes performances vers les scènes premium, les beach clubs et les événements internationaux.",
+    p4: "<em>« Life hangs by a toothpick. »</em>",
+  },
+  timeline_title: "Mon Parcours",
+  timeline: [
+    {
+      period: "2014",
+      title: "L'Accélération",
+      description: "Victoire en tremplin DJ et débuts officiels en clubbing. Le lancement d'une dynamique qui mène à plus de 1500 performances.",
+      bullets: [] as string[],
+    },
+    {
+      period: "2018–2020",
+      title: "La Direction Artistique & La Montagne",
+      description: "",
+      bullets: [
+        "Dijon : Résidence et Direction Artistique au Beverly.",
+        "Les Arcs 1800 : Première grande saison d'hiver en résidence au Carré.",
+      ],
+    },
+    {
+      period: "2021–2023",
+      title: "L'Export & Les Grandes Scènes",
+      description: "",
+      bullets: [
+        "Club Med Artist : Intégration du programme et résidences en resorts d'altitude (Peisey-Vallandry, Valmorel).",
+        "Festivals : Passage à l'Electrosaône aux côtés d'Adrien Toma et Sound of Legend.",
+      ],
+    },
+    {
+      period: "2023–2025",
+      title: "Production & Rayonnement International",
+      description: "",
+      bullets: [
+        "Remix & Radios : Le remix de Peggy Gou atteint +70k plays, diffusé sur les ondes TV/Radios (ZuTv) et joué par des DJs internationaux.",
+        "Ibiza & Premier Single : Premier release original « Your Stage » et passage sur le line-up Amani à Ibiza.",
+        "Chiffres clés : Cap des 1500 sets franchi, +500k vues sur les réseaux sociaux.",
+      ],
+    },
+    {
+      period: "2026",
+      title: "L'Ancrage Premium",
+      description: "",
+      bullets: [
+        "Résidence au Bal'tazar (Dijon) et déploiement de l'identité Phlegmatic DJ sur les scènes outdoor et résidences haut de gamme.",
+      ],
+    },
+  ],
+  booking: {
+    label: "Booking",
+    title: "Donnez une vraie signature à votre évènement.",
+    credibility: "+1500 sets · Clubs · Festivals · Ibiza · Sunburn Festival",
+    subtitle: "Disponible pour clubs, festivals et événements privés.",
+    cta: "Booker une date",
+    card1_title: "Clubs & Résidences",
+    card1_text: "L'expertise du clubbing haut de gamme. Lecture de foule, contrôle de l'énergie et mashups exclusifs.",
+    card2_title: "Festivals & Open-Air",
+    card2_text: "Format grande scène. Adaptabilité et énergie pour vos événements extérieurs et programmations festives.",
+    card3_title: "Privé & Corporate",
+    card3_text: "L'élégance musicale. Une sélection pointue et une technique irréprochable pour vos événements d'exception et soirées privées.",
+    form_name: "Nom / Structure",
+    form_email: "Email",
+    form_type: "Type d'événement",
+    form_type_club: "Club",
+    form_type_festival: "Festival",
+    form_type_private: "Événement privé & Corporate",
+    form_type_other: "Autre",
+    form_date: "Date envisagée",
+    form_budget: "Budget approximatif (optionnel)",
+    form_message: "Message",
+    form_submit: "Envoyer ma demande",
+    form_sending: "Envoi…",
+    success_title: "Demande envoyée ✓",
+    success_text: "Je reviens vers toi rapidement.",
+    presskit: "Télécharger mon presskit →",
+  },
+};
+
+export type Translations = typeof fr;
