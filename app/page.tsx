@@ -369,7 +369,7 @@ export default function Artist() {
               viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
               style={{
                 position: "absolute", inset: 0, width: "100%", height: "100%",
-                opacity: Math.max(0, 1 - p3), transition: "none", zIndex: 3,
+                opacity: Math.max(0, 1 - p2), transition: "none", zIndex: 3,
                 pointerEvents: "none", overflow: "hidden",
               }}
             >
