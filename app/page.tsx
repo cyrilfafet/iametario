@@ -192,12 +192,19 @@ export default function Artist() {
     }, 210);
   };
 
-  // Phase 1 (0→10%): photo shrinks/rises, sides start fading
-  const p1 = Math.min(1, heroProgress / 0.10);
-  // Phase 2 (0→70%): logo zooms into A dès le premier scroll
-  const p2 = Math.min(1, Math.max(0, heroProgress / 0.70));
-  // Phase 3 (70→100%): bio typewriter, logo fades
-  const p3 = Math.min(1, Math.max(0, (heroProgress - 0.70) / 0.30));
+  // Phase 1 (0→8%): photo + sides fade
+  const p1 = Math.min(1, heroProgress / 0.08);
+  // Phase 2 (0→55%): logo zoom + fade
+  const p2 = Math.min(1, Math.max(0, heroProgress / 0.55));
+  // Phase 3 (55→72%): bio typewriter reveal
+  const p3 = Math.min(1, Math.max(0, (heroProgress - 0.55) / 0.17));
+  // Bio opacity: appears then fades out as timeline approaches
+  const p3fade = Math.min(1, Math.max(0, (heroProgress - 0.70) / 0.10));
+  const bioOpacity = p3 * (1 - p3fade);
+  // Phase 4 (78→100%): timeline rail slides in from right
+  const p4raw = Math.min(1, Math.max(0, (heroProgress - 0.78) / 0.22));
+  // Ease-out cubic for smooth deceleration
+  const p4 = 1 - Math.pow(1 - p4raw, 3);
 
   const sidesOp = 0.5 * Math.max(0, 1 - p1 * 0.6 - p2);
   const sideStyle = (x: number, y: number, rot: number) => ({
@@ -215,7 +222,7 @@ export default function Artist() {
     { stripped: stripHtml(t.bio.p4), html: t.bio.p4, isQuote: true },
   ];
   const bioStripped = bioParagraphs.map(p => p.stripped).join("\n\n");
-  const charsRevealed = Math.floor(p3 * bioStripped.length);
+  const charsRevealed = Math.floor(p3 * bioStripped.length); // p3 = reveal progress
   let _rem = charsRevealed;
   const bioRevealed = bioParagraphs.map((p, i) => {
     const sep = i < bioParagraphs.length - 1 ? 2 : 0;
@@ -267,7 +274,7 @@ export default function Artist() {
 
       {/* Hero — scroll storytelling, 400vh. marginTop: -navH aligns hero top with viewport top
           so the sticky inner div is already at top:0 in normal flow — no jump on first scroll. */}
-      <section ref={heroRef} style={{ height: "400vh", position: "relative", marginTop: -navH }}>
+      <section ref={heroRef} style={{ height: "500vh", position: "relative", marginTop: -navH }}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
 
         {/* Background — reste fixe dans le sticky, ne remonte jamais */}
@@ -401,12 +408,12 @@ export default function Artist() {
         }}>Phlegmatic Dj</p>
 
         {/* Bio typewriter — phase 3 */}
-        {p3 > 0 && (
+        {bioOpacity > 0 && (
           <div style={{
             position: "absolute", top: "50%", left: "50%",
             transform: "translate(-50%, -50%)",
             width: "min(680px, calc(100vw - 48px))",
-            opacity: p3, zIndex: 10, padding: "0 24px", textAlign: "center",
+            opacity: bioOpacity, zIndex: 10, padding: "0 24px", textAlign: "center",
           }}>
             {/* Titre */}
             <p style={{
@@ -463,6 +470,69 @@ export default function Artist() {
             {t.booking_btn}
           </a>
         </div>{/* end social */}
+
+        {/* Timeline rail — phase 4 */}
+        {p4 > 0 && (() => {
+          type TLItem = { period: string; title: string };
+          const items = (t.timeline as TLItem[]);
+          const N = items.length;
+          // Track is 400vw wide, centered. Slides in from right.
+          // At p4=0: translateX(200vw) — fully off-screen right
+          // At p4=1: translateX(0)     — centered in viewport
+          const trackX = (1 - p4) * 200;
+          return (
+            <div style={{
+              position: "absolute", top: "50%", left: "50%",
+              width: "400vw",
+              transform: `translate(-50%, -50%) translateX(${trackX}vw)`,
+              zIndex: 6, pointerEvents: "none",
+            }}>
+              {/* The rail */}
+              <div style={{
+                position: "relative",
+                height: 6,
+                borderRadius: 3,
+                background: "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, #D4B896 25%, #B8936A 55%, #8A6040 100%)",
+                boxShadow: "0 3px 14px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.45)",
+              }}>
+                {items.map((item, i) => {
+                  const pct = N > 1 ? (i / (N - 1)) * 52 + 24 : 50; // spread 24%→76%
+                  const above = i % 2 === 0;
+                  return (
+                    <div key={i} style={{
+                      position: "absolute", left: `${pct}%`,
+                      top: "50%", transform: "translate(-50%, -50%)",
+                    }}>
+                      {/* Dot */}
+                      <div style={{
+                        width: 14, height: 14, borderRadius: "50%",
+                        background: "radial-gradient(circle at 35% 30%, #F0DFC0, #C4A070, #7A5030)",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.4)",
+                        position: "relative", zIndex: 1,
+                      }} />
+                      {/* Year */}
+                      <div style={{
+                        position: "absolute", top: 18, left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: 11, fontWeight: 700, color: "#B8936A",
+                        letterSpacing: "0.06em", whiteSpace: "nowrap",
+                      }}>{item.period}</div>
+                      {/* Title */}
+                      <div style={{
+                        position: "absolute",
+                        ...(above ? { bottom: 22 } : { top: 36 }),
+                        left: "50%", transform: "translateX(-50%)",
+                        fontSize: 10, color: "#5A4A3A",
+                        whiteSpace: "nowrap", fontWeight: 500,
+                        letterSpacing: "0.02em",
+                      }}>{item.title}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         </div>{/* end sticky inner */}
       </section>{/* end 400vh hero */}
