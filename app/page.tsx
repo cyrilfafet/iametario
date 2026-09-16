@@ -477,12 +477,12 @@ export default function Artist() {
           const items = (t.timeline as TLItem[]);
           const N = items.length;
           // p4 is already ease-out cubic (decelerates as it locks in place)
-          // rotateX: 65deg (road perspective) → 0deg (flat horizontal)
-          const rotX = (1 - p4) * 65;
-          // scale: 0.04 (tiny, distant) → 1 (full size)
-          const scl = 0.04 + p4 * 0.96;
-          // translateX: arrives from the right side
-          const tx = (1 - p4) * 80;
+          // rotateX: 75deg (road under your feet) → 0deg (flat horizontal)
+          const rotX = (1 - p4) * 75;
+          // scale: 4 (huge/close) → 1 (final size)
+          const scl = 4 - p4 * 3;
+          // translateX: slight drift as it settles
+          const tx = (1 - p4) * 15;
           return (
             // Perspective context on parent
             <div style={{
