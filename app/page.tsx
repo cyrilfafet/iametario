@@ -540,8 +540,8 @@ export default function Artist() {
                   );
                 })}
               </div>
-              </div>{/* end rail wrapper */}
-            </div>{/* end perspective container */}
+              </div>
+            </div>
           );
         })()}
 
