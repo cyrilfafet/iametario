@@ -486,8 +486,8 @@ export default function Artist() {
           return (
             // Perspective context on parent
             <div style={{
-              position: "absolute", inset: 0,
-              perspective: "900px", perspectiveOrigin: "50% 50%",
+              position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
+              perspective: 900,
               zIndex: 6, pointerEvents: "none", overflow: "hidden",
             }}>
               {/* Rail — 3D transform: scale then rotateX then slide from right */}
