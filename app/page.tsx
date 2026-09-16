@@ -353,7 +353,7 @@ export default function Artist() {
           const vbWS = 2026 * vwS / logoNatW;
           const vbHS = vbWS * vhS / vwS;
           // viewBox at p2=1: zoomed 70× into A center
-          const vbWE = vbWS / 70;
+          const vbWE = vbWS / 600;
           const vbHE = vbHS / 70;
           // Zoom exponentiel : vitesse perçue constante (chaque % de scroll = même facteur)
           const vbW = vbWS * Math.pow(vbWE / vbWS, p2);
