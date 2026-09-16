@@ -471,23 +471,33 @@ export default function Artist() {
           </a>
         </div>{/* end social */}
 
-        {/* Timeline rail — phase 4 */}
+        {/* Timeline rail — phase 4: route perspective effect */}
         {p4 > 0 && (() => {
           type TLItem = { period: string; title: string };
           const items = (t.timeline as TLItem[]);
           const N = items.length;
-          // Track is 400vw wide, centered. Slides in from right.
-          // At p4=0: translateX(200vw) — fully off-screen right
-          // At p4=1: translateX(0)     — centered in viewport
-          const trackX = (1 - p4) * 200;
+          // p4 is already ease-out cubic (decelerates as it locks in place)
+          // rotateX: 65deg (road perspective) → 0deg (flat horizontal)
+          const rotX = (1 - p4) * 65;
+          // scale: 0.04 (tiny, distant) → 1 (full size)
+          const scl = 0.04 + p4 * 0.96;
+          // translateX: arrives from the right side
+          const tx = (1 - p4) * 80;
           return (
+            // Perspective context on parent
             <div style={{
-              position: "absolute", top: "50%", left: "50%",
-              width: "400vw",
-              transform: `translate(-50%, -50%) translateX(${trackX}vw)`,
-              zIndex: 6, pointerEvents: "none",
+              position: "absolute", inset: 0,
+              perspective: "900px", perspectiveOrigin: "50% 50%",
+              zIndex: 6, pointerEvents: "none", overflow: "hidden",
             }}>
-              {/* The rail */}
+              {/* Rail — 3D transform: scale then rotateX then slide from right */}
+              <div style={{
+                position: "absolute", top: "50%", left: "50%",
+                width: "400vw",
+                transformOrigin: "50% 50%",
+                transform: `translateX(calc(-50% + ${tx}vw)) translateY(-50%) rotateX(${rotX}deg) scale(${scl})`,
+              }}>
+              {/* The rail line */}
               <div style={{
                 position: "relative",
                 height: 6,
@@ -530,7 +540,8 @@ export default function Artist() {
                   );
                 })}
               </div>
-            </div>
+              </div>{/* end rail wrapper */}
+            </div>{/* end perspective container */}
           );
         })()}
 
