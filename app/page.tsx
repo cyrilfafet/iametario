@@ -505,24 +505,24 @@ export default function Artist() {
                     }}>
                       {/* Dot */}
                       <div style={{
-                        width: 14, height: 14, borderRadius: "50%",
+                        width: 18, height: 18, borderRadius: "50%",
                         background: "radial-gradient(circle at 35% 30%, #F0DFC0, #C4A070, #7A5030)",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.4)",
                         position: "relative", zIndex: 1,
                       }} />
                       {/* Year */}
                       <div style={{
-                        position: "absolute", top: 18, left: "50%",
+                        position: "absolute", top: 24, left: "50%",
                         transform: "translateX(-50%)",
-                        fontSize: 11, fontWeight: 700, color: "#B8936A",
+                        fontSize: 15, fontWeight: 700, color: "#B8936A",
                         letterSpacing: "0.06em", whiteSpace: "nowrap",
                       }}>{item.period}</div>
                       {/* Title */}
                       <div style={{
                         position: "absolute",
-                        ...(above ? { bottom: 22 } : { top: 36 }),
+                        ...(above ? { bottom: 28 } : { top: 44 }),
                         left: "50%", transform: "translateX(-50%)",
-                        fontSize: 10, color: "#5A4A3A",
+                        fontSize: 13, color: "#5A4A3A",
                         whiteSpace: "nowrap", fontWeight: 500,
                         letterSpacing: "0.02em",
                       }}>{item.title}</div>
