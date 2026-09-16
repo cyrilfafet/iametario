@@ -471,75 +471,102 @@ export default function Artist() {
           </a>
         </div>{/* end social */}
 
-        {/* Timeline rail — phase 4: route perspective effect */}
+        {/* Timeline rail — phase 4: real road → timeline reveal */}
         {p4 > 0 && (() => {
           type TLItem = { period: string; title: string };
           const items = (t.timeline as TLItem[]);
           const N = items.length;
-          // p4 is already ease-out cubic (decelerates as it locks in place)
-          // rotateX: 75deg (road under your feet) → 0deg (flat horizontal)
-          const rotX = (1 - p4) * 75;
-          // scale: 4 (huge/close) → 1 (final size)
-          const scl = 4 - p4 * 3;
-          // translateX: slight drift as it settles
-          const tx = (1 - p4) * 15;
+          // rotateX: 82deg (road under your feet) → 0deg (flat)
+          const rotX = (1 - p4) * 82;
+          // scale: 30 (extreme zoom) → 1 (final)
+          const scl = 30 - p4 * 29;
+          // road fades out in first 45%, timeline fades in after 35%
+          const roadOpacity = Math.max(0, 1 - p4 / 0.45);
+          const tlOpacity = Math.max(0, (p4 - 0.35) / 0.65);
           return (
-            // Perspective context on parent
             <div style={{
               position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
-              perspective: 900,
+              perspective: 1200,
               zIndex: 6, pointerEvents: "none", overflow: "hidden",
             }}>
-              {/* Rail — 3D transform: scale then rotateX then slide from right */}
               <div style={{
                 position: "absolute", top: "50%", left: "50%",
                 width: "400vw",
                 transformOrigin: "50% 50%",
-                transform: `translateX(calc(-50% + ${tx}vw)) translateY(-50%) rotateX(${rotX}deg) scale(${scl})`,
+                transform: `translateX(-50%) translateY(-50%) rotateX(${rotX}deg) scale(${scl})`,
               }}>
-              {/* The rail line */}
-              <div style={{
-                position: "relative",
-                height: 6,
-                borderRadius: 3,
-                background: "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, #D4B896 25%, #B8936A 55%, #8A6040 100%)",
-                boxShadow: "0 3px 14px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.45)",
-              }}>
-                {items.map((item, i) => {
-                  const pct = N > 1 ? (i / (N - 1)) * 52 + 24 : 50; // spread 24%→76%
-                  const above = i % 2 === 0;
-                  return (
-                    <div key={i} style={{
-                      position: "absolute", left: `${pct}%`,
-                      top: "50%", transform: "translate(-50%, -50%)",
-                    }}>
-                      {/* Dot */}
-                      <div style={{
-                        width: 18, height: 18, borderRadius: "50%",
-                        background: "radial-gradient(circle at 35% 30%, #F0DFC0, #C4A070, #7A5030)",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.4)",
-                        position: "relative", zIndex: 1,
-                      }} />
-                      {/* Year */}
-                      <div style={{
-                        position: "absolute", top: 24, left: "50%",
-                        transform: "translateX(-50%)",
-                        fontSize: 15, fontWeight: 700, color: "#B8936A",
-                        letterSpacing: "0.06em", whiteSpace: "nowrap",
-                      }}>{item.period}</div>
-                      {/* Title */}
-                      <div style={{
-                        position: "absolute",
-                        ...(above ? { bottom: 28 } : { top: 44 }),
-                        left: "50%", transform: "translateX(-50%)",
-                        fontSize: 13, color: "#5A4A3A",
-                        whiteSpace: "nowrap", fontWeight: 500,
-                        letterSpacing: "0.02em",
-                      }}>{item.title}</div>
-                    </div>
-                  );
-                })}
-              </div>
+                {/* Road layer — asphalt with white dashes */}
+                <div style={{
+                  position: "absolute", top: "50%", left: 0, right: 0,
+                  height: 110,
+                  transform: "translateY(-50%)",
+                  opacity: roadOpacity,
+                  borderRadius: 4,
+                  background: "#1E1E1E",
+                  backgroundImage: [
+                    "repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,0.025) 0px, transparent 3px)",
+                    "repeating-radial-gradient(circle at 70% 60%, rgba(255,255,255,0.02) 0px, transparent 4px)",
+                    "linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)",
+                  ].join(", "),
+                  overflow: "hidden",
+                }}>
+                  {/* Edge stripe left */}
+                  <div style={{ position: "absolute", top: 10, left: 0, right: 0, height: 3, background: "rgba(255,255,255,0.55)" }} />
+                  {/* Edge stripe right */}
+                  <div style={{ position: "absolute", bottom: 10, left: 0, right: 0, height: 3, background: "rgba(255,255,255,0.55)" }} />
+                  {/* Center dashes */}
+                  <div style={{
+                    position: "absolute", top: "50%", left: 0, right: 0,
+                    height: 5, transform: "translateY(-50%)",
+                    backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0px, rgba(255,255,255,0.9) 80px, transparent 80px, transparent 160px)",
+                  }} />
+                </div>
+
+                {/* Timeline line — black, fades in */}
+                <div style={{
+                  position: "relative",
+                  height: 5,
+                  borderRadius: 3,
+                  opacity: tlOpacity,
+                  background: "#1A1410",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
+                }}>
+                  {items.map((item, i) => {
+                    const pct = N > 1 ? (i / (N - 1)) * 52 + 24 : 50;
+                    const above = i % 2 === 0;
+                    return (
+                      <div key={i} style={{
+                        position: "absolute", left: `${pct}%`,
+                        top: "50%", transform: "translate(-50%, -50%)",
+                        opacity: tlOpacity,
+                      }}>
+                        {/* Dot */}
+                        <div style={{
+                          width: 16, height: 16, borderRadius: "50%",
+                          background: "#1A1410",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)",
+                          position: "relative", zIndex: 1,
+                        }} />
+                        {/* Year */}
+                        <div style={{
+                          position: "absolute", top: 22, left: "50%",
+                          transform: "translateX(-50%)",
+                          fontSize: 15, fontWeight: 700, color: "#1A1410",
+                          letterSpacing: "0.06em", whiteSpace: "nowrap",
+                        }}>{item.period}</div>
+                        {/* Title */}
+                        <div style={{
+                          position: "absolute",
+                          ...(above ? { bottom: 26 } : { top: 42 }),
+                          left: "50%", transform: "translateX(-50%)",
+                          fontSize: 13, color: "#3A2E25",
+                          whiteSpace: "nowrap", fontWeight: 500,
+                          letterSpacing: "0.02em",
+                        }}>{item.title}</div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );
