@@ -107,12 +107,22 @@ export default function Artist() {
   const [mediaIndex, setMediaIndex] = useState(0);
   const [vw, setVw] = useState(375);
   const [vh, setVh] = useState(844);
+  const [navH, setNavH] = useState(0);
   const touchStartX = useRef(0);
   useEffect(() => {
     const update = () => { setVw(window.innerWidth); setVh(window.innerHeight); };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
+  }, []);
+  useEffect(() => {
+    const nav = document.querySelector("nav");
+    if (!nav) return;
+    const measure = () => setNavH(nav.getBoundingClientRect().height);
+    measure();
+    const obs = new ResizeObserver(measure);
+    obs.observe(nav);
+    return () => obs.disconnect();
   }, []);
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
@@ -251,8 +261,9 @@ export default function Artist() {
         </div>
       )}
 
-      {/* Hero — scroll storytelling, 400vh */}
-      <section ref={heroRef} style={{ height: "400vh", position: "relative" }}>
+      {/* Hero — scroll storytelling, 400vh. marginTop: -navH aligns hero top with viewport top
+          so the sticky inner div is already at top:0 in normal flow — no jump on first scroll. */}
+      <section ref={heroRef} style={{ height: "400vh", position: "relative", marginTop: -navH }}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
 
         {/* Background — reste fixe dans le sticky, ne remonte jamais */}
