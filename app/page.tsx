@@ -495,30 +495,53 @@ export default function Artist() {
                 transformOrigin: "50% 50%",
                 transform: `translateX(-50%) translateY(-50%) rotateX(${rotX}deg) scale(${scl})`,
               }}>
-                {/* Road layer — asphalt with white dashes */}
+                {/* Road layer — procedural asphalt via SVG feTurbulence */}
                 <div style={{
                   position: "absolute", top: "50%", left: 0, right: 0,
-                  height: 110,
+                  height: 120,
                   transform: "translateY(-50%)",
                   opacity: roadOpacity,
-                  borderRadius: 4,
-                  background: "#1E1E1E",
-                  backgroundImage: [
-                    "repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,0.025) 0px, transparent 3px)",
-                    "repeating-radial-gradient(circle at 70% 60%, rgba(255,255,255,0.02) 0px, transparent 4px)",
-                    "linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)",
-                  ].join(", "),
                   overflow: "hidden",
+                  borderRadius: 2,
                 }}>
-                  {/* Edge stripe left */}
-                  <div style={{ position: "absolute", top: 10, left: 0, right: 0, height: 3, background: "rgba(255,255,255,0.55)" }} />
-                  {/* Edge stripe right */}
-                  <div style={{ position: "absolute", bottom: 10, left: 0, right: 0, height: 3, background: "rgba(255,255,255,0.55)" }} />
-                  {/* Center dashes */}
+                  {/* Asphalt base + grain — feTurbulence gives real aggregate texture */}
+                  <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "block" }} xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <filter id="tarmac" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="sRGB">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.78 0.6" numOctaves="5" seed="11" result="noise"/>
+                        <feColorMatrix in="noise" type="matrix"
+                          values="0.22 0 0 0 0.1
+                                  0.22 0 0 0 0.1
+                                  0.2  0 0 0 0.09
+                                  0    0 0 0 1"
+                          result="asphalt"/>
+                        <feComposite in="asphalt" in2="SourceGraphic" operator="over"/>
+                      </filter>
+                      <linearGradient id="edgeTop" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#000" stopOpacity="0.5"/>
+                        <stop offset="100%" stopColor="#000" stopOpacity="0"/>
+                      </linearGradient>
+                      <linearGradient id="edgeBot" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stopColor="#000" stopOpacity="0.5"/>
+                        <stop offset="100%" stopColor="#000" stopOpacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    {/* Dark base */}
+                    <rect width="100%" height="100%" fill="#1A1A1A"/>
+                    {/* Grain layer */}
+                    <rect width="100%" height="100%" filter="url(#tarmac)" opacity="0.95"/>
+                    {/* Edge shadows — top and bottom 20px */}
+                    <rect width="100%" height="20" fill="url(#edgeTop)"/>
+                    <rect y="80%" width="100%" height="20%" fill="url(#edgeBot)"/>
+                  </svg>
+                  {/* White edge lines */}
+                  <div style={{ position: "absolute", top: 14, left: 0, right: 0, height: 4, background: "rgba(248,246,240,0.7)" }} />
+                  <div style={{ position: "absolute", bottom: 14, left: 0, right: 0, height: 4, background: "rgba(248,246,240,0.7)" }} />
+                  {/* Center dashes — slightly warm white like aged paint */}
                   <div style={{
                     position: "absolute", top: "50%", left: 0, right: 0,
-                    height: 5, transform: "translateY(-50%)",
-                    backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0px, rgba(255,255,255,0.9) 80px, transparent 80px, transparent 160px)",
+                    height: 6, transform: "translateY(-50%)",
+                    backgroundImage: "repeating-linear-gradient(90deg, rgba(248,244,230,0.88) 0px, rgba(248,244,230,0.88) 72px, transparent 72px, transparent 148px)",
                   }} />
                 </div>
 
