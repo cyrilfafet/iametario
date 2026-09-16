@@ -208,21 +208,22 @@ export default function Artist() {
   });
 
   const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "");
-  const bioQuote = stripHtml(t.bio.p4);
-  const bioBody = [
-    stripHtml(t.bio.p1),
-    "",
-    stripHtml(t.bio.p2),
-    "",
-    stripHtml(t.bio.p3),
-    "",
-    bioQuote,
-  ].join("\n");
-  const bioDisplayed = bioBody.slice(0, Math.floor(p3 * bioBody.length));
-  const quoteStart = bioBody.indexOf(bioQuote);
-  const quoteReached = quoteStart >= 0 && Math.floor(p3 * bioBody.length) > quoteStart;
-  const bodyDisplayed = quoteReached ? bioDisplayed.slice(0, quoteStart) : bioDisplayed;
-  const quoteDisplayed = quoteReached ? bioDisplayed.slice(quoteStart) : "";
+  const bioParagraphs = [
+    { stripped: stripHtml(t.bio.p1), html: t.bio.p1, isQuote: false },
+    { stripped: stripHtml(t.bio.p2), html: t.bio.p2, isQuote: false },
+    { stripped: stripHtml(t.bio.p3), html: t.bio.p3, isQuote: false },
+    { stripped: stripHtml(t.bio.p4), html: t.bio.p4, isQuote: true },
+  ];
+  const bioStripped = bioParagraphs.map(p => p.stripped).join("\n\n");
+  const charsRevealed = Math.floor(p3 * bioStripped.length);
+  let _rem = charsRevealed;
+  const bioRevealed = bioParagraphs.map((p, i) => {
+    const sep = i < bioParagraphs.length - 1 ? 2 : 0;
+    if (_rem <= 0) return { state: "hidden" as const, text: "" };
+    if (_rem >= p.stripped.length) { _rem -= p.stripped.length + sep; return { state: "complete" as const, text: p.html }; }
+    const t2 = p.stripped.slice(0, _rem); _rem = 0;
+    return { state: "typing" as const, text: t2 };
+  });
 
   const LangToggle = () => (
     <div className="flex items-center gap-2">
@@ -404,43 +405,39 @@ export default function Artist() {
           <div style={{
             position: "absolute", top: "50%", left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "min(640px, calc(100vw - 48px))",
+            width: "min(680px, calc(100vw - 48px))",
             opacity: p3, zIndex: 10, padding: "0 24px", textAlign: "center",
           }}>
-            {/* Titre accent */}
+            {/* Titre */}
             <p style={{
-              fontFamily: "var(--font-syne), sans-serif",
-              fontSize: "clamp(0.65rem, 1vw, 0.72rem)",
+              fontSize: "clamp(1.05rem, 2vw, 1.25rem)",
               fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "#B8936A",
-              marginBottom: "1.4rem",
+              color: "#1A1410",
+              marginBottom: "1.6rem",
+              lineHeight: 1.3,
             }}>
               {t.bio.highlight}
             </p>
-            {/* Corps */}
-            <p style={{
-              color: "#4A3F35",
-              fontSize: "clamp(0.82rem, 1.4vw, 0.9rem)",
-              lineHeight: 1.95,
-              whiteSpace: "pre-line",
-              marginBottom: quoteDisplayed ? "1.6rem" : 0,
-            }}>
-              {bodyDisplayed}{!quoteReached && p3 < 1 && <span className="bio-cursor" />}
-            </p>
-            {/* Citation */}
-            {quoteDisplayed && (
-              <p style={{
-                fontStyle: "italic",
-                fontSize: "clamp(0.9rem, 1.6vw, 1.05rem)",
-                color: "#7A6050",
-                letterSpacing: "0.02em",
-                lineHeight: 1.6,
-              }}>
-                {quoteDisplayed}{p3 < 1 && <span className="bio-cursor" />}
-              </p>
-            )}
+            {/* Paragraphes */}
+            {bioRevealed.map((r, i) => {
+              if (r.state === "hidden") return null;
+              const isCursor = r.state === "typing" && p3 < 1;
+              const isQuote = bioParagraphs[i].isQuote;
+              return (
+                <p key={i} style={{
+                  color: isQuote ? "#7A6050" : "#4A3F35",
+                  fontSize: isQuote ? "clamp(0.95rem, 1.6vw, 1.05rem)" : "clamp(0.9rem, 1.5vw, 1rem)",
+                  fontStyle: isQuote ? "italic" : "normal",
+                  lineHeight: 1.9,
+                  marginBottom: i < bioParagraphs.length - 1 ? "1.2rem" : 0,
+                }}>
+                  {r.state === "complete"
+                    ? <span dangerouslySetInnerHTML={{ __html: r.text }} />
+                    : r.text}
+                  {isCursor && <span className="bio-cursor" />}
+                </p>
+              );
+            })}
           </div>
         )}
 
