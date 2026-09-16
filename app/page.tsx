@@ -279,6 +279,8 @@ export default function Artist() {
           backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          opacity: Math.max(0, 1 - p2 * 1.4),
+          transition: "none",
         }} />
 
         {/* Images gauche */}
