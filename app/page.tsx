@@ -255,6 +255,21 @@ export default function Artist() {
       <section ref={heroRef} style={{ height: "400vh", position: "relative" }}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
 
+        {/* Background — reste fixe dans le sticky, ne remonte jamais */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 0,
+          backgroundImage: [
+            "radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184,147,106,0.10) 0%, transparent 65%)",
+            "radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201,169,110,0.08) 0%, transparent 65%)",
+            "radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224,213,197,0.25) 0%, transparent 55%)",
+            "linear-gradient(to bottom, rgba(245,239,228,0) 0%, rgba(245,239,228,0) 70%, rgba(245,239,228,1) 100%)",
+            "url(/bannieretest.jpg)",
+          ].join(", "),
+          backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }} />
+
         {/* Images gauche */}
         <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
           <img src="/clubmed.png" className="w-107 grayscale -mt-30 -ml-20" style={sideStyle(-55, -20, -4)} />
