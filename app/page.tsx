@@ -208,18 +208,21 @@ export default function Artist() {
   });
 
   const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "");
-  const bioText = [
-    "Une décennie d'expérience, plus de 1500 sets.",
-    "",
+  const bioQuote = stripHtml(t.bio.p4);
+  const bioBody = [
     stripHtml(t.bio.p1),
     "",
     stripHtml(t.bio.p2),
     "",
     stripHtml(t.bio.p3),
     "",
-    stripHtml(t.bio.p4),
+    bioQuote,
   ].join("\n");
-  const bioDisplayed = bioText.slice(0, Math.floor(p3 * bioText.length));
+  const bioDisplayed = bioBody.slice(0, Math.floor(p3 * bioBody.length));
+  const quoteStart = bioBody.indexOf(bioQuote);
+  const quoteReached = quoteStart >= 0 && Math.floor(p3 * bioBody.length) > quoteStart;
+  const bodyDisplayed = quoteReached ? bioDisplayed.slice(0, quoteStart) : bioDisplayed;
+  const quoteDisplayed = quoteReached ? bioDisplayed.slice(quoteStart) : "";
 
   const LangToggle = () => (
     <div className="flex items-center gap-2">
@@ -401,12 +404,43 @@ export default function Artist() {
           <div style={{
             position: "absolute", top: "50%", left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "min(680px, calc(100vw - 48px))",
+            width: "min(640px, calc(100vw - 48px))",
             opacity: p3, zIndex: 10, padding: "0 24px", textAlign: "center",
           }}>
-            <p style={{ color: "#1A1410", fontSize: "clamp(0.8rem, 1.5vw, 0.92rem)", lineHeight: 1.9, whiteSpace: "pre-line" }}>
-              {bioDisplayed}{p3 < 1 && <span className="bio-cursor" />}
+            {/* Titre accent */}
+            <p style={{
+              fontFamily: "var(--font-syne), sans-serif",
+              fontSize: "clamp(0.65rem, 1vw, 0.72rem)",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "#B8936A",
+              marginBottom: "1.4rem",
+            }}>
+              {t.bio.highlight}
             </p>
+            {/* Corps */}
+            <p style={{
+              color: "#4A3F35",
+              fontSize: "clamp(0.82rem, 1.4vw, 0.9rem)",
+              lineHeight: 1.95,
+              whiteSpace: "pre-line",
+              marginBottom: quoteDisplayed ? "1.6rem" : 0,
+            }}>
+              {bodyDisplayed}{!quoteReached && p3 < 1 && <span className="bio-cursor" />}
+            </p>
+            {/* Citation */}
+            {quoteDisplayed && (
+              <p style={{
+                fontStyle: "italic",
+                fontSize: "clamp(0.9rem, 1.6vw, 1.05rem)",
+                color: "#7A6050",
+                letterSpacing: "0.02em",
+                lineHeight: 1.6,
+              }}>
+                {quoteDisplayed}{p3 < 1 && <span className="bio-cursor" />}
+              </p>
+            )}
           </div>
         )}
 
