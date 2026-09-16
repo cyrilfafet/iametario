@@ -387,12 +387,12 @@ export default function Artist() {
 
         {/* Tagline */}
         <p style={{
-          position: "absolute", left: "50%", top: "calc(50% + 8rem)",
+          position: "absolute", left: "50%", top: "calc(50% + 6rem)",
           transform: "translateX(-50%)",
-          fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F",
+          fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "white",
           textTransform: "uppercase", whiteSpace: "nowrap",
           opacity: Math.max(0, 1 - p1 * 3), zIndex: 4,
-        }}>Phlegmatic DJ &amp; Producer</p>
+        }}>Phlegmatic Dj</p>
 
         {/* Bio typewriter — phase 3 */}
         {p3 > 0 && (
