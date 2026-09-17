@@ -721,7 +721,7 @@ export default function Artist() {
                       width: cardW,
                       transform: `translateX(${offset * cardOff}px) scale(${isActive ? 1 : 0.82})`,
                       filter: isActive ? "none" : "blur(3px)",
-                      opacity: !mediaVisible ? 0 : (isActive ? 1 : 0.45),
+                      opacity: (!mediaVisible || mediaAnimating) ? 0 : (isActive ? 1 : 0.45),
                       zIndex: isActive ? 10 : 5,
                       transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
                       cursor: isActive ? "default" : "pointer",
