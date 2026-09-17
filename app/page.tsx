@@ -643,7 +643,7 @@ export default function Artist() {
         ];
         const fallRots = ['-13deg','9deg','-8deg','14deg','-11deg','7deg','-5deg'];
         return (
-          <section ref={mediaRef} className="w-full pt-12 pb-6 border-t border-zinc-100 overflow-hidden">
+          <section ref={mediaRef} className="w-full pt-12 pb-6 border-t border-zinc-100 [overflow-x:clip]">
             <div className="flex justify-center gap-3 mb-8">
               <button
                 onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
