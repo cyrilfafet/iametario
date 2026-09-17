@@ -519,72 +519,102 @@ export default function Artist() {
                   }} />
                 </div>
 
-                {/* Dots + labels — staggered per item */}
-                {items.map((item, i) => {
-                  const pct = N > 1 ? (i / (N - 1)) * 100 : 50;
-                  const dotDelay = 0.38 + i * 0.06;
-                  const lblDelay = dotDelay + 0.08;
-                  const dotP = Math.min(1, Math.max(0, (p4 - dotDelay) / 0.22));
-                  const dotE = 1 - Math.pow(1 - dotP, 3);
-                  const lblP = Math.min(1, Math.max(0, (p4 - lblDelay) / 0.28));
-                  const above = i % 2 === 0;
+                {/* Dots + typewriter text — driven by scroll */}
+                {(() => {
+                  // Build per-item flat text corpus for char counting
+                  const itemCorpus = items.map(item => {
+                    const parts: string[] = [item.period, item.title];
+                    if (item.description) parts.push(item.description);
+                    item.bullets.forEach(b => parts.push(b));
+                    return parts; // array of fields
+                  });
+                  // Text types in during p4 0.46→0.90 — fast
+                  const textP = Math.min(1, Math.max(0, (p4 - 0.46) / 0.44));
+                  const totalChars = itemCorpus.reduce((s, fields) => s + fields.join("").length, 0);
+                  const charsRevealed = Math.floor(textP * totalChars);
 
-                  return (
-                    <div key={i} style={{
-                      position: "absolute", left: `${pct}%`,
-                      top: "50%", transform: "translate(-50%, -50%)",
-                    }}>
-                      {/* Dot */}
-                      <div style={{
-                        width: 7, height: 7, borderRadius: "50%",
-                        background: "#1A1410",
-                        boxShadow: "0 0 0 2px rgba(26,20,16,0.15)",
-                        opacity: dotE,
-                        transform: `scale(${0.4 + dotE * 0.6})`,
-                        position: "relative", zIndex: 1,
-                      }} />
-                      {/* Labels + description */}
-                      <div style={{
-                        position: "absolute",
-                        ...(above ? { bottom: 18 } : { top: 18 }),
-                        left: "50%",
-                        transform: `translateX(-50%) translateY(${above ? (1 - lblP) * 10 : -(1 - lblP) * 10}px)`,
-                        opacity: lblP,
-                        textAlign: "center",
-                        width: 160,
+                  // Distribute chars across items
+                  let rem = charsRevealed;
+                  const itemChars = itemCorpus.map(fields => {
+                    const len = fields.join("").length;
+                    if (rem <= 0) return 0;
+                    const c = Math.min(rem, len);
+                    rem -= len;
+                    return c;
+                  });
+
+                  return items.map((item, i) => {
+                    const pct = N > 1 ? (i / (N - 1)) * 100 : 50;
+                    const dotDelay = 0.38 + i * 0.04;
+                    const dotP = Math.min(1, Math.max(0, (p4 - dotDelay) / 0.18));
+                    const dotE = 1 - Math.pow(1 - dotP, 3);
+                    const above = i % 2 === 0;
+
+                    // Reveal fields for this item
+                    const fields = itemCorpus[i];
+                    let fieldRem = itemChars[i];
+                    const revealed = fields.map(f => {
+                      if (fieldRem <= 0) return { text: "", done: false };
+                      if (fieldRem >= f.length) { fieldRem -= f.length; return { text: f, done: true }; }
+                      const t = f.slice(0, fieldRem); fieldRem = 0;
+                      return { text: t, done: false };
+                    });
+                    const [rPeriod, rTitle, ...rRest] = revealed;
+                    // rRest maps to description (if any) then bullets
+                    let restIdx = 0;
+                    const rDesc = item.description ? rRest[restIdx++] : null;
+                    const rBullets = item.bullets.map(() => rRest[restIdx++] ?? { text: "", done: false });
+                    const isActive = itemChars[i] > 0 && itemChars[i] < fields.join("").length;
+
+                    return (
+                      <div key={i} style={{
+                        position: "absolute", left: `${pct}%`,
+                        top: "50%", transform: "translate(-50%, -50%)",
                       }}>
+                        {/* Dot */}
                         <div style={{
-                          fontSize: 12, fontWeight: 700, color: "#1A1410",
-                          letterSpacing: "0.1em", marginBottom: 2,
-                        }}>{item.period}</div>
-                        <div style={{
-                          fontSize: 10, fontWeight: 600,
-                          color: "#4A3F35",
-                          letterSpacing: "0.04em",
-                          marginBottom: 6,
-                        }}>{item.title}</div>
-                        {item.description ? (
-                          <div style={{ fontSize: 9.5, color: "#7A6A5A", lineHeight: 1.5 }}>
-                            {item.description}
+                          width: 8, height: 8, borderRadius: "50%",
+                          background: "#1A1410",
+                          boxShadow: "0 0 0 2px rgba(26,20,16,0.12)",
+                          opacity: dotE,
+                          transform: `scale(${0.3 + dotE * 0.7})`,
+                          position: "relative", zIndex: 1,
+                        }} />
+                        {/* Text block */}
+                        {rPeriod && rPeriod.text && (
+                          <div style={{
+                            position: "absolute",
+                            ...(above ? { bottom: 20 } : { top: 20 }),
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: 190,
+                            ...(above ? { textAlign: "center" } : { textAlign: "center" }),
+                          }}>
+                            <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1410", letterSpacing: "0.08em", marginBottom: 3 }}>
+                              {rPeriod.text}{!rPeriod.done && <span className="bio-cursor" />}
+                            </div>
+                            {rTitle && rTitle.text && (
+                              <div style={{ fontSize: 12, fontWeight: 600, color: "#3A2E25", letterSpacing: "0.03em", marginBottom: 7 }}>
+                                {rTitle.text}{rPeriod.done && !rTitle.done && <span className="bio-cursor" />}
+                              </div>
+                            )}
+                            {rDesc && rDesc.text && (
+                              <div style={{ fontSize: 11, color: "#7A6A5A", lineHeight: 1.55, marginBottom: 4, textAlign: "left" }}>
+                                {rDesc.text}{rTitle?.done && !rDesc.done && <span className="bio-cursor" />}
+                              </div>
+                            )}
+                            {rBullets.map((rb, bi) => rb.text ? (
+                              <div key={bi} style={{ fontSize: 11, color: "#7A6A5A", lineHeight: 1.55, textAlign: "left", paddingLeft: 10, position: "relative" }}>
+                                <span style={{ position: "absolute", left: 0, top: 0 }}>·</span>
+                                {rb.text}{isActive && bi === rBullets.findIndex(x => !x.done) && <span className="bio-cursor" />}
+                              </div>
+                            ) : null)}
                           </div>
-                        ) : null}
-                        {item.bullets.length > 0 ? (
-                          <ul style={{ listStyle: "none", padding: 0, margin: 0, textAlign: "left" }}>
-                            {item.bullets.map((b, bi) => (
-                              <li key={bi} style={{
-                                fontSize: 9.5, color: "#7A6A5A", lineHeight: 1.5,
-                                paddingLeft: 10, position: "relative",
-                              }}>
-                                <span style={{ position: "absolute", left: 0 }}>·</span>
-                                {b}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
+                        )}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  });
+                })()}
               </div>
             </div>
           );
