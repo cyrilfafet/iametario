@@ -478,27 +478,18 @@ export default function Artist() {
           const items = (t.timeline as TLItem[]);
           const N = items.length;
 
-          // Dark overlay — fades in with p4
-          const overlayOp = Math.min(0.92, p4 * 1.1);
-
           // Line draws left→right, ease-out quad, completes at p4=0.45
           const lineRaw = Math.min(1, p4 / 0.45);
           const lineP = 1 - Math.pow(1 - lineRaw, 2);
 
-          // Spark head: bright glow racing ahead of the line
-          const sparkOp = lineRaw < 1 ? (1 - lineRaw) * 0.9 : 0;
+          // Spark head racing ahead of the line
+          const sparkOp = lineRaw < 1 ? (1 - lineRaw) * 0.7 : 0;
 
           return (
             <div style={{
               position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
               zIndex: 6, pointerEvents: "none", overflow: "hidden",
             }}>
-              {/* Dark overlay */}
-              <div style={{
-                position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
-                background: "#0A0907",
-                opacity: overlayOp,
-              }} />
 
               {/* Timeline centred */}
               <div style={{
@@ -513,16 +504,16 @@ export default function Artist() {
                   <div style={{
                     position: "absolute", top: 0, left: 0,
                     width: `${lineP * 100}%`, height: "100%",
-                    background: "rgba(255,255,255,0.9)",
+                    background: "#1A1410",
                   }} />
-                  {/* Racing spark — luminous blur head */}
+                  {/* Racing spark — dark blur head */}
                   <div style={{
                     position: "absolute", top: "50%",
                     left: `${lineP * 100}%`,
                     transform: "translate(-100%, -50%)",
-                    width: "12vw", height: 3,
-                    background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0.7) 85%, white 100%)",
-                    filter: "blur(1.5px)",
+                    width: "10vw", height: 2,
+                    background: "linear-gradient(90deg, transparent 0%, rgba(26,20,16,0.1) 40%, rgba(26,20,16,0.6) 85%, #1A1410 100%)",
+                    filter: "blur(1px)",
                     opacity: sparkOp,
                     pointerEvents: "none",
                   }} />
@@ -546,8 +537,8 @@ export default function Artist() {
                       {/* Dot */}
                       <div style={{
                         width: 7, height: 7, borderRadius: "50%",
-                        background: "white",
-                        boxShadow: "0 0 8px rgba(255,255,255,0.6)",
+                        background: "#1A1410",
+                        boxShadow: "0 0 0 2px rgba(26,20,16,0.15)",
                         opacity: dotE,
                         transform: `scale(${0.4 + dotE * 0.6})`,
                         position: "relative", zIndex: 1,
@@ -563,12 +554,12 @@ export default function Artist() {
                         whiteSpace: "nowrap",
                       }}>
                         <div style={{
-                          fontSize: 13, fontWeight: 700, color: "white",
+                          fontSize: 13, fontWeight: 700, color: "#1A1410",
                           letterSpacing: "0.1em", marginBottom: 3,
                         }}>{item.period}</div>
                         <div style={{
                           fontSize: 11, fontWeight: 400,
-                          color: "rgba(255,255,255,0.5)",
+                          color: "#7A6A5A",
                           letterSpacing: "0.05em",
                         }}>{item.title}</div>
                       </div>
