@@ -108,7 +108,6 @@ export default function Artist() {
   const [vw, setVw] = useState(375);
   const [vh, setVh] = useState(844);
   const [navH, setNavH] = useState(0);
-  const [asphaltUrl, setAsphaltUrl] = useState("");
   const touchStartX = useRef(0);
   useEffect(() => {
     const update = () => { setVw(window.innerWidth); setVh(window.innerHeight); };
@@ -126,55 +125,6 @@ export default function Artist() {
     return () => obs.disconnect();
   }, []);
 
-  useEffect(() => {
-    const W = 512, H = 256;
-    const canvas = document.createElement("canvas");
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    // Seeded PRNG for reproducibility
-    let s = 1337;
-    const r = () => { s = (s * 1664525 + 1013904223) & 0x7fffffff; return s / 0x7fffffff; };
-    // Base dark asphalt noise — pixel-level variation like a real photo
-    const img = ctx.createImageData(W, H);
-    const d = img.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const g = 22 + Math.floor(r() * 22); // 22–44 dark grey
-      d[i] = g; d[i+1] = g; d[i+2] = g - 1; d[i+3] = 255;
-    }
-    ctx.putImageData(img, 0, 0);
-    // Aggregate stones — varied sizes, irregular ellipses
-    for (let i = 0; i < 1200; i++) {
-      const x = r() * W, y = r() * H;
-      const rx = 1.2 + r() * 5.5, ry = rx * (0.4 + r() * 0.7);
-      const angle = r() * Math.PI;
-      const bright = r();
-      const base = bright < 0.25 ? 55 : bright < 0.65 ? 38 : 68;
-      const alpha = 0.35 + r() * 0.45;
-      ctx.save();
-      ctx.translate(x, y); ctx.rotate(angle);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${base},${base},${base-2},${alpha})`;
-      ctx.fill();
-      ctx.restore();
-    }
-    // Quartz/light mineral specks
-    for (let i = 0; i < 350; i++) {
-      ctx.beginPath();
-      ctx.arc(r() * W, r() * H, r() * 1.2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(130,125,118,${0.25 + r() * 0.4})`;
-      ctx.fill();
-    }
-    // Subtle darker patches (oil spots, wear variation)
-    for (let i = 0; i < 12; i++) {
-      const grd = ctx.createRadialGradient(r()*W, r()*H, 0, r()*W, r()*H, 20 + r()*40);
-      grd.addColorStop(0, `rgba(10,10,10,${0.15 + r() * 0.2})`);
-      grd.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = grd; ctx.fillRect(0, 0, W, H);
-    }
-    setAsphaltUrl(canvas.toDataURL("image/webp", 0.92));
-  }, []);
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
   const [bookingDate, setBookingDate] = useState("");
@@ -522,102 +472,109 @@ export default function Artist() {
           </a>
         </div>{/* end social */}
 
-        {/* Timeline rail — phase 4: real road → timeline reveal */}
+        {/* Timeline — phase 4: cinematic black reveal */}
         {p4 > 0 && (() => {
           type TLItem = { period: string; title: string };
           const items = (t.timeline as TLItem[]);
           const N = items.length;
-          // rotateX: 82deg (road under your feet) → 0deg (flat)
-          const rotX = (1 - p4) * 82;
-          // scale: 30 (extreme zoom) → 1 (final)
-          const scl = 30 - p4 * 29;
-          // road fades out in first 45%, timeline fades in after 35%
-          const roadOpacity = Math.max(0, 1 - p4 / 0.45);
-          const tlOpacity = Math.max(0, (p4 - 0.35) / 0.65);
+
+          // Dark overlay — fades in with p4
+          const overlayOp = Math.min(0.92, p4 * 1.1);
+
+          // Line draws left→right, ease-out quad, completes at p4=0.45
+          const lineRaw = Math.min(1, p4 / 0.45);
+          const lineP = 1 - Math.pow(1 - lineRaw, 2);
+
+          // Spark head: bright glow racing ahead of the line
+          const sparkOp = lineRaw < 1 ? (1 - lineRaw) * 0.9 : 0;
+
           return (
             <div style={{
               position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
-              perspective: 1200,
               zIndex: 6, pointerEvents: "none", overflow: "hidden",
             }}>
+              {/* Dark overlay */}
               <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: "400vw",
-                transformOrigin: "50% 50%",
-                transform: `translateX(-50%) translateY(-50%) rotateX(${rotX}deg) scale(${scl})`,
+                position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
+                background: "#0A0907",
+                opacity: overlayOp,
+              }} />
+
+              {/* Timeline centred */}
+              <div style={{
+                position: "absolute",
+                top: "50%", left: "10%",
+                width: "80%",
+                transform: "translateY(-50%)",
               }}>
-                {/* Road layer — photographic asphalt from canvas pixel texture */}
-                <div style={{
-                  position: "absolute", top: "50%", left: 0, right: 0,
-                  height: 120,
-                  transform: "translateY(-50%)",
-                  opacity: roadOpacity,
-                  overflow: "hidden",
-                  borderRadius: 2,
-                  background: "#1C1C1C",
-                  backgroundImage: asphaltUrl ? `url(${asphaltUrl})` : undefined,
-                  backgroundSize: "512px 256px",
-                  backgroundRepeat: "repeat",
-                }}>
-                  {/* Edge shadow vignette */}
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-                    background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.5) 100%)" }} />
-                  {/* White edge lines */}
-                  <div style={{ position: "absolute", top: 12, left: 0, right: 0, height: 4, background: "rgba(245,242,232,0.75)" }} />
-                  <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, height: 4, background: "rgba(245,242,232,0.75)" }} />
-                  {/* Center dashes — aged paint warm white */}
+                {/* Line track — draws left to right */}
+                <div style={{ position: "relative", height: 1, overflow: "visible" }}>
+                  {/* Drawn line */}
                   <div style={{
-                    position: "absolute", top: "50%", left: 0, right: 0,
-                    height: 6, transform: "translateY(-50%)",
-                    backgroundImage: "repeating-linear-gradient(90deg, rgba(248,244,228,0.9) 0px, rgba(248,244,228,0.9) 70px, transparent 70px, transparent 148px)",
+                    position: "absolute", top: 0, left: 0,
+                    width: `${lineP * 100}%`, height: "100%",
+                    background: "rgba(255,255,255,0.9)",
+                  }} />
+                  {/* Racing spark — luminous blur head */}
+                  <div style={{
+                    position: "absolute", top: "50%",
+                    left: `${lineP * 100}%`,
+                    transform: "translate(-100%, -50%)",
+                    width: "12vw", height: 3,
+                    background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0.7) 85%, white 100%)",
+                    filter: "blur(1.5px)",
+                    opacity: sparkOp,
+                    pointerEvents: "none",
                   }} />
                 </div>
 
-                {/* Timeline line — black, fades in */}
-                <div style={{
-                  position: "relative",
-                  height: 5,
-                  borderRadius: 3,
-                  opacity: tlOpacity,
-                  background: "#1A1410",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
-                }}>
-                  {items.map((item, i) => {
-                    const pct = N > 1 ? (i / (N - 1)) * 52 + 24 : 50;
-                    const above = i % 2 === 0;
-                    return (
-                      <div key={i} style={{
-                        position: "absolute", left: `${pct}%`,
-                        top: "50%", transform: "translate(-50%, -50%)",
-                        opacity: tlOpacity,
+                {/* Dots + labels — staggered per item */}
+                {items.map((item, i) => {
+                  const pct = N > 1 ? (i / (N - 1)) * 100 : 50;
+                  const dotDelay = 0.38 + i * 0.06;
+                  const lblDelay = dotDelay + 0.08;
+                  const dotP = Math.min(1, Math.max(0, (p4 - dotDelay) / 0.22));
+                  const dotE = 1 - Math.pow(1 - dotP, 3);
+                  const lblP = Math.min(1, Math.max(0, (p4 - lblDelay) / 0.28));
+                  const above = i % 2 === 0;
+
+                  return (
+                    <div key={i} style={{
+                      position: "absolute", left: `${pct}%`,
+                      top: "50%", transform: "translate(-50%, -50%)",
+                    }}>
+                      {/* Dot */}
+                      <div style={{
+                        width: 7, height: 7, borderRadius: "50%",
+                        background: "white",
+                        boxShadow: "0 0 8px rgba(255,255,255,0.6)",
+                        opacity: dotE,
+                        transform: `scale(${0.4 + dotE * 0.6})`,
+                        position: "relative", zIndex: 1,
+                      }} />
+                      {/* Labels */}
+                      <div style={{
+                        position: "absolute",
+                        ...(above ? { bottom: 18 } : { top: 18 }),
+                        left: "50%",
+                        transform: `translateX(-50%) translateY(${above ? (1 - lblP) * 10 : -(1 - lblP) * 10}px)`,
+                        opacity: lblP,
+                        textAlign: "center",
+                        whiteSpace: "nowrap",
                       }}>
-                        {/* Dot */}
                         <div style={{
-                          width: 16, height: 16, borderRadius: "50%",
-                          background: "#1A1410",
-                          boxShadow: "0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)",
-                          position: "relative", zIndex: 1,
-                        }} />
-                        {/* Year */}
-                        <div style={{
-                          position: "absolute", top: 22, left: "50%",
-                          transform: "translateX(-50%)",
-                          fontSize: 15, fontWeight: 700, color: "#1A1410",
-                          letterSpacing: "0.06em", whiteSpace: "nowrap",
+                          fontSize: 13, fontWeight: 700, color: "white",
+                          letterSpacing: "0.1em", marginBottom: 3,
                         }}>{item.period}</div>
-                        {/* Title */}
                         <div style={{
-                          position: "absolute",
-                          ...(above ? { bottom: 26 } : { top: 42 }),
-                          left: "50%", transform: "translateX(-50%)",
-                          fontSize: 13, color: "#3A2E25",
-                          whiteSpace: "nowrap", fontWeight: 500,
-                          letterSpacing: "0.02em",
+                          fontSize: 11, fontWeight: 400,
+                          color: "rgba(255,255,255,0.5)",
+                          letterSpacing: "0.05em",
                         }}>{item.title}</div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
