@@ -108,6 +108,7 @@ export default function Artist() {
   const [vw, setVw] = useState(375);
   const [vh, setVh] = useState(844);
   const [navH, setNavH] = useState(0);
+  const [asphaltUrl, setAsphaltUrl] = useState("");
   const touchStartX = useRef(0);
   useEffect(() => {
     const update = () => { setVw(window.innerWidth); setVh(window.innerHeight); };
@@ -123,6 +124,56 @@ export default function Artist() {
     const obs = new ResizeObserver(measure);
     obs.observe(nav);
     return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const W = 512, H = 256;
+    const canvas = document.createElement("canvas");
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    // Seeded PRNG for reproducibility
+    let s = 1337;
+    const r = () => { s = (s * 1664525 + 1013904223) & 0x7fffffff; return s / 0x7fffffff; };
+    // Base dark asphalt noise — pixel-level variation like a real photo
+    const img = ctx.createImageData(W, H);
+    const d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const g = 22 + Math.floor(r() * 22); // 22–44 dark grey
+      d[i] = g; d[i+1] = g; d[i+2] = g - 1; d[i+3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    // Aggregate stones — varied sizes, irregular ellipses
+    for (let i = 0; i < 1200; i++) {
+      const x = r() * W, y = r() * H;
+      const rx = 1.2 + r() * 5.5, ry = rx * (0.4 + r() * 0.7);
+      const angle = r() * Math.PI;
+      const bright = r();
+      const base = bright < 0.25 ? 55 : bright < 0.65 ? 38 : 68;
+      const alpha = 0.35 + r() * 0.45;
+      ctx.save();
+      ctx.translate(x, y); ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${base},${base},${base-2},${alpha})`;
+      ctx.fill();
+      ctx.restore();
+    }
+    // Quartz/light mineral specks
+    for (let i = 0; i < 350; i++) {
+      ctx.beginPath();
+      ctx.arc(r() * W, r() * H, r() * 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(130,125,118,${0.25 + r() * 0.4})`;
+      ctx.fill();
+    }
+    // Subtle darker patches (oil spots, wear variation)
+    for (let i = 0; i < 12; i++) {
+      const grd = ctx.createRadialGradient(r()*W, r()*H, 0, r()*W, r()*H, 20 + r()*40);
+      grd.addColorStop(0, `rgba(10,10,10,${0.15 + r() * 0.2})`);
+      grd.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = grd; ctx.fillRect(0, 0, W, H);
+    }
+    setAsphaltUrl(canvas.toDataURL("image/webp", 0.92));
   }, []);
   const [bookingNom, setBookingNom] = useState("");
   const [bookingEmail, setBookingEmail] = useState("");
@@ -495,7 +546,7 @@ export default function Artist() {
                 transformOrigin: "50% 50%",
                 transform: `translateX(-50%) translateY(-50%) rotateX(${rotX}deg) scale(${scl})`,
               }}>
-                {/* Road layer — procedural asphalt via SVG feTurbulence */}
+                {/* Road layer — photographic asphalt from canvas pixel texture */}
                 <div style={{
                   position: "absolute", top: "50%", left: 0, right: 0,
                   height: 120,
@@ -503,45 +554,22 @@ export default function Artist() {
                   opacity: roadOpacity,
                   overflow: "hidden",
                   borderRadius: 2,
+                  background: "#1C1C1C",
+                  backgroundImage: asphaltUrl ? `url(${asphaltUrl})` : undefined,
+                  backgroundSize: "512px 256px",
+                  backgroundRepeat: "repeat",
                 }}>
-                  {/* Asphalt base + grain — feTurbulence gives real aggregate texture */}
-                  <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "block" }} xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <filter id="tarmac" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="sRGB">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.78 0.6" numOctaves="5" seed="11" result="noise"/>
-                        <feColorMatrix in="noise" type="matrix"
-                          values="0.22 0 0 0 0.1
-                                  0.22 0 0 0 0.1
-                                  0.2  0 0 0 0.09
-                                  0    0 0 0 1"
-                          result="asphalt"/>
-                        <feComposite in="asphalt" in2="SourceGraphic" operator="over"/>
-                      </filter>
-                      <linearGradient id="edgeTop" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#000" stopOpacity="0.5"/>
-                        <stop offset="100%" stopColor="#000" stopOpacity="0"/>
-                      </linearGradient>
-                      <linearGradient id="edgeBot" x1="0" y1="1" x2="0" y2="0">
-                        <stop offset="0%" stopColor="#000" stopOpacity="0.5"/>
-                        <stop offset="100%" stopColor="#000" stopOpacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    {/* Dark base */}
-                    <rect width="100%" height="100%" fill="#1A1A1A"/>
-                    {/* Grain layer */}
-                    <rect width="100%" height="100%" filter="url(#tarmac)" opacity="0.95"/>
-                    {/* Edge shadows — top and bottom 20px */}
-                    <rect width="100%" height="20" fill="url(#edgeTop)"/>
-                    <rect y="80%" width="100%" height="20%" fill="url(#edgeBot)"/>
-                  </svg>
+                  {/* Edge shadow vignette */}
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+                    background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.5) 100%)" }} />
                   {/* White edge lines */}
-                  <div style={{ position: "absolute", top: 14, left: 0, right: 0, height: 4, background: "rgba(248,246,240,0.7)" }} />
-                  <div style={{ position: "absolute", bottom: 14, left: 0, right: 0, height: 4, background: "rgba(248,246,240,0.7)" }} />
-                  {/* Center dashes — slightly warm white like aged paint */}
+                  <div style={{ position: "absolute", top: 12, left: 0, right: 0, height: 4, background: "rgba(245,242,232,0.75)" }} />
+                  <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, height: 4, background: "rgba(245,242,232,0.75)" }} />
+                  {/* Center dashes — aged paint warm white */}
                   <div style={{
                     position: "absolute", top: "50%", left: 0, right: 0,
                     height: 6, transform: "translateY(-50%)",
-                    backgroundImage: "repeating-linear-gradient(90deg, rgba(248,244,230,0.88) 0px, rgba(248,244,230,0.88) 72px, transparent 72px, transparent 148px)",
+                    backgroundImage: "repeating-linear-gradient(90deg, rgba(248,244,228,0.9) 0px, rgba(248,244,228,0.9) 70px, transparent 70px, transparent 148px)",
                   }} />
                 </div>
 
