@@ -144,7 +144,7 @@ export default function Artist() {
   }, []);
 
   useEffect(() => {
-    if (heroProgress >= 0.93 && !mediaEnteredRef.current) {
+    if (heroProgress >= 0.97 && !mediaEnteredRef.current) {
       mediaEnteredRef.current = true;
       setMediaVisible(true);
       setMediaAnimating(true);
@@ -683,7 +683,8 @@ export default function Artist() {
               </div>
             </div>
           )}
-          <section className="w-full pt-12 pb-6 border-t border-zinc-100 [overflow-x:clip]">
+          <section className="w-full pt-12 pb-6 border-t border-zinc-100 [overflow-x:clip]"
+            style={{ opacity: mediaAnimating ? 0 : 1, transition: "opacity 0.4s ease" }}>
             <div className="flex justify-center gap-3 mb-8">
               <button
                 onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
