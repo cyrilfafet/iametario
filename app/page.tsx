@@ -146,16 +146,21 @@ export default function Artist() {
   useEffect(() => {
     const el = mediaRef.current;
     if (!el) return;
+    let timer: ReturnType<typeof setTimeout>;
     const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !mediaVisible) {
+      if (entry.isIntersecting) {
         setMediaVisible(true);
         setMediaAnimating(true);
-        setTimeout(() => setMediaAnimating(false), 1800);
+        timer = setTimeout(() => setMediaAnimating(false), 1800);
+      } else {
+        clearTimeout(timer);
+        setMediaVisible(false);
+        setMediaAnimating(false);
       }
     }, { threshold: 0.12 });
     obs.observe(el);
-    return () => obs.disconnect();
-  }, [mediaVisible]);
+    return () => { obs.disconnect(); clearTimeout(timer); };
+  }, []);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -682,20 +687,18 @@ export default function Artist() {
                       width: cardW,
                       transform: `translateX(${offset * cardOff}px) scale(${isActive ? 1 : 0.82})`,
                       filter: isActive ? "none" : "blur(3px)",
-                      opacity: isActive ? 1 : 0.45,
+                      opacity: !mediaVisible ? 0 : (isActive ? 1 : 0.45),
                       zIndex: isActive ? 10 : 5,
-                      transition: mediaAnimating ? "none" : "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+                      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
                       cursor: isActive ? "default" : "pointer",
                     }}
                   >
-                    {/* Fall animation wrapper */}
+                    {/* Fall animation — only during entrance, cleared after */}
                     <div
-                      style={{
-                        animation: mediaVisible
-                          ? `cardFall 0.75s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`
-                          : undefined,
+                      style={mediaAnimating ? {
+                        animation: `cardFall 0.75s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`,
                         '--rot': fallRots[i % fallRots.length],
-                      } as React.CSSProperties}
+                      } as React.CSSProperties : undefined}
                       className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
                     >
                       <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
