@@ -101,7 +101,7 @@ export default function Artist() {
   const [mediaIndex, setMediaIndex] = useState(0);
   const [mediaVisible, setMediaVisible] = useState(false);
   const [mediaAnimating, setMediaAnimating] = useState(false);
-  const mediaRef = useRef<HTMLElement>(null);
+  const mediaEnteredRef = useRef(false);
   const [vw, setVw] = useState(375);
   const [vh, setVh] = useState(844);
   const [navH, setNavH] = useState(0);
@@ -144,23 +144,17 @@ export default function Artist() {
   }, []);
 
   useEffect(() => {
-    const el = mediaRef.current;
-    if (!el) return;
-    let timer: ReturnType<typeof setTimeout>;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setMediaVisible(true);
-        setMediaAnimating(true);
-        timer = setTimeout(() => setMediaAnimating(false), 1800);
-      } else {
-        clearTimeout(timer);
-        setMediaVisible(false);
-        setMediaAnimating(false);
-      }
-    }, { threshold: 0.12 });
-    obs.observe(el);
-    return () => { obs.disconnect(); clearTimeout(timer); };
-  }, []);
+    if (heroProgress >= 0.93 && !mediaEnteredRef.current) {
+      mediaEnteredRef.current = true;
+      setMediaVisible(true);
+      setMediaAnimating(true);
+      setTimeout(() => setMediaAnimating(false), 1800);
+    } else if (heroProgress < 0.85 && mediaEnteredRef.current) {
+      mediaEnteredRef.current = false;
+      setMediaVisible(false);
+      setMediaAnimating(false);
+    }
+  }, [heroProgress]);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -642,8 +636,51 @@ export default function Artist() {
           },
         ];
         const fallRots = ['-13deg','9deg','-8deg','14deg','-11deg','7deg','-5deg'];
+        const cardW = Math.min(320, vw - 40);
+        const cardOff = Math.min(300, vw - 32);
         return (
-          <section ref={mediaRef} className="w-full pt-12 pb-6 border-t border-zinc-100 [overflow-x:clip]">
+          <>
+          {/* POV animation overlay — plays in the viewport as timeline exits */}
+          {mediaAnimating && (
+            <div style={{ position: "fixed", inset: 0, zIndex: 50, pointerEvents: "none",
+                          display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ position: "relative", width: cardW * 3, height: 280 }}>
+                {mediaItems.map((item, i) => {
+                  let offset = i - mediaIndex;
+                  const n = mediaItems.length;
+                  if (offset > n / 2) offset -= n;
+                  if (offset < -n / 2) offset += n;
+                  if (Math.abs(offset) > 1) return null;
+                  const isActive = offset === 0;
+                  return (
+                    <div key={i} style={{
+                      position: "absolute", left: "50%", width: cardW,
+                      transform: `translateX(calc(-50% + ${offset * cardOff}px)) scale(${isActive ? 1 : 0.82})`,
+                      filter: isActive ? "none" : "blur(3px)",
+                      opacity: isActive ? 1 : 0.45,
+                      zIndex: isActive ? 10 : 5,
+                    }}>
+                      <div style={{
+                        animation: `cardFall 0.9s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`,
+                        '--rot': fallRots[i % fallRots.length],
+                      } as React.CSSProperties}
+                        className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
+                      >
+                        <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
+                        <div className="px-5 pt-4 pb-3 flex-shrink-0">
+                          <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
+                          <p className="text-zinc-900 font-semibold text-base truncate">{item.title}</p>
+                          <p className="text-zinc-400 text-xs mt-0.5">{item.subtitle}</p>
+                        </div>
+                        <div className="flex-1 overflow-hidden">{item.content(isActive)}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          <section className="w-full pt-12 pb-6 border-t border-zinc-100 [overflow-x:clip]">
             <div className="flex justify-center gap-3 mb-8">
               <button
                 onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
@@ -673,11 +710,8 @@ export default function Artist() {
                 const n = mediaItems.length;
                 if (offset > n / 2) offset -= n;
                 if (offset < -n / 2) offset += n;
-                // During animation show all cards; otherwise carousel ±1
-                if (!mediaAnimating && Math.abs(offset) > 1) return null;
+                if (Math.abs(offset) > 1) return null;
                 const isActive = offset === 0;
-                const cardW = Math.min(320, vw - 40);
-                const cardOff = Math.min(300, vw - 32);
                 return (
                   <div
                     key={i}
@@ -693,14 +727,7 @@ export default function Artist() {
                       cursor: isActive ? "default" : "pointer",
                     }}
                   >
-                    {/* Fall animation — only during entrance, cleared after */}
-                    <div
-                      style={mediaAnimating ? {
-                        animation: `cardFall 0.9s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`,
-                        '--rot': fallRots[i % fallRots.length],
-                      } as React.CSSProperties : undefined}
-                      className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
-                    >
+                    <div className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col">
                       <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
                       <div className="px-5 pt-4 pb-3 flex-shrink-0">
                         <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
@@ -725,6 +752,7 @@ export default function Artist() {
               ))}
             </div>
           </section>
+          </>
         );
       })()}
 
