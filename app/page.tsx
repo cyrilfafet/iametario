@@ -474,7 +474,7 @@ export default function Artist() {
 
         {/* Timeline — phase 4: cinematic black reveal */}
         {p4 > 0 && (() => {
-          type TLItem = { period: string; title: string };
+          type TLItem = { period: string; title: string; description: string; bullets: string[] };
           const items = (t.timeline as TLItem[]);
           const N = items.length;
 
@@ -543,7 +543,7 @@ export default function Artist() {
                         transform: `scale(${0.4 + dotE * 0.6})`,
                         position: "relative", zIndex: 1,
                       }} />
-                      {/* Labels */}
+                      {/* Labels + description */}
                       <div style={{
                         position: "absolute",
                         ...(above ? { bottom: 18 } : { top: 18 }),
@@ -551,17 +551,36 @@ export default function Artist() {
                         transform: `translateX(-50%) translateY(${above ? (1 - lblP) * 10 : -(1 - lblP) * 10}px)`,
                         opacity: lblP,
                         textAlign: "center",
-                        whiteSpace: "nowrap",
+                        width: 160,
                       }}>
                         <div style={{
-                          fontSize: 13, fontWeight: 700, color: "#1A1410",
-                          letterSpacing: "0.1em", marginBottom: 3,
+                          fontSize: 12, fontWeight: 700, color: "#1A1410",
+                          letterSpacing: "0.1em", marginBottom: 2,
                         }}>{item.period}</div>
                         <div style={{
-                          fontSize: 11, fontWeight: 400,
-                          color: "#7A6A5A",
-                          letterSpacing: "0.05em",
+                          fontSize: 10, fontWeight: 600,
+                          color: "#4A3F35",
+                          letterSpacing: "0.04em",
+                          marginBottom: 6,
                         }}>{item.title}</div>
+                        {item.description ? (
+                          <div style={{ fontSize: 9.5, color: "#7A6A5A", lineHeight: 1.5 }}>
+                            {item.description}
+                          </div>
+                        ) : null}
+                        {item.bullets.length > 0 ? (
+                          <ul style={{ listStyle: "none", padding: 0, margin: 0, textAlign: "left" }}>
+                            {item.bullets.map((b, bi) => (
+                              <li key={bi} style={{
+                                fontSize: 9.5, color: "#7A6A5A", lineHeight: 1.5,
+                                paddingLeft: 10, position: "relative",
+                              }}>
+                                <span style={{ position: "absolute", left: 0 }}>·</span>
+                                {b}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
                       </div>
                     </div>
                   );
