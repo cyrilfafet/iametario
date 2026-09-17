@@ -75,3 +75,12 @@ nav a {
   50% { opacity: 0; }
 }
 
+/* Media cards fall-in entrance */
+@keyframes cardFall {
+  0%   { transform: translateY(-115vh) rotate(var(--rot)) scale(0.88); opacity: 0; }
+  55%  { opacity: 1; }
+  78%  { transform: translateY(12px) rotate(calc(var(--rot) * 0.07)) scale(1.02); }
+  91%  { transform: translateY(-5px) rotate(0deg) scale(0.99); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+}
+

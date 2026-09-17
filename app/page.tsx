@@ -99,6 +99,9 @@ export default function Artist() {
   const [heroProgress, setHeroProgress] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
   const [mediaIndex, setMediaIndex] = useState(0);
+  const [mediaVisible, setMediaVisible] = useState(false);
+  const [mediaAnimating, setMediaAnimating] = useState(false);
+  const mediaRef = useRef<HTMLElement>(null);
   const [vw, setVw] = useState(375);
   const [vh, setVh] = useState(844);
   const [navH, setNavH] = useState(0);
@@ -140,6 +143,20 @@ export default function Artist() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const el = mediaRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !mediaVisible) {
+        setMediaVisible(true);
+        setMediaAnimating(true);
+        setTimeout(() => setMediaAnimating(false), 1800);
+      }
+    }, { threshold: 0.12 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [mediaVisible]);
+
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     setBookingLoading(true);
@@ -161,10 +178,12 @@ export default function Artist() {
   // Bio opacity: appears then fades out as timeline approaches
   const p3fade = Math.min(1, Math.max(0, (heroProgress - 0.70) / 0.10));
   const bioOpacity = p3 * (1 - p3fade);
-  // Phase 4 (78→100%): timeline rail slides in from right
+  // Phase 4 (78→91%): timeline rail slides in
   const p4raw = Math.min(1, Math.max(0, (heroProgress - 0.78) / 0.22));
   // Ease-out cubic for smooth deceleration
   const p4 = 1 - Math.pow(1 - p4raw, 3);
+  // Phase 4 exit (91→100%): timeline fades + blurs out
+  const p4exit = Math.min(1, Math.max(0, (heroProgress - 0.91) / 0.09));
 
   const sidesOp = 0.5 * Math.max(0, 1 - p1 * 0.6 - p2);
   const sideStyle = (x: number, y: number, rot: number) => ({
@@ -448,6 +467,9 @@ export default function Artist() {
             <div style={{
               position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
               zIndex: 6, pointerEvents: "none", overflow: "hidden",
+              opacity: 1 - p4exit,
+              filter: p4exit > 0 ? `blur(${p4exit * 8}px)` : undefined,
+              transform: `translateY(${-p4exit * 45}px)`,
             }}>
 
               {/* Timeline centred */}
@@ -614,8 +636,9 @@ export default function Artist() {
             content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/interview-fun-radio-part1.mp4" active={active} objectPosition="center center" />,
           },
         ];
+        const fallRots = ['-13deg','9deg','-8deg','14deg','-11deg','7deg','-5deg'];
         return (
-          <section className="w-full pt-12 pb-6 border-t border-zinc-100 overflow-hidden">
+          <section ref={mediaRef} className="w-full pt-12 pb-6 border-t border-zinc-100 overflow-hidden">
             <div className="flex flex-col items-center mb-8 gap-4">
               <h2 className="text-2xl font-bold text-zinc-900">Médias</h2>
               <div className="flex gap-3">
@@ -642,13 +665,14 @@ export default function Artist() {
               }}
             >
 
-              {/* Cartes */}
+              {/* Cartes — fall entrance then carousel */}
               {mediaItems.map((item, i) => {
                 let offset = i - mediaIndex;
                 const n = mediaItems.length;
                 if (offset > n / 2) offset -= n;
                 if (offset < -n / 2) offset += n;
-                if (Math.abs(offset) > 1) return null;
+                // During animation show all cards; otherwise carousel ±1
+                if (!mediaAnimating && Math.abs(offset) > 1) return null;
                 const isActive = offset === 0;
                 const cardW = Math.min(320, vw - 40);
                 const cardOff = Math.min(300, vw - 32);
@@ -663,18 +687,28 @@ export default function Artist() {
                       filter: isActive ? "none" : "blur(3px)",
                       opacity: isActive ? 1 : 0.45,
                       zIndex: isActive ? 10 : 5,
-                      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+                      transition: mediaAnimating ? "none" : "all 0.4s cubic-bezier(0.4,0,0.2,1)",
                       cursor: isActive ? "default" : "pointer",
                     }}
-                    className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
                   >
-                    <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
-                    <div className="px-5 pt-4 pb-3 flex-shrink-0">
-                      <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
-                      <p className="text-zinc-900 font-semibold text-base truncate">{item.title}</p>
-                      <p className="text-zinc-400 text-xs mt-0.5">{item.subtitle}</p>
+                    {/* Fall animation wrapper */}
+                    <div
+                      style={{
+                        animation: mediaVisible
+                          ? `cardFall 0.75s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`
+                          : undefined,
+                        '--rot': fallRots[i % fallRots.length],
+                      } as React.CSSProperties}
+                      className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
+                    >
+                      <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
+                      <div className="px-5 pt-4 pb-3 flex-shrink-0">
+                        <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
+                        <p className="text-zinc-900 font-semibold text-base truncate">{item.title}</p>
+                        <p className="text-zinc-400 text-xs mt-0.5">{item.subtitle}</p>
+                      </div>
+                      <div className="flex-1 overflow-hidden">{item.content(isActive)}</div>
                     </div>
-                    <div className="flex-1 overflow-hidden">{item.content(isActive)}</div>
                   </div>
                 );
               })}
