@@ -148,8 +148,11 @@ export default function Artist() {
       mediaEnteredRef.current = true;
       setMediaVisible(true);
       setMediaAnimating(true);
-      setTimeout(() => setMediaAnimating(false), 1800);
-    } else if (heroProgress < 0.85 && mediaEnteredRef.current) {
+    }
+    if (heroProgress >= 1.0 && mediaEnteredRef.current) {
+      setMediaAnimating(false);
+    }
+    if (heroProgress < 0.85 && mediaEnteredRef.current) {
       mediaEnteredRef.current = false;
       setMediaVisible(false);
       setMediaAnimating(false);
