@@ -696,7 +696,7 @@ export default function Artist() {
                     {/* Fall animation — only during entrance, cleared after */}
                     <div
                       style={mediaAnimating ? {
-                        animation: `cardFall 0.75s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`,
+                        animation: `cardFall 0.9s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`,
                         '--rot': fallRots[i % fallRots.length],
                       } as React.CSSProperties : undefined}
                       className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
