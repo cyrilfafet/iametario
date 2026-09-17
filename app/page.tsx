@@ -639,18 +639,15 @@ export default function Artist() {
         const fallRots = ['-13deg','9deg','-8deg','14deg','-11deg','7deg','-5deg'];
         return (
           <section ref={mediaRef} className="w-full pt-12 pb-6 border-t border-zinc-100 overflow-hidden">
-            <div className="flex flex-col items-center mb-8 gap-4">
-              <h2 className="text-2xl font-bold text-zinc-900">Médias</h2>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
-                  className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
-                >‹</button>
-                <button
-                  onClick={() => setMediaIndex(i => (i + 1) % mediaItems.length)}
-                  className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
-                >›</button>
-              </div>
+            <div className="flex justify-center gap-3 mb-8">
+              <button
+                onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
+                className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
+              >‹</button>
+              <button
+                onClick={() => setMediaIndex(i => (i + 1) % mediaItems.length)}
+                className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
+              >›</button>
             </div>
             <div
               className="relative flex items-center justify-center"
