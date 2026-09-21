@@ -428,7 +428,7 @@ export default function Artist() {
         )}
 
         {/* Réseaux + Booking — fades in phase 1 */}
-        <div style={{ position: "absolute", top: navH + 16, left: "50%", transform: "translateX(-50%)", opacity: Math.max(0, 1 - p1 * 3), zIndex: 5, pointerEvents: p1 > 0.3 ? "none" : "auto" }}
+        <div style={{ position: "absolute", bottom: "25vh", left: "50%", transform: "translateX(-50%)", opacity: Math.max(0, 1 - p1 * 3), zIndex: 5, pointerEvents: p1 > 0.3 ? "none" : "auto" }}
           className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
           <div className="flex gap-6 items-center flex-wrap justify-center">
             <a href="https://www.instagram.com/etario_music" target="_blank" className="text-zinc-500 hover:text-zinc-900 transition-colors">
