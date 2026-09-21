@@ -255,7 +255,7 @@ export default function Artist() {
 
       {/* Hero — scroll storytelling, 400vh. marginTop: -navH aligns hero top with viewport top
           so the sticky inner div is already at top:0 in normal flow — no jump on first scroll. */}
-      <section ref={heroRef} style={{ height: "500vh", position: "relative", marginTop: -navH }}>
+      <section ref={heroRef} style={{ height: "500vh", position: "relative", marginTop: -navH, zIndex: 2 }}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
 
         {/* Background — reste fixe dans le sticky, ne remonte jamais */}
@@ -642,8 +642,11 @@ export default function Artist() {
         const cardW = Math.min(320, vw - 40);
         const cardOff = Math.min(300, vw - 32);
         return (
-          <>
-          {/* POV animation overlay — plays in the viewport as timeline exits */}
+          /* Wrapper sticky: margin-top -100vh so the section is already at viewport
+             top when the hero ends (heroProgress=1.0). zIndex:1 keeps it behind
+             the hero panel (zIndex:2) so the hero acts as a curtain that reveals it. */
+          <div style={{ height: vh * 2, marginTop: -vh, position: "relative", zIndex: 1 }}>
+          {/* POV animation overlay — fixed, plays in the viewport during hero exit */}
           {mediaAnimating && (
             <div style={{ position: "fixed", inset: 0, zIndex: 50, pointerEvents: "none",
                           display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -683,8 +686,13 @@ export default function Artist() {
               </div>
             </div>
           )}
-          <section className="w-full pt-12 pb-6 border-t border-zinc-100 [overflow-x:clip]"
-            style={{ opacity: mediaAnimating ? 0 : 1, transition: "opacity 0.4s ease" }}>
+          <section className="w-full border-t border-zinc-100 [overflow-x:clip]"
+            style={{
+              position: "sticky", top: 0,
+              minHeight: vh,
+              paddingTop: navH + 16, paddingBottom: 24,
+              background: "#F5EFE4",
+            }}>
             <div className="flex justify-center gap-3 mb-8">
               <button
                 onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
@@ -725,7 +733,7 @@ export default function Artist() {
                       width: cardW,
                       transform: `translateX(${offset * cardOff}px) scale(${isActive ? 1 : 0.82})`,
                       filter: isActive ? "none" : "blur(3px)",
-                      opacity: (!mediaVisible || mediaAnimating) ? 0 : (isActive ? 1 : 0.45),
+                      opacity: !mediaVisible ? 0 : (isActive ? 1 : 0.45),
                       zIndex: isActive ? 10 : 5,
                       transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
                       cursor: isActive ? "default" : "pointer",
@@ -756,7 +764,7 @@ export default function Artist() {
               ))}
             </div>
           </section>
-          </>
+          </div>
         );
       })()}
 
