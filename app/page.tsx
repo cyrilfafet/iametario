@@ -144,13 +144,11 @@ export default function Artist() {
   }, []);
 
   useEffect(() => {
-    if (heroProgress >= 0.97 && !mediaEnteredRef.current) {
+    if (heroProgress >= 0.91 && !mediaEnteredRef.current) {
       mediaEnteredRef.current = true;
       setMediaVisible(true);
       setMediaAnimating(true);
-    }
-    if (heroProgress >= 1.0 && mediaEnteredRef.current) {
-      setMediaAnimating(false);
+      setTimeout(() => setMediaAnimating(false), 1800);
     }
     if (heroProgress < 0.85 && mediaEnteredRef.current) {
       mediaEnteredRef.current = false;
@@ -603,75 +601,66 @@ export default function Artist() {
           );
         })()}
 
-        </div>{/* end sticky inner */}
-      </section>{/* end 400vh hero */}
-
-      {/* Médias */}
-      {(() => {
-        const mediaItems = [
-          {
-            type: "Audio", color: "#3B82F6", title: "Afro House Selection by E-Tario", subtitle: "2024",
-            content: (active: boolean) => <SoundCloudCard active={active} src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" />,
-          },
-          {
-            type: "Audio", color: "#3B82F6", title: "EDM Club Selection by E-Tario", subtitle: "2025",
-            content: (active: boolean) => <SoundCloudCard active={active} src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" />,
-          },
-          {
-            type: "Vidéo", color: "#818cf8", title: "Peggy Gou – Nanana (E-Tario Remix)", subtitle: "2025",
-            content: (active: boolean) => <YouTubeCard videoId="9x81NCHbXhU" active={active} />,
-          },
-          {
-            type: "Vidéo", color: "#818cf8", title: "Hugel – Movin To The Sun (E-Tario Remix)", subtitle: "2025",
-            content: (active: boolean) => <YouTubeCard videoId="i67MKS6Vnz4" active={active} />,
-          },
-          {
-            type: "Vidéo", color: "#818cf8", title: "Mix House @Mimi Dole", subtitle: "2025",
-            content: (active: boolean) => <YouTubeCard videoId="Y4scDZipvCU" active={active} />,
-          },
-          {
-            type: "Vidéo", color: "#a78bfa", title: "E-Tario @ Almanach Festival", subtitle: "Set Live",
-            content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/extrait-pjanoo-linkin.mp4" active={active} />,
-          },
-          {
-            type: "Interview", color: "#f472b6", title: "E-Tario @ Fun Radio Bourgogne", subtitle: "2026",
-            content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/interview-fun-radio-part1.mp4" active={active} objectPosition="center center" />,
-          },
-        ];
-        const fallRots = ['-13deg','9deg','-8deg','14deg','-11deg','7deg','-5deg'];
-        const cardW = Math.min(320, vw - 40);
-        const cardOff = Math.min(300, vw - 32);
-        return (
-          /* Wrapper sticky: margin-top -100vh so the section is already at viewport
-             top when the hero ends (heroProgress=1.0). zIndex:1 keeps it behind
-             the hero panel (zIndex:2) so the hero acts as a curtain that reveals it. */
-          <div style={{ height: vh * 2, marginTop: -vh, position: "relative", zIndex: 1 }}>
-          {/* POV animation overlay — fixed, plays in the viewport during hero exit */}
-          {mediaAnimating && (
-            <div style={{ position: "fixed", inset: 0, zIndex: 50, pointerEvents: "none",
-                          display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ position: "relative", width: cardW * 3, height: 280 }}>
+        {/* Médias — carousel inside sticky hero, appears as timeline exits */}
+        {mediaVisible && (() => {
+          const mediaItems = [
+            { type: "Audio", title: "Afro House Selection by E-Tario", subtitle: "2024", content: (active: boolean) => <SoundCloudCard active={active} src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2162991717&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" /> },
+            { type: "Audio", title: "EDM Club Selection by E-Tario", subtitle: "2025", content: (active: boolean) => <SoundCloudCard active={active} src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2273673995&color=%233b82f6&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" /> },
+            { type: "Vidéo", title: "Peggy Gou – Nanana (E-Tario Remix)", subtitle: "2025", content: (active: boolean) => <YouTubeCard videoId="9x81NCHbXhU" active={active} /> },
+            { type: "Vidéo", title: "Hugel – Movin To The Sun (E-Tario Remix)", subtitle: "2025", content: (active: boolean) => <YouTubeCard videoId="i67MKS6Vnz4" active={active} /> },
+            { type: "Vidéo", title: "Mix House @Mimi Dole", subtitle: "2025", content: (active: boolean) => <YouTubeCard videoId="Y4scDZipvCU" active={active} /> },
+            { type: "Vidéo", title: "E-Tario @ Almanach Festival", subtitle: "Set Live", content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/extrait-pjanoo-linkin.mp4" active={active} /> },
+            { type: "Interview", title: "E-Tario @ Fun Radio Bourgogne", subtitle: "2026", content: (active: boolean) => <VideoCard src="https://pub-23c7de8a0b4249ae88f17836c36cce74.r2.dev/videos/interview-fun-radio-part1.mp4" active={active} objectPosition="center center" /> },
+          ];
+          const fallRots = ['-13deg','9deg','-8deg','14deg','-11deg','7deg','-5deg'];
+          const cardW = Math.min(320, vw - 40);
+          const cardOff = Math.min(300, vw - 32);
+          const n = mediaItems.length;
+          return (
+            <div style={{
+              position: "absolute", inset: 0, zIndex: 9, pointerEvents: "auto",
+              display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center",
+              opacity: Math.min(1, p4exit * 3),
+            }}>
+              {/* Nav */}
+              <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
+                <button onClick={() => setMediaIndex(i => (i - 1 + n) % n)}
+                  className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50/80 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm">‹</button>
+                <button onClick={() => setMediaIndex(i => (i + 1) % n)}
+                  className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50/80 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm">›</button>
+              </div>
+              {/* Cards */}
+              <div style={{ position: "relative", height: 280, width: "100%" }}
+                onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
+                onTouchEnd={e => {
+                  const dx = e.changedTouches[0].clientX - touchStartX.current;
+                  if (Math.abs(dx) > 40) {
+                    if (dx < 0) setMediaIndex(i => (i + 1) % n);
+                    else setMediaIndex(i => (i - 1 + n) % n);
+                  }
+                }}>
                 {mediaItems.map((item, i) => {
                   let offset = i - mediaIndex;
-                  const n = mediaItems.length;
                   if (offset > n / 2) offset -= n;
                   if (offset < -n / 2) offset += n;
                   if (Math.abs(offset) > 1) return null;
                   const isActive = offset === 0;
                   return (
-                    <div key={i} style={{
+                    <div key={i} onClick={() => !isActive && setMediaIndex(i)} style={{
                       position: "absolute", left: "50%", width: cardW,
                       transform: `translateX(calc(-50% + ${offset * cardOff}px)) scale(${isActive ? 1 : 0.82})`,
                       filter: isActive ? "none" : "blur(3px)",
                       opacity: isActive ? 1 : 0.45,
                       zIndex: isActive ? 10 : 5,
+                      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+                      cursor: isActive ? "default" : "pointer",
                     }}>
-                      <div style={{
+                      <div style={mediaAnimating ? {
                         animation: `cardFall 0.9s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`,
                         '--rot': fallRots[i % fallRots.length],
-                      } as React.CSSProperties}
-                        className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col"
-                      >
+                      } as React.CSSProperties : undefined}
+                        className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col">
                         <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
                         <div className="px-5 pt-4 pb-3 flex-shrink-0">
                           <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
@@ -684,89 +673,20 @@ export default function Artist() {
                   );
                 })}
               </div>
+              {/* Dots */}
+              <div style={{ display: "flex", gap: 6, marginTop: 20 }}>
+                {mediaItems.map((_, i) => (
+                  <button key={i} onClick={() => setMediaIndex(i)}
+                    style={{ width: 6, height: 6, borderRadius: "50%", border: "none", padding: 0, cursor: "pointer",
+                             backgroundColor: i === mediaIndex ? "#B8936A" : "#d4d4d8", transition: "background-color 0.2s" }} />
+                ))}
+              </div>
             </div>
-          )}
-          <section className="w-full border-t border-zinc-100 [overflow-x:clip]"
-            style={{
-              position: "sticky", top: 0,
-              minHeight: vh,
-              paddingTop: navH + 16, paddingBottom: 24,
-              background: "#F5EFE4",
-            }}>
-            <div className="flex justify-center gap-3 mb-8">
-              <button
-                onClick={() => setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)}
-                className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
-              >‹</button>
-              <button
-                onClick={() => setMediaIndex(i => (i + 1) % mediaItems.length)}
-                className="w-10 h-10 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-400 hover:border-blue-400 hover:text-blue-400 transition-colors shadow-sm"
-              >›</button>
-            </div>
-            <div
-              className="relative flex items-center justify-center"
-              style={{ height: 280 }}
-              onTouchStart={e => { touchStartX.current = e.touches[0].clientX; }}
-              onTouchEnd={e => {
-                const dx = e.changedTouches[0].clientX - touchStartX.current;
-                if (Math.abs(dx) > 40) {
-                  if (dx < 0) setMediaIndex(i => (i + 1) % mediaItems.length);
-                  else setMediaIndex(i => (i - 1 + mediaItems.length) % mediaItems.length);
-                }
-              }}
-            >
+          );
+        })()}
 
-              {/* Cartes — fall entrance then carousel */}
-              {mediaItems.map((item, i) => {
-                let offset = i - mediaIndex;
-                const n = mediaItems.length;
-                if (offset > n / 2) offset -= n;
-                if (offset < -n / 2) offset += n;
-                if (Math.abs(offset) > 1) return null;
-                const isActive = offset === 0;
-                return (
-                  <div
-                    key={i}
-                    onClick={() => !isActive && setMediaIndex(i)}
-                    style={{
-                      position: "absolute",
-                      width: cardW,
-                      transform: `translateX(${offset * cardOff}px) scale(${isActive ? 1 : 0.82})`,
-                      filter: isActive ? "none" : "blur(3px)",
-                      opacity: !mediaVisible ? 0 : (isActive ? 1 : 0.45),
-                      zIndex: isActive ? 10 : 5,
-                      transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
-                      cursor: isActive ? "default" : "pointer",
-                    }}
-                  >
-                    <div className="bg-white rounded-3xl overflow-hidden shadow-lg shadow-zinc-200/80 flex flex-col">
-                      <div className="h-px w-full flex-shrink-0" style={{ backgroundColor: "#E4DDD1" }} />
-                      <div className="px-5 pt-4 pb-3 flex-shrink-0">
-                        <p className="text-xs uppercase tracking-widest mb-1 text-zinc-400">{item.type}</p>
-                        <p className="text-zinc-900 font-semibold text-base truncate">{item.title}</p>
-                        <p className="text-zinc-400 text-xs mt-0.5">{item.subtitle}</p>
-                      </div>
-                      <div className="flex-1 overflow-hidden">{item.content(isActive)}</div>
-                    </div>
-                  </div>
-                );
-              })}
-
-            </div>
-
-            {/* Dots */}
-            <div className="flex justify-center gap-1.5 mt-6">
-              {mediaItems.map((_, i) => (
-                <button key={i} onClick={() => setMediaIndex(i)}
-                  className="w-1.5 h-1.5 rounded-full transition-colors"
-                  style={{ backgroundColor: i === mediaIndex ? "#B8936A" : "#d4d4d8" }}
-                />
-              ))}
-            </div>
-          </section>
-          </div>
-        );
-      })()}
+        </div>{/* end sticky inner */}
+      </section>{/* end 500vh hero */}
 
       {/* Booking */}
       <section className="px-6 py-12 md:py-24 max-w-4xl mx-auto w-full">
