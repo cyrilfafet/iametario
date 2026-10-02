@@ -224,7 +224,19 @@ export default function Artist() {
       )}
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
+      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative" style={{
+        backgroundImage: [
+          "radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184,147,106,0.10) 0%, transparent 65%)",
+          "radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201,169,110,0.08) 0%, transparent 65%)",
+          "radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224,213,197,0.25) 0%, transparent 55%)",
+          "linear-gradient(to bottom, rgba(245,239,228,0) 0%, rgba(245,239,228,0) 65%, rgba(245,239,228,1) 100%)",
+          "url(/bannieretest.jpg)",
+        ].join(", "),
+        backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 50vh, 100% 50vh",
+        backgroundPosition: "0 0, 0 0, 0 0, center top, center top",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#F5EFE4",
+      }}>
 
         {/* Images gauche */}
         <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">

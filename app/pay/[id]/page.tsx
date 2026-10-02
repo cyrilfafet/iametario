@@ -21,7 +21,7 @@ export default async function PayPage({
   const paid = inv.status === "paid";
 
   return (
-    <main style={{ maxWidth: 480, margin: "80px auto", padding: "0 20px", fontFamily: "system-ui, sans-serif", color: "#111" }}>
+    <main style={{ maxWidth: 480, margin: "80px auto", padding: "0 20px", fontFamily: "system-ui, sans-serif", color: "#111", minHeight: "100vh", backgroundColor: "#fff" }}>
       <h1 style={{ letterSpacing: "0.3em", fontWeight: 500, textAlign: "center", fontSize: 28 }}>E-TARIO</h1>
       <p style={{ textAlign: "center", color: "#666", marginTop: 4 }}>
         Facture n°{inv.number} · {longDate(inv.issued_at)}
