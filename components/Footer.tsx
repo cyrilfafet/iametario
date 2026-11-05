@@ -5,16 +5,16 @@ export default function Footer() {
 
         {/* Liens rapides */}
         <nav className="flex gap-6 text-xs uppercase tracking-widest">
-          <a href="/" className="hover:text-blue-500 transition-colors">Accueil</a>
-          <a href="/services" className="hover:text-blue-500 transition-colors">Services</a>
-          <a href="/formations" className="hover:text-blue-500 transition-colors">Formations</a>
+          <a href="/perform" className="hover:text-blue-500 transition-colors">Perform</a>
+          <a href="/creation" className="hover:text-blue-500 transition-colors">Create</a>
+          <a href="/teaching" className="hover:text-blue-500 transition-colors">Teach</a>
           <a href="/shop" className="hover:text-blue-500 transition-colors">Shop</a>
           <a href="/contact" className="hover:text-blue-500 transition-colors">Contact</a>
         </nav>
 
         {/* Réseaux */}
         <div className="flex gap-5 text-xs">
-          <a href="https://www.instagram.com/etario_music" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Instagram</a>
+          <a href="https://instagram.com/iametario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Instagram</a>
           <a href="https://soundcloud.com/iametario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">SoundCloud</a>
           <a href="https://open.spotify.com/intl-fr/artist/5PRHGYHjRAJsxSiHWuBUVp?si=QOFkWIr5Q12Fn2TDoBzlKg" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">Spotify</a>
           <a href="https://youtube.com/@e-tario" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">YouTube</a>
