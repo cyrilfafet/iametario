@@ -147,17 +147,16 @@ function CreationInner() {
   };
 
   return (
-    <main className="min-h-screen text-zinc-900">
+    <main className="min-h-screen bg-white text-zinc-900">
 
     <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
   <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
   <div className="hidden md:flex gap-8 text-sm text-zinc-500">
-    <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-    <a href="/services" className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
-          <a href="/formations" className="hover:text-violet-400 transition-colors">FORMATIONS</a>
-    
+    <a href="/" className="hover:text-zinc-900 transition-colors">ACCUEIL</a>
+    <a href="/services" className="font-medium text-zinc-900">SERVICES</a>
+    <a href="/formations" className="hover:text-zinc-900 transition-colors">FORMATIONS</a>
     <a href="/shop" className="hover:text-zinc-900 transition-colors">SHOP</a>
-    <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+    <a href="/contact" className="hover:text-zinc-900 transition-colors">CONTACT</a>
   </div>
   <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
     <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
@@ -168,11 +167,11 @@ function CreationInner() {
 
 {menuOpen && (
   <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-    <a href="/" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-    <a href="/services" onClick={() => setMenuOpen(false)} className="font-medium" style={{ color: "#818cf8" }}>SERVICES</a>
-    <a href="/formations" onClick={() => setMenuOpen(false)} className="hover:text-violet-400 transition-colors">FORMATIONS</a>
+    <a href="/" onClick={() => setMenuOpen(false)} className="hover:text-zinc-900 transition-colors">ACCUEIL</a>
+    <a href="/services" onClick={() => setMenuOpen(false)} className="font-medium text-zinc-900">SERVICES</a>
+    <a href="/formations" onClick={() => setMenuOpen(false)} className="hover:text-zinc-900 transition-colors">FORMATIONS</a>
     <a href="/shop" onClick={() => setMenuOpen(false)} className="hover:text-zinc-900 transition-colors">SHOP</a>
-    <a href="/contact" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">CONTACT</a>
+    <a href="/contact" onClick={() => setMenuOpen(false)} className="hover:text-zinc-900 transition-colors">CONTACT</a>
   </div>
 )}
 
@@ -200,7 +199,7 @@ function CreationInner() {
     </p>
     <p className="text-zinc-400 text-lg mt-1">Production soignée · Vocales haute qualité</p>
     <div className="flex flex-wrap items-center justify-center gap-3 mt-6 max-w-sm mx-auto">
-      <a href="#commander" className="inline-block bg-indigo-400 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors">
+      <a href="#commander" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-blue-600 transition-colors">
         Commander un montage audio
       </a>
       <a href="/shop" className="inline-block border border-zinc-300 text-zinc-600 px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:border-zinc-400 hover:text-zinc-900 transition-colors">
@@ -228,25 +227,25 @@ function CreationInner() {
             <div className="max-w-2xl mx-auto">
               {/* Compteur + navigation */}
               <div className="flex items-center justify-between mb-6">
-                <span className="text-sm text-zinc-500 font-medium">Exemple <span className="text-indigo-400 font-bold">{currentDemo + 1}</span> / {demos.length}</span>
+                <span className="text-sm text-zinc-500 font-medium">Exemple <span className="text-blue-500 font-bold">{currentDemo + 1}</span> / {demos.length}</span>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => { setPlaying(null); setCurrentDemo(i => Math.max(0, i - 1)); }}
                     disabled={currentDemo === 0}
-                    className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-400 text-lg hover:bg-indigo-100 hover:border-indigo-400 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-500 text-lg hover:bg-blue-100 hover:border-blue-500 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
                   >‹</button>
                   <div className="flex gap-1.5">
                     {demos.map((_, i) => (
                       <button key={i} onClick={() => { setPlaying(null); setCurrentDemo(i); }}
                         className="w-1.5 h-1.5 rounded-full transition-colors"
-                        style={{ backgroundColor: i === currentDemo ? "#818cf8" : "#d4d4d8" }}
+                        style={{ backgroundColor: i === currentDemo ? "#B8936A" : "#CFC6B8" }}
                       />
                     ))}
                   </div>
                   <button
                     onClick={() => { setPlaying(null); setCurrentDemo(i => Math.min(demos.length - 1, i + 1)); }}
                     disabled={currentDemo === demos.length - 1}
-                    className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-400 text-lg hover:bg-indigo-100 hover:border-indigo-400 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-500 text-lg hover:bg-blue-100 hover:border-blue-500 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
                   >›</button>
                 </div>
               </div>
@@ -269,12 +268,12 @@ function CreationInner() {
                     </div>
                     {/* Lecteur */}
                     <div className="ml-11 flex items-center gap-4">
-                      <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-indigo-400" : "border-zinc-100 opacity-60"}`}>
+                      <div className={`flex-1 border rounded-2xl px-5 py-4 transition-colors ${demo.file ? "border-zinc-200 hover:border-blue-500" : "border-zinc-100 opacity-60"}`}>
                         <div className="flex items-center gap-4 mb-3">
                           <button
                             onClick={() => demo.file && togglePlay(index)}
                             disabled={!demo.file}
-                            className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-indigo-400 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             {playing === index ? (
                               <span className="w-3 h-3 flex gap-0.5">
@@ -287,13 +286,13 @@ function CreationInner() {
                           </button>
                           <div className="flex-1">
                             <p className="text-sm font-medium mb-1">{demo.title}</p>
-                            <span className="text-xs text-indigo-400 border border-indigo-400/40 rounded-full px-2.5 py-0.5">{demo.tag}</span>
+                            <span className="text-xs text-blue-500 border border-blue-500/40 rounded-full px-2.5 py-0.5">{demo.tag}</span>
                           </div>
                         </div>
                         <input
                           type="range" min={0} max={100} value={progress[index]}
                           onChange={(e) => handleSeek(index, e)}
-                          className="w-full h-1 accent-indigo-400 cursor-pointer"
+                          className="w-full h-1 accent-blue-500 cursor-pointer"
                         />
                         <div className="flex justify-between text-xs text-zinc-400 mt-1">
                           <span>{fmt((progress[index] / 100) * durations[index])}</span>
@@ -390,7 +389,7 @@ function CreationInner() {
             <div className="text-center">
               <button
                 onClick={startChat}
-                className="bg-indigo-400 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-indigo-500 transition-colors"
+                className="bg-blue-500 text-white px-6 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-600 transition-colors"
               >
                 Estimer mon projet
               </button>
@@ -403,7 +402,7 @@ function CreationInner() {
                   <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-indigo-400 text-white rounded-br-sm"
+                        ? "bg-blue-500 text-white rounded-br-sm"
                         : "bg-zinc-50 border border-zinc-200 text-zinc-700 rounded-bl-sm"
                     }`}>
                       {msg.content}
@@ -438,12 +437,12 @@ function CreationInner() {
                     onKeyDown={e => e.key === "Enter" && sendChatMessage()}
                     placeholder="Votre réponse…"
                     disabled={chatLoading}
-                    className="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors disabled:opacity-50"
+                    className="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
                   />
                   <button
                     onClick={sendChatMessage}
                     disabled={chatLoading || !chatInput.trim()}
-                    className="bg-indigo-400 text-white px-4 py-3 rounded-xl text-xs font-semibold hover:bg-indigo-500 transition-colors disabled:opacity-40"
+                    className="bg-blue-500 text-white px-4 py-3 rounded-xl text-xs font-semibold hover:bg-blue-600 transition-colors disabled:opacity-40"
                   >
                     →
                   </button>
@@ -490,7 +489,7 @@ function CreationInner() {
         required
         value={nom}
         onChange={e => setNom(e.target.value)}
-        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
+        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
       />
       <input
         name="email"
@@ -499,7 +498,7 @@ function CreationInner() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors"
+        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors"
       />
       <textarea
         name="description"
@@ -508,7 +507,7 @@ function CreationInner() {
         required
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 transition-colors resize-none"
+        className="bg-zinc-50 border border-zinc-200 border-b-0 px-5 py-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
       />
       <div className="border border-zinc-200 px-5 py-4">
         <input

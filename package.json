@@ -12,6 +12,7 @@
     "@anthropic-ai/sdk": "^0.95.1",
     "@aws-sdk/client-s3": "^3.1080.0",
     "@aws-sdk/s3-request-presigner": "^3.1080.0",
+    "@react-pdf/renderer": "^4.9.0",
     "@supabase/supabase-js": "^2.105.3",
     "jsmediatags": "^3.9.7",
     "next": "16.2.1",
@@ -19,7 +20,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.2",
-    "stripe": "^22.1.0"
+    "stripe": "^22.1.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

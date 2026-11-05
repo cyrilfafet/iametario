@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["jsmediatags"],
+  serverExternalPackages: ["jsmediatags", "@react-pdf/renderer"],
+  // Polices et logo du PDF embarqués dans le bundle serverless Vercel.
+  outputFileTracingIncludes: {
+    "/api/invoices": ["./assets/**/*"],
+  },
   turbopack: {},
   async redirects() {
     return [
