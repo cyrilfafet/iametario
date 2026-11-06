@@ -204,7 +204,7 @@ function ServicesInner() {
             onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#C9A96E"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#B8936A"; }}
           >
-            Lancer un projet →
+            Lancer un projet
           </a>
           <a
             href="/shop"
@@ -213,7 +213,7 @@ function ServicesInner() {
             onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "#B8936A"; el.style.backgroundColor = "rgba(184,147,106,0.08)"; }}
             onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "rgba(184,147,106,0.45)"; el.style.backgroundColor = "transparent"; }}
           >
-            Explorer le shop →
+            Explorer le shop
           </a>
         </div>
       </section>
