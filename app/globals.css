@@ -41,13 +41,18 @@ html {
 }
 
 body {
-  background-color: #F5EFE4;
+  background-color: #ffffff;
   color: #1A1410;
   font-family: var(--font-geist-sans), sans-serif;
 }
 
 nav a {
   font-family: var(--font-syne), sans-serif;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes ticker {
@@ -58,20 +63,5 @@ nav a {
 @keyframes tlFadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.bio-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1.1em;
-  background: #B8936A;
-  margin-left: 2px;
-  vertical-align: middle;
-  animation: blink 0.7s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
 }
 

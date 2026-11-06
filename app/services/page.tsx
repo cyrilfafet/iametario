@@ -102,6 +102,7 @@ function ServicesInner() {
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
   const [fileName, setFileName] = useState<string | null>(null);
+  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const fmt = (s: number) => {
     if (!s || isNaN(s)) return "0:00";
@@ -410,15 +411,16 @@ function ServicesInner() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
+              setFormStatus("loading");
               const formData = new FormData(e.currentTarget);
               const res = await fetch("/api/contact", { method: "POST", body: formData });
               const data = await res.json();
               if (data.success) {
-                alert("Message envoyé ! Je vous réponds sous 48h.");
                 (e.target as HTMLFormElement).reset();
                 setNom(""); setEmail(""); setDescription(""); setFileName(null);
+                setFormStatus("success");
               } else {
-                alert("Erreur lors de l'envoi. Réessayez ou contactez-moi directement.");
+                setFormStatus("error");
               }
             }}
             className="flex flex-col"
@@ -470,15 +472,43 @@ function ServicesInner() {
             <div className="flex flex-col items-start gap-3 mt-6">
               <button
                 type="submit"
-                className="px-7 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
+                disabled={formStatus === "loading" || formStatus === "success"}
+                className="px-7 py-3 text-xs font-semibold tracking-widest uppercase transition-all disabled:opacity-50"
                 style={{ border: "1px solid #B8936A", color: "#B8936A" }}
-                onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "#B8936A"; b.style.color = "#0D0B08"; }}
+                onMouseEnter={e => { if (formStatus === "idle" || formStatus === "error") { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "#B8936A"; b.style.color = "#0D0B08"; } }}
                 onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "transparent"; b.style.color = "#B8936A"; }}
               >
-                Envoyer
+                {formStatus === "loading" ? "Envoi…" : "Envoyer"}
               </button>
               <p className="text-xs" style={{ color: "rgba(245,239,228,0.3)" }}>Je vous réponds sous 48h — confirmation de faisabilité et devis personnalisé.</p>
             </div>
+
+            {formStatus === "success" && (
+              <div
+                className="mt-6 px-5 py-4"
+                style={{
+                  backgroundColor: "rgba(184,147,106,0.07)",
+                  border: "1px solid rgba(184,147,106,0.3)",
+                  animation: "fadeIn 0.4s ease",
+                }}
+              >
+                <p className="text-sm" style={{ color: "#B8936A" }}>Message envoyé.</p>
+                <p className="text-xs mt-1" style={{ color: "rgba(245,239,228,0.45)" }}>Je vous réponds sous 48h.</p>
+              </div>
+            )}
+            {formStatus === "error" && (
+              <div
+                className="mt-6 px-5 py-4"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,100,100,0.25)",
+                  animation: "fadeIn 0.4s ease",
+                }}
+              >
+                <p className="text-sm" style={{ color: "rgba(255,150,150,0.8)" }}>Erreur lors de l'envoi.</p>
+                <p className="text-xs mt-1" style={{ color: "rgba(245,239,228,0.4)" }}>Réessayez ou écrivez directement à <span style={{ color: "#B8936A" }}>contact@iametario.com</span>.</p>
+              </div>
+            )}
           </form>
         </div>
       </section>
