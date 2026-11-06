@@ -233,15 +233,15 @@ function ServicesInner() {
                 cardTransform = "translateX(0%) rotateY(0deg) scale(1)";
                 cardOpacity = 1; cardZIndex = 10; origin = "center center";
               } else if (isRight) {
-                cardTransform = "translateX(72%) rotateY(-52deg) scale(0.78)";
-                cardOpacity = 0.38; cardZIndex = 5; origin = "left center";
+                cardTransform = "translateX(28%) rotateY(-44deg) scale(0.82)";
+                cardOpacity = 0.42; cardZIndex = 5; origin = "left center";
               } else if (isLeft) {
-                cardTransform = "translateX(-72%) rotateY(52deg) scale(0.78)";
-                cardOpacity = 0.38; cardZIndex = 5; origin = "right center";
+                cardTransform = "translateX(-28%) rotateY(44deg) scale(0.82)";
+                cardOpacity = 0.42; cardZIndex = 5; origin = "right center";
               } else {
                 cardTransform = relPos > 1
-                  ? "translateX(140%) rotateY(-52deg) scale(0.68)"
-                  : "translateX(-140%) rotateY(52deg) scale(0.68)";
+                  ? "translateX(80%) rotateY(-44deg) scale(0.68)"
+                  : "translateX(-80%) rotateY(44deg) scale(0.68)";
                 cardOpacity = 0; cardZIndex = 1; origin = "center center";
               }
 
