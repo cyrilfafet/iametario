@@ -233,6 +233,7 @@ export default function Artist() {
               maskSize: "100% 100%",
               WebkitMaskRepeat: "no-repeat",
               maskRepeat: "no-repeat",
+              filter: "grayscale(1)",
             }}
           >
             <video
@@ -257,6 +258,7 @@ export default function Artist() {
               maskSize: "100% 100%",
               WebkitMaskRepeat: "no-repeat",
               maskRepeat: "no-repeat",
+              filter: "grayscale(1)",
             }}
           >
             <video
