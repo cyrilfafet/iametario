@@ -221,7 +221,7 @@ export default function Artist() {
       }}>
 
         {/* Images gauche */}
-        <div className="hidden md:flex absolute left-0 top-0 h-[560px] items-center pointer-events-none">
+        <div className="hidden md:flex absolute left-0 top-[8vh] h-[55vh] items-center pointer-events-none">
           <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" />
           <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" />
           <div
@@ -247,7 +247,7 @@ export default function Artist() {
         </div>
 
         {/* Images droite */}
-        <div className="hidden md:flex absolute right-0 top-0 h-[560px] items-center pointer-events-none">
+        <div className="hidden md:flex absolute right-0 top-[8vh] h-[55vh] items-center pointer-events-none">
           <div
             className="w-88 h-88 -mt-25 -mr-18 flex-shrink-0"
             style={{
