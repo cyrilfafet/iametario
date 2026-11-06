@@ -206,7 +206,7 @@ export default function Artist() {
       )}
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative overflow-hidden" style={{
+      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative" style={{
         backgroundImage: [
           "radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184,147,106,0.10) 0%, transparent 65%)",
           "radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201,169,110,0.08) 0%, transparent 65%)",
@@ -221,7 +221,7 @@ export default function Artist() {
       }}>
 
         {/* Images gauche */}
-        <div className="hidden md:flex absolute left-0 top-0 h-full items-center pointer-events-none">
+        <div className="hidden md:flex absolute left-0 top-0 h-[560px] items-center pointer-events-none">
           <img src="/clubmed.png" className="w-107 grayscale opacity-50 -mt-30 -ml-20" />
           <img src="/color_dole.png" className="w-80 grayscale opacity-50 -mt-10 -ml-74" />
           <div
@@ -247,7 +247,7 @@ export default function Artist() {
         </div>
 
         {/* Images droite */}
-        <div className="hidden md:flex absolute right-0 top-0 h-full items-center pointer-events-none">
+        <div className="hidden md:flex absolute right-0 top-0 h-[560px] items-center pointer-events-none">
           <div
             className="w-88 h-88 -mt-25 -mr-18 flex-shrink-0"
             style={{
