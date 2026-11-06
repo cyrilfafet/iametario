@@ -102,23 +102,28 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
   };
 
   return (
-    <div className="border border-zinc-200 rounded-2xl p-4 hover:border-blue-500 transition-colors">
+    <div
+      className="rounded-2xl p-4 transition-all"
+      style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.18)" }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(184,147,106,0.38)"; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(184,147,106,0.18)"; }}
+    >
       {/* Ligne principale */}
-      <div className="flex items-center gap-4 mb-3">
+      <div className="flex items-center gap-4 mb-4">
         {/* Cover */}
-        <div className="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-zinc-100 flex items-center justify-center">
+        <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden flex items-center justify-center" style={{ backgroundColor: "rgba(184,147,106,0.1)", border: "1px solid rgba(184,147,106,0.2)" }}>
           {cover
             ? <img src={cover} alt={track.titre} className="w-full h-full object-cover" />
-            : <span className="text-zinc-300 text-xl">♪</span>
+            : <span style={{ color: "rgba(184,147,106,0.4)", fontSize: 20 }}>♪</span>
           }
         </div>
 
         {/* Titre + tags */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-zinc-900 truncate mb-1">{track.titre}</p>
+          <p className="text-sm font-medium truncate mb-1.5" style={{ color: "#F5EFE4" }}>{track.titre}</p>
           <div className="flex flex-wrap gap-1">
             {tags.map(tag => (
-              <span key={tag} className="text-xs text-blue-500 border border-blue-500/40 rounded-full px-2 py-0.5">
+              <span key={tag} className="text-xs rounded-full px-2 py-0.5" style={{ color: "#B8936A", border: "1px solid rgba(184,147,106,0.35)" }}>
                 {tag}
               </span>
             ))}
@@ -127,13 +132,16 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
 
         {/* Prix + achat */}
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
-          <span className="text-base font-bold text-zinc-900">
+          <span className="text-base font-semibold" style={{ color: "#F5EFE4" }}>
             {track.prix === 0 ? "Free" : `${track.prix % 100 === 0 ? track.prix / 100 : (track.prix / 100).toFixed(2).replace(".", ",")}€`}
           </span>
           <button
             onClick={handleBuy}
             disabled={loadingCheckout}
-            className="bg-blue-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-blue-400 transition-colors disabled:opacity-50 min-w-[60px]"
+            className="text-xs font-semibold tracking-widest uppercase transition-all disabled:opacity-50 min-w-[64px] px-4 py-2"
+            style={{ backgroundColor: "#B8936A", color: "#0D0B08", borderRadius: 2 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C9A96E"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#B8936A"; }}
           >
             {loadingCheckout ? "…" : track.prix === 0 ? "Download" : "Buy"}
           </button>
@@ -142,35 +150,33 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
 
       {/* Ligne player */}
       <div className="flex items-center gap-3">
-        {/* Bouton play */}
         <button
           onClick={onToggle}
-          className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center hover:border-blue-500 transition-colors flex-shrink-0"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0"
+          style={{ border: "1px solid rgba(184,147,106,0.4)" }}
+          onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "#B8936A"; b.style.backgroundColor = "rgba(184,147,106,0.12)"; }}
+          onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "rgba(184,147,106,0.4)"; b.style.backgroundColor = "transparent"; }}
         >
           {isPlaying ? (
             <span className="w-3 h-3 flex gap-0.5">
-              <span className="w-1 h-full bg-zinc-900 rounded-sm" />
-              <span className="w-1 h-full bg-zinc-900 rounded-sm" />
+              <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
+              <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
             </span>
           ) : (
-            <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent border-l-zinc-900 ml-0.5" />
+            <span className="w-0 h-0 border-t-[5px] border-b-[5px] border-l-[9px] border-transparent ml-0.5" style={{ borderLeftColor: "#B8936A" }} />
           )}
         </button>
 
-        {/* Waveform ou fallback range */}
         <div className="flex-1 flex flex-col gap-1">
           {bars.length > 0 ? (
-            <div
-              className="flex items-end gap-px h-10 cursor-pointer w-full"
-              onClick={seekTo}
-            >
+            <div className="flex items-end gap-px h-10 cursor-pointer w-full" onClick={seekTo}>
               {bars.map((h, i) => {
                 const played = (i / bars.length) < (progress / 100);
                 return (
                   <div
                     key={i}
-                    className={`flex-1 rounded-full transition-colors ${played ? "bg-blue-500" : "bg-zinc-200"}`}
-                    style={{ height: `${Math.max(8, h * 100)}%` }}
+                    className="flex-1 rounded-full transition-colors"
+                    style={{ height: `${Math.max(8, h * 100)}%`, backgroundColor: played ? "#B8936A" : "rgba(184,147,106,0.2)" }}
                   />
                 );
               })}
@@ -186,11 +192,12 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
                   audio.currentTime = (v / 100) * audio.duration;
                   setProgress(v);
                 }}
-                className="w-full h-1 accent-blue-500 cursor-pointer"
+                className="w-full h-1 cursor-pointer"
+                style={{ accentColor: "#B8936A" }}
               />
             </div>
           )}
-          <div className="flex justify-between text-xs text-zinc-400">
+          <div className="flex justify-between text-xs" style={{ color: "rgba(245,239,228,0.3)" }}>
             <span>{fmt((progress / 100) * duration)}</span>
             <span>{fmt(duration)}</span>
           </div>
@@ -227,61 +234,70 @@ export default function ShopPage() {
   const togglePlay = (id: string) => setPlaying(prev => prev === id ? null : id);
 
   return (
-    <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
-      <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
-        <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
-        <div className="hidden md:flex gap-8 text-sm text-zinc-500">
-          <a href="/" className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-          <a href="/services" className="hover:text-blue-500 transition-colors">SERVICES</a>
-          <a href="/formations" className="hover:text-blue-500 transition-colors">FORMATIONS</a>
-          <a href="/shop" className="font-medium text-zinc-900">SHOP</a>
-          <a href="/contact" className="hover:text-blue-500 transition-colors">CONTACT</a>
+    <main className="min-h-screen flex flex-col" style={{ backgroundColor: "#0D0B08", color: "#F5EFE4" }}>
+      {/* Nav */}
+      <nav className="flex items-center justify-between px-8 py-5 sticky top-0 z-50" style={{ backgroundColor: "rgba(13,11,8,0.85)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(184,147,106,0.1)" }}>
+        <a href="/"><img src="/Logo _V1_white.png" alt="E-Tario" className="h-4 md:h-5" /></a>
+        <div className="hidden md:flex gap-8 text-xs tracking-widest" style={{ fontFamily: "var(--font-syne)" }}>
+          <a href="/" className="transition-colors" style={{ color: "rgba(245,239,228,0.5)" }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#F5EFE4"; }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,239,228,0.5)"; }}>ACCUEIL</a>
+          <a href="/services" className="transition-colors" style={{ color: "rgba(245,239,228,0.5)" }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#F5EFE4"; }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,239,228,0.5)"; }}>SERVICES</a>
+          <a href="/formations" className="transition-colors" style={{ color: "rgba(245,239,228,0.5)" }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#F5EFE4"; }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,239,228,0.5)"; }}>FORMATIONS</a>
+          <a href="/shop" className="font-semibold" style={{ color: "#B8936A" }}>SHOP</a>
+          <a href="/contact" className="transition-colors" style={{ color: "rgba(245,239,228,0.5)" }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#F5EFE4"; }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,239,228,0.5)"; }}>CONTACT</a>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1.5">
-          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`w-6 h-px bg-zinc-900 transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span className={`w-5 h-px transition-all ${menuOpen ? "rotate-45 translate-y-2" : ""}`} style={{ backgroundColor: "#F5EFE4" }} />
+          <span className={`w-5 h-px transition-all ${menuOpen ? "opacity-0" : ""}`} style={{ backgroundColor: "#F5EFE4" }} />
+          <span className={`w-5 h-px transition-all ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} style={{ backgroundColor: "#F5EFE4" }} />
         </button>
       </nav>
       {menuOpen && (
-        <div className="md:hidden flex flex-col items-center gap-6 py-8 border-b border-zinc-100 text-sm text-zinc-500">
-          <a href="/" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">ACCUEIL</a>
-          <a href="/services" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">SERVICES</a>
-          <a href="/formations" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">FORMATIONS</a>
-          <a href="/shop" onClick={() => setMenuOpen(false)} className="font-medium text-zinc-900">SHOP</a>
-          <a href="/contact" onClick={() => setMenuOpen(false)} className="hover:text-blue-500 transition-colors">CONTACT</a>
+        <div className="md:hidden flex flex-col items-center gap-6 py-8 text-xs tracking-widest" style={{ borderBottom: "1px solid rgba(184,147,106,0.1)", fontFamily: "var(--font-syne)" }}>
+          <a href="/" onClick={() => setMenuOpen(false)} style={{ color: "rgba(245,239,228,0.5)" }}>ACCUEIL</a>
+          <a href="/services" onClick={() => setMenuOpen(false)} style={{ color: "rgba(245,239,228,0.5)" }}>SERVICES</a>
+          <a href="/formations" onClick={() => setMenuOpen(false)} style={{ color: "rgba(245,239,228,0.5)" }}>FORMATIONS</a>
+          <a href="/shop" onClick={() => setMenuOpen(false)} className="font-semibold" style={{ color: "#B8936A" }}>SHOP</a>
+          <a href="/contact" onClick={() => setMenuOpen(false)} style={{ color: "rgba(245,239,228,0.5)" }}>CONTACT</a>
         </div>
       )}
 
-      <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-16 text-center">
-        <p className="text-zinc-400 text-xs uppercase tracking-widest mb-3">Shop</p>
-        <h1 className="text-3xl md:text-4xl font-bold leading-snug mb-3">Ready to drop.</h1>
-        <p className="text-zinc-500 text-base mb-12">High quality WAV files. Instant download after payment.</p>
+      {/* Hero */}
+      <div className="text-center px-8 pt-20 pb-14">
+        <p className="text-xs tracking-widest uppercase mb-4" style={{ color: "#B8936A" }}>Shop</p>
+        <h1 style={{ fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(2.8rem, 6vw, 4.5rem)", color: "#F5EFE4", lineHeight: 1.1 }}>
+          Ready to drop.
+        </h1>
+        <p className="mt-4 text-sm" style={{ color: "rgba(245,239,228,0.45)" }}>Fichiers WAV haute qualité · Téléchargement instantané</p>
+      </div>
 
+      <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, rgba(184,147,106,0.3), transparent)" }} />
+
+      {/* Tracks */}
+      <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
         {loading ? (
           <div className="flex flex-col gap-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="border border-zinc-200 rounded-2xl p-4 animate-pulse">
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="w-16 h-16 flex-shrink-0 rounded-xl bg-zinc-100" />
+              <div key={i} className="rounded-2xl p-4 animate-pulse" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.1)" }}>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-xl flex-shrink-0" style={{ backgroundColor: "rgba(184,147,106,0.08)" }} />
                   <div className="flex-1 space-y-2">
-                    <div className="h-3 bg-zinc-100 rounded-full w-2/3" />
-                    <div className="h-3 bg-zinc-100 rounded-full w-1/3" />
+                    <div className="h-3 rounded-full w-2/3" style={{ backgroundColor: "rgba(184,147,106,0.1)" }} />
+                    <div className="h-3 rounded-full w-1/3" style={{ backgroundColor: "rgba(184,147,106,0.07)" }} />
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <div className="h-4 bg-zinc-100 rounded-full w-10" />
-                    <div className="h-9 bg-zinc-100 rounded-xl w-16" />
+                    <div className="h-4 rounded-full w-10" style={{ backgroundColor: "rgba(184,147,106,0.1)" }} />
+                    <div className="h-8 rounded w-16" style={{ backgroundColor: "rgba(184,147,106,0.1)" }} />
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-zinc-100 flex-shrink-0" />
-                  <div className="flex-1 h-10 bg-zinc-100 rounded-lg" />
+                  <div className="w-8 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: "rgba(184,147,106,0.08)" }} />
+                  <div className="flex-1 h-10 rounded-lg" style={{ backgroundColor: "rgba(184,147,106,0.06)" }} />
                 </div>
               </div>
             ))}
           </div>
         ) : tracks.length === 0 ? (
-          <p className="text-zinc-400 text-sm text-center py-12">No audio available yet.</p>
+          <p className="text-sm text-center py-16" style={{ color: "rgba(245,239,228,0.3)" }}>Aucun audio disponible pour le moment.</p>
         ) : (
           <div className="flex flex-col gap-3">
             {tracks.map(track => (
