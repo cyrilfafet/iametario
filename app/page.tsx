@@ -206,7 +206,7 @@ export default function Artist() {
       )}
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative" style={{
+      <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative overflow-hidden" style={{
         backgroundImage: [
           "radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184,147,106,0.10) 0%, transparent 65%)",
           "radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201,169,110,0.08) 0%, transparent 65%)",
