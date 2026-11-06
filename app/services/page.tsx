@@ -405,8 +405,7 @@ function ServicesInner() {
         <div className="max-w-xl mx-auto">
           <p className="text-xs tracking-widest uppercase mb-4 text-center" style={{ color: "#B8936A" }}>Contact</p>
           <h2 className="text-3xl mb-2 text-center" style={{ color: "#F5EFE4", fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(2rem, 4vw, 3rem)" }}>Un projet en tête ?</h2>
-          <p className="text-center mb-2 text-sm" style={{ color: "rgba(245,239,228,0.5)" }}>Décrivez votre projet, je valide la faisabilité et vous envoie un lien pour un premier acompte de 30€ sous 48h.</p>
-          <p className="text-center mb-12 text-xs" style={{ color: "rgba(245,239,228,0.35)" }}>Livraison sous 10 jours · 3 révisions incluses</p>
+          <p className="text-center mb-12 text-sm" style={{ color: "rgba(245,239,228,0.5)" }}>Réponse sous 48h · Livraison sous 10 jours · 3 révisions incluses</p>
 
           <form
             onSubmit={async (e) => {
@@ -445,7 +444,7 @@ function ServicesInner() {
             />
             <textarea
               name="description"
-              placeholder="Dites-moi ce que vous imaginez, je vous confirme la faisabilité sous 48h"
+              placeholder="Décrivez votre projet — style, références, structure, timing..."
               rows={5} required
               value={description} onChange={e => setDescription(e.target.value)}
               className="px-5 py-4 text-sm focus:outline-none transition-colors resize-none"
@@ -520,7 +519,7 @@ function ServicesInner() {
               >
                 {formStatus === "loading" ? "Envoi…" : "Envoyer"}
               </button>
-              <p className="text-xs" style={{ color: "rgba(245,239,228,0.3)" }}>Je vous réponds sous 48h — confirmation de faisabilité et devis personnalisé.</p>
+              <p className="text-xs" style={{ color: "rgba(245,239,228,0.3)" }}>Devis personnalisé · Acompte de 30€ à la confirmation</p>
             </div>
 
             {formStatus === "success" && (
