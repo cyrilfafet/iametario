@@ -97,6 +97,35 @@ export default function Formations() {
 
   return (
     <main className="min-h-screen bg-white text-zinc-900 flex flex-col">
+      {/* Overlay "En construction" */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 60,
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+          backgroundColor: "rgba(255,255,255,0.55)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1rem",
+        }}
+      >
+        <p style={{ fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(2.8rem, 8vw, 5rem)", color: "#18181b", lineHeight: 1.1, textAlign: "center" }}>
+          En construction.
+        </p>
+        <p style={{ fontSize: "0.75rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "#a1a1aa" }}>
+          Revenez bientôt
+        </p>
+        <a
+          href="/"
+          style={{ marginTop: "1rem", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#71717a", borderBottom: "1px solid #d4d4d8", paddingBottom: "2px" }}
+        >
+          Retour à l'accueil
+        </a>
+      </div>
       <nav className="flex items-center justify-between px-8 py-6 sticky top-0 z-50 bg-zinc-50/80 backdrop-blur-md border-b border-zinc-100/60">
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6" /></a>
         <div className="hidden md:flex gap-8 text-sm text-zinc-500">
