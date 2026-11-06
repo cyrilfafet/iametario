@@ -315,8 +315,6 @@ export default function Artist() {
           <span dangerouslySetInnerHTML={{__html: t.bio.p2}} />
           <br /><br />
           <span dangerouslySetInnerHTML={{__html: t.bio.p3}} />
-          <br /><br />
-          <span dangerouslySetInnerHTML={{__html: t.bio.p4}} />
         </p>
 
         {/* Timeline — picker scroll */}
