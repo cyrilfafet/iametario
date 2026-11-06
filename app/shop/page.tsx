@@ -7,20 +7,9 @@ type Track = {
   titre: string;
   genre: string;
   fichier_preview_url: string;
+  cover_url: string | null;
   prix: number;
 };
-
-function useCoverArt(trackId: string) {
-  const [cover, setCover] = useState<string | null>(null);
-  useEffect(() => {
-    if (!trackId) return;
-    fetch(`/api/shop/cover/${trackId}`)
-      .then(r => r.json())
-      .then(data => { if (data.cover) setCover(data.cover); })
-      .catch(() => {});
-  }, [trackId]);
-  return cover;
-}
 
 function useWaveform(url: string) {
   const [bars, setBars] = useState<number[]>([]);
@@ -59,7 +48,6 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
-  const cover = useCoverArt(track.id);
   const bars = useWaveform(track.fichier_preview_url);
   const tags = track.genre.split(",").map(g => g.trim()).filter(Boolean);
 
@@ -112,8 +100,8 @@ function TrackPlayer({ track, isPlaying, onToggle }: { track: Track; isPlaying: 
       <div className="flex items-center gap-4 mb-4">
         {/* Cover */}
         <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden flex items-center justify-center" style={{ backgroundColor: "rgba(184,147,106,0.1)", border: "1px solid rgba(184,147,106,0.2)" }}>
-          {cover
-            ? <img src={cover} alt={track.titre} className="w-full h-full object-cover" />
+          {track.cover_url
+            ? <img src={track.cover_url} alt={track.titre} className="w-full h-full object-cover" />
             : <span style={{ color: "rgba(184,147,106,0.4)", fontSize: 20 }}>♪</span>
           }
         </div>
