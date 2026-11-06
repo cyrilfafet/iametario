@@ -248,7 +248,7 @@ function ServicesInner() {
               return (
                 <div key={index} style={{
                   gridRow: 1, gridColumn: 1,
-                  padding: "0 max(16px, 10%)",
+                  display: "flex", justifyContent: "center",
                   transform: cardTransform,
                   opacity: cardOpacity,
                   zIndex: cardZIndex,
@@ -257,7 +257,7 @@ function ServicesInner() {
                   pointerEvents: isActive ? "auto" : "none",
                   visibility: isVisible ? "visible" : "hidden",
                 }}>
-                  <div className="flex flex-col gap-4 p-5 rounded-2xl" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.18)" }}>
+                  <div className="flex flex-col gap-4 p-5 rounded-2xl" style={{ width: "min(340px, calc(100% - 48px))", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.18)" }}>
                     {/* Brief */}
                     <div className="flex items-start gap-3">
                       <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 font-semibold" style={{ backgroundColor: "rgba(184,147,106,0.15)", color: "#B8936A" }}>
