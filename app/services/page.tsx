@@ -196,15 +196,26 @@ function ServicesInner() {
           ))}
         </div>
 
-        <a
-          href="#commander"
-          className="relative z-10 mt-10 inline-block px-8 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
-          style={{ backgroundColor: "#B8936A", color: "#0D0B08", borderRadius: 2 }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#C9A96E"; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#B8936A"; }}
-        >
-          Lancer un projet →
-        </a>
+        <div className="relative z-10 mt-10 flex items-center gap-4 flex-wrap justify-center">
+          <a
+            href="#commander"
+            className="inline-block px-8 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
+            style={{ backgroundColor: "#B8936A", color: "#0D0B08", borderRadius: 2 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#C9A96E"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#B8936A"; }}
+          >
+            Lancer un projet →
+          </a>
+          <a
+            href="/shop"
+            className="inline-block px-8 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
+            style={{ border: "1px solid rgba(184,147,106,0.45)", color: "#B8936A", borderRadius: 2 }}
+            onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "#B8936A"; el.style.backgroundColor = "rgba(184,147,106,0.08)"; }}
+            onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.borderColor = "rgba(184,147,106,0.45)"; el.style.backgroundColor = "transparent"; }}
+          >
+            Explorer le shop →
+          </a>
+        </div>
       </section>
 
       {/* Séparateur */}
