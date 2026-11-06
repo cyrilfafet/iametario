@@ -9,7 +9,7 @@ export async function GET(_req: NextRequest, props: { params: Promise<{ id: stri
 
   const { data: track, error } = await supabaseAdmin
     .from("shop_tracks")
-    .select("prix, nb_telechargements")
+    .select("prix, nb_telechargements, fichier_wav_url")
     .eq("id", id)
     .single();
 
@@ -21,9 +21,15 @@ export async function GET(_req: NextRequest, props: { params: Promise<{ id: stri
     return NextResponse.json({ error: "Cette track n'est pas gratuite" }, { status: 403 });
   }
 
+  if (!track.fichier_wav_url) {
+    return NextResponse.json({ error: "Fichier WAV non disponible" }, { status: 404 });
+  }
+
+  // Extraire la clé R2 depuis l'URL publique stockée en base
+  const r2Key = track.fichier_wav_url.split(".r2.dev/")[1];
   const url = await getSignedUrl(
     r2,
-    new GetObjectCommand({ Bucket: R2_BUCKET, Key: `shop/${id}/final.wav` }),
+    new GetObjectCommand({ Bucket: R2_BUCKET, Key: r2Key }),
     { expiresIn: 300 }
   );
 
