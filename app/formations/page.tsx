@@ -102,7 +102,7 @@ export default function Formations() {
         style={{
           position: "fixed",
           inset: 0,
-          zIndex: 60,
+          zIndex: 40,
           backdropFilter: "blur(18px)",
           WebkitBackdropFilter: "blur(18px)",
           backgroundColor: "rgba(255,255,255,0.55)",
