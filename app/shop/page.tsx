@@ -237,7 +237,7 @@ export default function ShopPage() {
     <main className="min-h-screen flex flex-col" style={{ backgroundColor: "#0D0B08", color: "#F5EFE4" }}>
       {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-5 sticky top-0 z-50" style={{ backgroundColor: "rgba(13,11,8,0.85)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(184,147,106,0.1)" }}>
-        <a href="/"><img src="/Logo _V1_white.png" alt="E-Tario" className="h-4 md:h-5" /></a>
+        <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-5 invert" /></a>
         <div className="hidden md:flex gap-8 text-xs tracking-widest" style={{ fontFamily: "var(--font-syne)" }}>
           <a href="/" className="transition-colors" style={{ color: "rgba(245,239,228,0.5)" }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#F5EFE4"; }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,239,228,0.5)"; }}>ACCUEIL</a>
           <a href="/services" className="transition-colors" style={{ color: "rgba(245,239,228,0.5)" }} onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#F5EFE4"; }} onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,239,228,0.5)"; }}>SERVICES</a>
