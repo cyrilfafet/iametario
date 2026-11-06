@@ -203,7 +203,7 @@ function ServicesInner() {
           onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#C9A96E"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#B8936A"; }}
         >
-          Commander un projet →
+          Lancer un projet →
         </a>
       </section>
 
