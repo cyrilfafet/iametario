@@ -9,14 +9,16 @@ export async function POST(request: Request) {
   const email = formData.get("email") as string;
   const prestation = formData.get("prestation") as string;
   const description = formData.get("description") as string;
-  const fichier = formData.get("fichier") as File | null;
+  const fichiers = formData.getAll("fichier") as File[];
 
   const isCreation = source === "creation";
 
-  let attachments: { filename: string; content: Buffer }[] = [];
-  if (fichier && fichier.size > 0) {
-    const buffer = await fichier.arrayBuffer();
-    attachments = [{ filename: fichier.name, content: Buffer.from(buffer) }];
+  const attachments: { filename: string; content: Buffer }[] = [];
+  for (const fichier of fichiers) {
+    if (fichier && fichier.size > 0) {
+      const buffer = await fichier.arrayBuffer();
+      attachments.push({ filename: fichier.name, content: Buffer.from(buffer) });
+    }
   }
 
   const subject = isCreation

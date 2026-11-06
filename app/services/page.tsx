@@ -101,7 +101,7 @@ function ServicesInner() {
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const fmt = (s: number) => {
@@ -413,11 +413,12 @@ function ServicesInner() {
               e.preventDefault();
               setFormStatus("loading");
               const formData = new FormData(e.currentTarget);
+              files.forEach(f => formData.append("fichier", f));
               const res = await fetch("/api/contact", { method: "POST", body: formData });
               const data = await res.json();
               if (data.success) {
                 (e.target as HTMLFormElement).reset();
-                setNom(""); setEmail(""); setDescription(""); setFileName(null);
+                setNom(""); setEmail(""); setDescription(""); setFiles([]);
                 setFormStatus("success");
               } else {
                 setFormStatus("error");
@@ -452,21 +453,60 @@ function ServicesInner() {
               onFocus={e => { e.target.style.borderColor = "rgba(184,147,106,0.6)"; }}
               onBlur={e => { e.target.style.borderColor = "rgba(184,147,106,0.2)"; }}
             />
-            <div className="px-5 py-4" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)" }}>
+            <div className="px-5 py-4 flex flex-col gap-3" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)" }}>
               <input
-                id="fichier-input" name="fichier" type="file" className="hidden"
-                onChange={e => setFileName(e.target.files?.[0]?.name ?? null)}
+                id="fichier-input" name="fichier" type="file" multiple className="hidden"
+                onChange={e => {
+                  const picked = Array.from(e.target.files ?? []);
+                  setFiles(prev => {
+                    const names = new Set(prev.map(f => f.name));
+                    return [...prev, ...picked.filter(f => !names.has(f.name))];
+                  });
+                  e.target.value = "";
+                }}
               />
               <label
                 htmlFor="fichier-input"
-                className="inline-flex items-center gap-2 text-xs cursor-pointer transition-colors"
+                className="inline-flex items-center gap-2 text-xs cursor-pointer transition-colors self-start"
                 style={{ color: "rgba(245,239,228,0.4)", border: "1px solid rgba(184,147,106,0.25)", padding: "6px 14px" }}
                 onMouseEnter={e => { const l = e.currentTarget as HTMLLabelElement; l.style.color = "#B8936A"; l.style.borderColor = "#B8936A"; }}
                 onMouseLeave={e => { const l = e.currentTarget as HTMLLabelElement; l.style.color = "rgba(245,239,228,0.4)"; l.style.borderColor = "rgba(184,147,106,0.25)"; }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                {fileName ?? "Joindre un fichier (optionnel)"}
+                {files.length === 0 ? "Joindre des fichiers (optionnel)" : "Ajouter d'autres fichiers"}
               </label>
+
+              {files.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {files.map((f, i) => {
+                    const sizeLabel = f.size < 1024 * 1024
+                      ? `${(f.size / 1024).toFixed(0)} Ko`
+                      : `${(f.size / (1024 * 1024)).toFixed(1)} Mo`;
+                    return (
+                      <div key={i} className="flex flex-col gap-1">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-xs truncate max-w-[260px]" style={{ color: "rgba(245,239,228,0.7)" }}>{f.name}</span>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <span className="text-xs" style={{ color: "rgba(245,239,228,0.3)" }}>{sizeLabel}</span>
+                            <button
+                              type="button"
+                              onClick={() => setFiles(prev => prev.filter((_, j) => j !== i))}
+                              className="text-xs transition-colors leading-none"
+                              style={{ color: "rgba(245,239,228,0.25)" }}
+                              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,100,100,0.6)"; }}
+                              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(245,239,228,0.25)"; }}
+                            >✕</button>
+                          </div>
+                        </div>
+                        {/* Barre chargée */}
+                        <div className="h-px w-full overflow-hidden" style={{ backgroundColor: "rgba(184,147,106,0.1)" }}>
+                          <div className="h-full" style={{ width: "100%", backgroundColor: "rgba(184,147,106,0.5)", animation: "fileLoaded 0.4s ease" }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col items-start gap-3 mt-6">
