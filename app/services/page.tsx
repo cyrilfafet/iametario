@@ -90,6 +90,7 @@ function WaveformBars({ count = 36, flip = false }: { count?: number; flip?: boo
 }
 
 function ServicesInner() {
+  const [demoPage, setDemoPage] = useState(0);
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
@@ -209,71 +210,132 @@ function ServicesInner() {
       {/* Séparateur */}
       <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, rgba(184,147,106,0.3), transparent)" }} />
 
-      {/* Démos — grille 2×2 */}
-      <section className="px-8 py-16">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs tracking-widest uppercase mb-10 text-center" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Exemples de réalisations</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {demos.map((demo, index) => (
-              <div key={index} className="flex flex-col gap-4 p-5 rounded-2xl" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.18)" }}>
-                {/* Brief */}
-                <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 font-semibold" style={{ backgroundColor: "rgba(184,147,106,0.15)", color: "#B8936A" }}>
-                    {demo.client[0]}
-                  </div>
-                  <div>
-                    <p className="text-xs mb-1" style={{ color: "rgba(245,239,228,0.35)" }}>{demo.client}</p>
-                    <p className="text-xs leading-relaxed italic" style={{ color: "rgba(245,239,228,0.6)", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{demo.brief}</p>
-                  </div>
-                </div>
-                {/* Player */}
-                <div className="rounded-xl px-4 py-3" style={{ backgroundColor: "rgba(184,147,106,0.05)", border: "1px solid rgba(184,147,106,0.15)" }}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <button
-                      onClick={() => togglePlay(index)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0"
-                      style={{ border: "1px solid rgba(184,147,106,0.4)" }}
-                      onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "#B8936A"; b.style.backgroundColor = "rgba(184,147,106,0.12)"; }}
-                      onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "rgba(184,147,106,0.4)"; b.style.backgroundColor = "transparent"; }}
-                    >
-                      {playing === index ? (
-                        <span className="w-3 h-3 flex gap-0.5">
-                          <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
-                          <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
-                        </span>
-                      ) : (
-                        <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent ml-0.5" style={{ borderLeftColor: "#B8936A" }} />
-                      )}
-                    </button>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate" style={{ color: "#F5EFE4" }}>{demo.title}</p>
-                      <span className="text-xs rounded-full px-2 py-0.5" style={{ color: "#B8936A", border: "1px solid rgba(184,147,106,0.35)" }}>{demo.tag}</span>
+      {/* Démos — carousel 3D coverflow */}
+      <section className="py-16">
+        <p className="text-xs tracking-widest uppercase mb-10 text-center px-8" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Exemples de réalisations</p>
+
+        {/* Carousel */}
+        <div style={{ overflow: "hidden", perspective: "1400px" }}>
+          <div style={{
+            display: "flex",
+            width: "200%",
+            alignItems: "stretch",
+            transform: `translateX(${-demoPage * 25}%)`,
+            transition: "transform 0.55s cubic-bezier(0.4,0,0.2,1)",
+          }}>
+            {demos.map((demo, index) => {
+              const relPos = index - demoPage * 2;
+              const isActive = relPos === 0 || relPos === 1;
+              const isRightWing = relPos === 2;
+              const isLeftWing = relPos === -1;
+              const isVisible = isActive || isRightWing || isLeftWing;
+
+              let innerTransform = "none";
+              let innerOpacity = 1;
+              let originX = "center";
+              if (isRightWing) { innerTransform = "rotateY(-42deg) scale(0.88)"; innerOpacity = 0.28; originX = "left"; }
+              else if (isLeftWing) { innerTransform = "rotateY(42deg) scale(0.88)"; innerOpacity = 0.28; originX = "right"; }
+              else if (!isActive) { innerOpacity = 0; }
+
+              return (
+                <div key={index} style={{ width: "25%", padding: "0 10px", boxSizing: "border-box", pointerEvents: isActive ? "auto" : "none" }}>
+                  <div style={{
+                    height: "100%",
+                    transform: innerTransform,
+                    opacity: isVisible ? innerOpacity : 0,
+                    transformOrigin: `${originX} center`,
+                    transition: "transform 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.45s",
+                  }}>
+                    <div className="flex flex-col gap-4 p-5 rounded-2xl h-full" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.18)" }}>
+                      {/* Brief */}
+                      <div className="flex items-start gap-3">
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 font-semibold" style={{ backgroundColor: "rgba(184,147,106,0.15)", color: "#B8936A" }}>
+                          {demo.client[0]}
+                        </div>
+                        <div>
+                          <p className="text-xs mb-1.5" style={{ color: "rgba(245,239,228,0.35)" }}>{demo.client}</p>
+                          <p className="text-xs leading-relaxed italic" style={{ color: "rgba(245,239,228,0.65)" }}>{demo.brief}</p>
+                        </div>
+                      </div>
+                      {/* Player */}
+                      <div className="mt-auto rounded-xl px-4 py-3" style={{ backgroundColor: "rgba(184,147,106,0.05)", border: "1px solid rgba(184,147,106,0.15)" }}>
+                        <div className="flex items-center gap-3 mb-3">
+                          <button
+                            onClick={() => togglePlay(index)}
+                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0"
+                            style={{ border: "1px solid rgba(184,147,106,0.4)" }}
+                            onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "#B8936A"; b.style.backgroundColor = "rgba(184,147,106,0.12)"; }}
+                            onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "rgba(184,147,106,0.4)"; b.style.backgroundColor = "transparent"; }}
+                          >
+                            {playing === index ? (
+                              <span className="w-3 h-3 flex gap-0.5">
+                                <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
+                                <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
+                              </span>
+                            ) : (
+                              <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent ml-0.5" style={{ borderLeftColor: "#B8936A" }} />
+                            )}
+                          </button>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate" style={{ color: "#F5EFE4" }}>{demo.title}</p>
+                            <span className="text-xs rounded-full px-2 py-0.5" style={{ color: "#B8936A", border: "1px solid rgba(184,147,106,0.35)" }}>{demo.tag}</span>
+                          </div>
+                        </div>
+                        <input
+                          type="range" min={0} max={100} value={progress[index]}
+                          onChange={(e) => handleSeek(index, e)}
+                          className="w-full h-1 cursor-pointer"
+                          style={{ accentColor: "#B8936A" }}
+                        />
+                        <div className="flex justify-between text-xs mt-1" style={{ color: "rgba(245,239,228,0.3)" }}>
+                          <span>{fmt((progress[index] / 100) * durations[index])}</span>
+                          <span>{fmt(durations[index])}</span>
+                        </div>
+                        <audio
+                          ref={(el) => { audioRefs.current[index] = el; }}
+                          src={demo.file}
+                          onLoadedMetadata={() => {
+                            const audio = audioRefs.current[index];
+                            if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
+                          }}
+                          onTimeUpdate={() => handleTimeUpdate(index)}
+                          onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <input
-                    type="range" min={0} max={100} value={progress[index]}
-                    onChange={(e) => handleSeek(index, e)}
-                    className="w-full h-1 cursor-pointer"
-                    style={{ accentColor: "#B8936A" }}
-                  />
-                  <div className="flex justify-between text-xs mt-1" style={{ color: "rgba(245,239,228,0.3)" }}>
-                    <span>{fmt((progress[index] / 100) * durations[index])}</span>
-                    <span>{fmt(durations[index])}</span>
-                  </div>
-                  <audio
-                    ref={(el) => { audioRefs.current[index] = el; }}
-                    src={demo.file}
-                    onLoadedMetadata={() => {
-                      const audio = audioRefs.current[index];
-                      if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
-                    }}
-                    onTimeUpdate={() => handleTimeUpdate(index)}
-                    onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
-                  />
                 </div>
-              </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-center gap-6 mt-8 px-8">
+          <button
+            onClick={() => setDemoPage(p => Math.max(0, p - 1))}
+            disabled={demoPage === 0}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all disabled:opacity-20"
+            style={{ border: "1px solid rgba(184,147,106,0.35)", color: "#B8936A" }}
+            onMouseEnter={e => { if (demoPage > 0) (e.currentTarget as HTMLButtonElement).style.borderColor = "#B8936A"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,147,106,0.35)"; }}
+          >‹</button>
+          <div className="flex gap-2">
+            {[0, 1].map(p => (
+              <button key={p} onClick={() => setDemoPage(p)}
+                className="rounded-full transition-all"
+                style={{ width: demoPage === p ? 20 : 7, height: 7, backgroundColor: demoPage === p ? "#B8936A" : "rgba(184,147,106,0.25)" }}
+              />
             ))}
           </div>
+          <button
+            onClick={() => setDemoPage(p => Math.min(1, p + 1))}
+            disabled={demoPage === 1}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all disabled:opacity-20"
+            style={{ border: "1px solid rgba(184,147,106,0.35)", color: "#B8936A" }}
+            onMouseEnter={e => { if (demoPage < 1) (e.currentTarget as HTMLButtonElement).style.borderColor = "#B8936A"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,147,106,0.35)"; }}
+          >›</button>
         </div>
       </section>
 
