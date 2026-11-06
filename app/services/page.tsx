@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import Footer from "@/components/Footer";
 
 const demos = [
@@ -13,21 +12,21 @@ const demos = [
   },
   {
     client: "Karim B.",
-    brief: "Salut E-Tario, j'aurais besoin d'un edit de 'Alors la Zone' de Jul pour mon intro de festival. Quelque chose d'épique qui monte, avec le vocal 'indépendance' qu'il dit dans un live Skyrock en boucle si possible. Merci !",
+    brief: "Salut E-Tario, j'aurais besoin d'un edit de 'Alors la Zone' de Jul pour mon intro de festival. Quelque chose d'épique qui monte, avec le vocal 'indépendance' qu'il dit dans un live Skyrock en boucle si possible.",
     title: "Alors la Zone — Festival intro",
     file: "/Alors_La_Zone_DEMO.mp3",
     tag: "Intro Festival",
   },
   {
     client: "Discothèque la D****",
-    brief: "Bonjour, pouvez vous intégrer des voix dans vos intros ? Nous faisons une soirée 60-2010 en aferwork pour Halloween, et aimerions une voix qui introduit la soirée, dans le style Halloween, sur un fond musical adapté à l'ambiance. Merci.",
+    brief: "Bonjour, pouvez vous intégrer des voix dans vos intros ? Nous faisons une soirée 60-2010 en afterwork pour Halloween, et aimerions une voix qui introduit la soirée, dans le style Halloween, sur un fond musical adapté.",
     title: "Soirée 60-2010 — Halloween Intro",
     file: "/Halloween_Soiree_60_2010_DEMO.mp3",
     tag: "Intro Soirée",
   },
   {
     client: "Camille D.",
-    brief: "Bonjour ! Je suis témoin de mariage, on prépare une chorée surprise pour la mariée avec les autres témoins. Il nous faudrait un montage 3 titres : Women de Doja Cat depuis le début, ensuite Jatti De Nain de Millind Gaba à partir de 0:38 avec une transition fluide, et quand la musique finit, je voudrais le show Shakira & JLo Super Bowl 2020 entre 4:34 et 5:52. Pour la fin, carte blanche si vous arrivez à faire quelque chose de naturel !",
+    brief: "Bonjour ! Je suis témoin de mariage, on prépare une chorée surprise. Il nous faudrait un montage 3 titres : Women de Doja Cat, Jatti De Nain à partir de 0:38, et le show Shakira & JLo Super Bowl 2020 entre 4:34 et 5:52.",
     title: "Women × Jatti × Shakira — Wedding Mix",
     file: "/Women_Jatti_Shakira_Wedding_Mix.mp3",
     tag: "Chorée Mariage",
@@ -37,7 +36,7 @@ const demos = [
 const services = [
   {
     icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="16" cy="10" r="4" />
         <path d="M8 28c0-4.418 3.582-8 8-8s8 3.582 8 8" />
         <path d="M22 6c1.5.8 2.5 2.3 2.5 4s-1 3.2-2.5 4" />
@@ -49,7 +48,7 @@ const services = [
   },
   {
     icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="16" r="6" />
         <circle cx="20" cy="16" r="6" />
         <path d="M14.5 11.5a6 6 0 0 1 3 0M14.5 20.5a6 6 0 0 0 3 0" />
@@ -60,7 +59,7 @@ const services = [
   },
   {
     icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <line x1="6" y1="8" x2="6" y2="24" /><line x1="6" y1="12" x2="10" y2="12" /><line x1="6" y1="20" x2="10" y2="20" />
         <circle cx="12" cy="12" r="2" /><circle cx="12" cy="20" r="2" />
         <line x1="14" y1="8" x2="14" y2="24" /><line x1="14" y1="16" x2="18" y2="16" />
@@ -84,27 +83,16 @@ function WaveformBars({ count = 36, flip = false }: { count?: number; flip?: boo
       style={{ transform: flip ? "scaleX(-1)" : undefined }}
     >
       {heights.slice(0, count).map((h, i) => (
-        <rect
-          key={i}
-          x={i * 9 + 1}
-          y={(100 - h) / 2}
-          width={6}
-          height={h}
-          rx={2}
-          fill="#B8936A"
-          opacity={0.55 + (i / count) * 0.3}
-        />
+        <rect key={i} x={i * 9 + 1} y={(100 - h) / 2} width={6} height={h} rx={2} fill="#B8936A" opacity={0.5 + (i / count) * 0.35} />
       ))}
     </svg>
   );
 }
 
-function CreationInner() {
+function ServicesInner() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [progress, setProgress] = useState<number[]>(demos.map(() => 0));
   const [durations, setDurations] = useState<number[]>(demos.map(() => 0));
-  const [demosOpen, setDemosOpen] = useState(false);
-  const [currentDemo, setCurrentDemo] = useState(0);
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -113,33 +101,26 @@ function CreationInner() {
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
   const [fileName, setFileName] = useState<string | null>(null);
-  const searchParams = useSearchParams();
 
   const fmt = (s: number) => {
     if (!s || isNaN(s)) return "0:00";
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
-    return `${m}:${sec.toString().padStart(2, "0")}`;
+    return `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
   };
 
   const togglePlay = (index: number) => {
     const audio = audioRefs.current[index];
     if (!audio) return;
-    if (playing === index) {
-      audio.pause();
-      setPlaying(null);
-    } else {
+    if (playing === index) { audio.pause(); setPlaying(null); }
+    else {
       audioRefs.current.forEach((a, i) => { if (i !== index && a) a.pause(); });
-      audio.play();
-      setPlaying(index);
+      audio.play(); setPlaying(index);
     }
   };
 
   const handleTimeUpdate = (index: number) => {
     const audio = audioRefs.current[index];
     if (!audio || !audio.duration) return;
-    const pct = (audio.currentTime / audio.duration) * 100;
-    setProgress(prev => prev.map((p, i) => i === index ? pct : p));
+    setProgress(prev => prev.map((p, i) => i === index ? (audio.currentTime / audio.duration) * 100 : p));
   };
 
   const handleSeek = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,7 +139,7 @@ function CreationInner() {
         <a href="/"><img src="/Logo _V1_black.png" alt="E-Tario" className="h-4 md:h-6 invert" /></a>
         <div className="hidden md:flex gap-8 text-sm" style={{ color: "rgba(245,239,228,0.5)" }}>
           <a href="/" className="hover:text-white transition-colors" style={{ fontFamily: "var(--font-syne)" }}>ACCUEIL</a>
-          <a href="/services" className="font-semibold transition-colors" style={{ color: "#B8936A", fontFamily: "var(--font-syne)" }}>SERVICES</a>
+          <a href="/services" className="font-semibold" style={{ color: "#B8936A", fontFamily: "var(--font-syne)" }}>SERVICES</a>
           <a href="/formations" className="hover:text-white transition-colors" style={{ fontFamily: "var(--font-syne)" }}>FORMATIONS</a>
           <a href="/shop" className="hover:text-white transition-colors" style={{ fontFamily: "var(--font-syne)" }}>SHOP</a>
           <a href="/contact" className="hover:text-white transition-colors" style={{ fontFamily: "var(--font-syne)" }}>CONTACT</a>
@@ -182,21 +163,15 @@ function CreationInner() {
 
       {/* Hero */}
       <section className="relative flex flex-col items-center justify-center px-8 py-20 overflow-hidden" style={{ minHeight: 480 }}>
-        {/* Waveform left */}
         <div className="hidden md:block absolute left-0 top-0 h-full" style={{ width: 280, opacity: 0.9 }}>
           <WaveformBars count={36} />
         </div>
-        {/* Waveform right */}
         <div className="hidden md:block absolute right-0 top-0 h-full" style={{ width: 280, opacity: 0.9 }}>
           <WaveformBars count={36} flip />
         </div>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 100% at 50% 50%, #0D0B08 60%, transparent 100%)" }} />
 
-        {/* Gradient overlay over waveforms */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse 60% 100% at 50% 50%, #0D0B08 60%, transparent 100%)",
-        }} />
-
-        <div className="relative z-10 text-center max-w-xl mx-auto mb-16">
+        <div className="relative z-10 text-center max-w-xl mx-auto mb-14">
           <p className="text-xs tracking-widest uppercase mb-4" style={{ color: "#B8936A", fontFamily: "var(--font-syne)" }}>Services Audio</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight" style={{ color: "#F5EFE4" }}>
             Le bon son,<br />sur mesure.
@@ -204,17 +179,12 @@ function CreationInner() {
           <p style={{ color: "rgba(245,239,228,0.55)", fontSize: 15 }}>Production soignée · Livrée en 10 jours · 3 révisions incluses</p>
         </div>
 
-        {/* Service cards */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl mx-auto">
           {services.map((s, i) => (
             <a
-              key={i}
-              href="#commander"
+              key={i} href="#commander"
               className="flex flex-col items-center text-center px-6 py-8 rounded-2xl transition-all group"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(184,147,106,0.25)",
-              }}
+              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.25)" }}
               onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(184,147,106,0.6)"; (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(184,147,106,0.07)"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(184,147,106,0.25)"; (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(255,255,255,0.03)"; }}
             >
@@ -228,12 +198,7 @@ function CreationInner() {
         <a
           href="#commander"
           className="relative z-10 mt-10 inline-block px-8 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
-          style={{
-            backgroundColor: "#B8936A",
-            color: "#0D0B08",
-            borderRadius: 2,
-            fontFamily: "var(--font-syne)",
-          }}
+          style={{ backgroundColor: "#B8936A", color: "#0D0B08", borderRadius: 2, fontFamily: "var(--font-syne)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#C9A96E"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#B8936A"; }}
         >
@@ -244,128 +209,82 @@ function CreationInner() {
       {/* Séparateur */}
       <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, rgba(184,147,106,0.3), transparent)" }} />
 
-      {/* Démos */}
-      <section className="px-8 py-2" style={{ borderBottom: "1px solid rgba(184,147,106,0.1)" }}>
-        <div className="max-w-2xl mx-auto">
-          <button
-            onClick={() => setDemosOpen(o => !o)}
-            className="w-full flex items-center justify-between py-6 group"
-          >
-            <p className="text-xs tracking-widest uppercase" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Exemples de réalisations</p>
-            <span className={`transition-all duration-200 text-lg leading-none ${demosOpen ? "rotate-45" : ""}`} style={{ color: "#B8936A" }}>+</span>
-          </button>
-
-          {demosOpen && (
-            <div className="pb-10">
-              <div className="max-w-2xl mx-auto">
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-sm" style={{ color: "rgba(245,239,228,0.4)" }}>
-                    Exemple <span className="font-bold" style={{ color: "#B8936A" }}>{currentDemo + 1}</span> / {demos.length}
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => { setPlaying(null); setCurrentDemo(i => Math.max(0, i - 1)); }}
-                      disabled={currentDemo === 0}
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
-                      style={{ border: "1px solid rgba(184,147,106,0.3)", color: "#B8936A" }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#B8936A"; }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,147,106,0.3)"; }}
-                    >‹</button>
-                    <div className="flex gap-1.5">
-                      {demos.map((_, i) => (
-                        <button key={i} onClick={() => { setPlaying(null); setCurrentDemo(i); }}
-                          className="w-1.5 h-1.5 rounded-full transition-colors"
-                          style={{ backgroundColor: i === currentDemo ? "#B8936A" : "rgba(184,147,106,0.25)" }}
-                        />
-                      ))}
-                    </div>
-                    <button
-                      onClick={() => { setPlaying(null); setCurrentDemo(i => Math.min(demos.length - 1, i + 1)); }}
-                      disabled={currentDemo === demos.length - 1}
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
-                      style={{ border: "1px solid rgba(184,147,106,0.3)", color: "#B8936A" }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#B8936A"; }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,147,106,0.3)"; }}
-                    >›</button>
+      {/* Démos — grille 2×2 */}
+      <section className="px-8 py-16">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs tracking-widest uppercase mb-10 text-center" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Exemples de réalisations</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {demos.map((demo, index) => (
+              <div key={index} className="flex flex-col gap-4 p-5 rounded-2xl" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.18)" }}>
+                {/* Brief */}
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 font-semibold" style={{ backgroundColor: "rgba(184,147,106,0.15)", color: "#B8936A" }}>
+                    {demo.client[0]}
+                  </div>
+                  <div>
+                    <p className="text-xs mb-1" style={{ color: "rgba(245,239,228,0.35)" }}>{demo.client}</p>
+                    <p className="text-xs leading-relaxed italic" style={{ color: "rgba(245,239,228,0.6)", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{demo.brief}</p>
                   </div>
                 </div>
-
-                {(() => {
-                  const index = currentDemo;
-                  const demo = demos[index];
-                  return (
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs flex-shrink-0" style={{ backgroundColor: "rgba(184,147,106,0.15)", color: "#B8936A" }}>
-                          {demo.client[0]}
-                        </div>
-                        <div className="rounded-2xl rounded-tl-sm px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                          <p className="text-xs mb-1" style={{ color: "rgba(245,239,228,0.4)" }}>{demo.client}</p>
-                          <p className="text-sm leading-relaxed italic" style={{ color: "rgba(245,239,228,0.7)" }}>{demo.brief}</p>
-                        </div>
-                      </div>
-                      <div className="ml-11 flex items-center gap-4">
-                        <div className={`flex-1 rounded-2xl px-5 py-4 transition-colors ${demo.file ? "" : "opacity-60"}`} style={{ border: "1px solid rgba(184,147,106,0.2)", backgroundColor: "rgba(184,147,106,0.04)" }}>
-                          <div className="flex items-center gap-4 mb-3">
-                            <button
-                              onClick={() => demo.file && togglePlay(index)}
-                              disabled={!demo.file}
-                              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
-                              style={{ border: "1px solid rgba(184,147,106,0.4)" }}
-                              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#B8936A"; }}
-                              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(184,147,106,0.4)"; }}
-                            >
-                              {playing === index ? (
-                                <span className="w-3 h-3 flex gap-0.5">
-                                  <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
-                                  <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
-                                </span>
-                              ) : (
-                                <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent ml-0.5" style={{ borderLeftColor: "#B8936A" }} />
-                              )}
-                            </button>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium mb-1" style={{ color: "#F5EFE4" }}>{demo.title}</p>
-                              <span className="text-xs rounded-full px-2.5 py-0.5" style={{ color: "#B8936A", border: "1px solid rgba(184,147,106,0.4)" }}>{demo.tag}</span>
-                            </div>
-                          </div>
-                          <input
-                            type="range" min={0} max={100} value={progress[index]}
-                            onChange={(e) => handleSeek(index, e)}
-                            className="w-full h-1 cursor-pointer"
-                            style={{ accentColor: "#B8936A" }}
-                          />
-                          <div className="flex justify-between text-xs mt-1" style={{ color: "rgba(245,239,228,0.3)" }}>
-                            <span>{fmt((progress[index] / 100) * durations[index])}</span>
-                            <span>{fmt(durations[index])}</span>
-                          </div>
-                          <audio
-                            ref={(el) => { audioRefs.current[index] = el; }}
-                            src={demo.file}
-                            onLoadedMetadata={() => {
-                              const audio = audioRefs.current[index];
-                              if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
-                            }}
-                            onTimeUpdate={() => handleTimeUpdate(index)}
-                            onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
-                          />
-                        </div>
-                      </div>
+                {/* Player */}
+                <div className="rounded-xl px-4 py-3" style={{ backgroundColor: "rgba(184,147,106,0.05)", border: "1px solid rgba(184,147,106,0.15)" }}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <button
+                      onClick={() => togglePlay(index)}
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0"
+                      style={{ border: "1px solid rgba(184,147,106,0.4)" }}
+                      onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "#B8936A"; b.style.backgroundColor = "rgba(184,147,106,0.12)"; }}
+                      onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "rgba(184,147,106,0.4)"; b.style.backgroundColor = "transparent"; }}
+                    >
+                      {playing === index ? (
+                        <span className="w-3 h-3 flex gap-0.5">
+                          <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
+                          <span className="w-1 h-full rounded-sm" style={{ backgroundColor: "#B8936A" }} />
+                        </span>
+                      ) : (
+                        <span className="w-0 h-0 border-t-4 border-b-4 border-l-8 border-transparent ml-0.5" style={{ borderLeftColor: "#B8936A" }} />
+                      )}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate" style={{ color: "#F5EFE4" }}>{demo.title}</p>
+                      <span className="text-xs rounded-full px-2 py-0.5" style={{ color: "#B8936A", border: "1px solid rgba(184,147,106,0.35)" }}>{demo.tag}</span>
                     </div>
-                  );
-                })()}
+                  </div>
+                  <input
+                    type="range" min={0} max={100} value={progress[index]}
+                    onChange={(e) => handleSeek(index, e)}
+                    className="w-full h-1 cursor-pointer"
+                    style={{ accentColor: "#B8936A" }}
+                  />
+                  <div className="flex justify-between text-xs mt-1" style={{ color: "rgba(245,239,228,0.3)" }}>
+                    <span>{fmt((progress[index] / 100) * durations[index])}</span>
+                    <span>{fmt(durations[index])}</span>
+                  </div>
+                  <audio
+                    ref={(el) => { audioRefs.current[index] = el; }}
+                    src={demo.file}
+                    onLoadedMetadata={() => {
+                      const audio = audioRefs.current[index];
+                      if (audio) setDurations(prev => prev.map((d, i) => i === index ? audio.duration : d));
+                    }}
+                    onTimeUpdate={() => handleTimeUpdate(index)}
+                    onEnded={() => { setPlaying(null); setProgress(prev => prev.map((p, i) => i === index ? 0 : p)); }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </section>
 
+      <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, rgba(184,147,106,0.15), transparent)" }} />
+
       {/* FAQ */}
-      <section className="px-8 py-2" style={{ borderBottom: "1px solid rgba(184,147,106,0.1)" }}>
+      <section className="px-8 py-2">
         <div className="max-w-2xl mx-auto">
           <button
             onClick={() => setShowFaq(!showFaq)}
-            className="w-full flex items-center justify-between py-6 group"
+            className="w-full flex items-center justify-between py-6"
           >
             <p className="text-xs tracking-widest uppercase" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Questions fréquemment posées</p>
             <span className={`transition-all duration-200 text-lg leading-none ${showFaq ? "rotate-45" : ""}`} style={{ color: "#B8936A" }}>+</span>
@@ -387,7 +306,7 @@ function CreationInner() {
                     className="w-full flex items-center justify-between py-5 text-left gap-4"
                   >
                     <span className="text-sm font-medium transition-colors" style={{ color: openFaq === i ? "#F5EFE4" : "rgba(245,239,228,0.55)" }}>{q}</span>
-                    <span className={`transition-transform duration-200 text-lg leading-none ${openFaq === i ? "rotate-45" : ""}`} style={{ color: "#B8936A" }}>+</span>
+                    <span className={`transition-transform duration-200 text-lg leading-none flex-shrink-0 ${openFaq === i ? "rotate-45" : ""}`} style={{ color: "#B8936A" }}>+</span>
                   </button>
                   {openFaq === i && (
                     <p className="text-sm leading-relaxed pb-5" style={{ color: "rgba(245,239,228,0.45)" }}>{a}</p>
@@ -398,6 +317,8 @@ function CreationInner() {
           )}
         </div>
       </section>
+
+      <div className="w-full h-px" style={{ background: "linear-gradient(to right, transparent, rgba(184,147,106,0.15), transparent)" }} />
 
       {/* Formulaire */}
       <section id="commander" className="px-8 py-24">
@@ -421,22 +342,22 @@ function CreationInner() {
                 alert("Erreur lors de l'envoi. Réessayez ou contactez-moi directement.");
               }
             }}
-            className="flex flex-col gap-0"
+            className="flex flex-col"
           >
             <input type="hidden" name="source" value="creation" />
             <input
               name="nom" type="text" placeholder="Votre nom" required
               value={nom} onChange={e => setNom(e.target.value)}
-              className="px-5 py-4 text-sm placeholder:text-sm focus:outline-none transition-colors border-b-0"
-              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", color: "#F5EFE4" }}
+              className="px-5 py-4 text-sm focus:outline-none transition-colors"
+              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", borderBottomWidth: 0, color: "#F5EFE4" }}
               onFocus={e => { e.target.style.borderColor = "rgba(184,147,106,0.6)"; }}
               onBlur={e => { e.target.style.borderColor = "rgba(184,147,106,0.2)"; }}
             />
             <input
               name="email" type="email" placeholder="Votre email" required
               value={email} onChange={e => setEmail(e.target.value)}
-              className="px-5 py-4 text-sm placeholder:text-sm focus:outline-none transition-colors border-b-0"
-              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", color: "#F5EFE4", borderTopWidth: 0 }}
+              className="px-5 py-4 text-sm focus:outline-none transition-colors"
+              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", borderBottomWidth: 0, color: "#F5EFE4" }}
               onFocus={e => { e.target.style.borderColor = "rgba(184,147,106,0.6)"; }}
               onBlur={e => { e.target.style.borderColor = "rgba(184,147,106,0.2)"; }}
             />
@@ -445,12 +366,12 @@ function CreationInner() {
               placeholder="Dites-moi ce que vous imaginez, je vous confirme la faisabilité sous 48h"
               rows={5} required
               value={description} onChange={e => setDescription(e.target.value)}
-              className="px-5 py-4 text-sm placeholder:text-sm focus:outline-none transition-colors resize-none"
-              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", color: "#F5EFE4", borderTopWidth: 0 }}
+              className="px-5 py-4 text-sm focus:outline-none transition-colors resize-none"
+              style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", borderBottomWidth: 0, color: "#F5EFE4" }}
               onFocus={e => { e.target.style.borderColor = "rgba(184,147,106,0.6)"; }}
               onBlur={e => { e.target.style.borderColor = "rgba(184,147,106,0.2)"; }}
             />
-            <div className="px-5 py-4" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)", borderTopWidth: 0 }}>
+            <div className="px-5 py-4" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,147,106,0.2)" }}>
               <input
                 id="fichier-input" name="fichier" type="file" className="hidden"
                 onChange={e => setFileName(e.target.files?.[0]?.name ?? null)}
@@ -459,8 +380,8 @@ function CreationInner() {
                 htmlFor="fichier-input"
                 className="inline-flex items-center gap-2 text-xs cursor-pointer transition-colors"
                 style={{ color: "rgba(245,239,228,0.4)", border: "1px solid rgba(184,147,106,0.25)", padding: "6px 14px" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLLabelElement).style.color = "#B8936A"; (e.currentTarget as HTMLLabelElement).style.borderColor = "#B8936A"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLLabelElement).style.color = "rgba(245,239,228,0.4)"; (e.currentTarget as HTMLLabelElement).style.borderColor = "rgba(184,147,106,0.25)"; }}
+                onMouseEnter={e => { const l = e.currentTarget as HTMLLabelElement; l.style.color = "#B8936A"; l.style.borderColor = "#B8936A"; }}
+                onMouseLeave={e => { const l = e.currentTarget as HTMLLabelElement; l.style.color = "rgba(245,239,228,0.4)"; l.style.borderColor = "rgba(184,147,106,0.25)"; }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 {fileName ?? "Joindre un fichier (optionnel)"}
@@ -470,7 +391,7 @@ function CreationInner() {
             <div className="flex flex-col items-start gap-3 mt-6">
               <button
                 type="submit"
-                className="px-7 py-3 text-xs font-semibold tracking-widest uppercase transition-colors"
+                className="px-7 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
                 style={{ border: "1px solid #B8936A", color: "#B8936A", fontFamily: "var(--font-syne)" }}
                 onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "#B8936A"; b.style.color = "#0D0B08"; }}
                 onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "transparent"; b.style.color = "#B8936A"; }}
@@ -491,7 +412,7 @@ function CreationInner() {
 export default function Creation() {
   return (
     <Suspense>
-      <CreationInner />
+      <ServicesInner />
     </Suspense>
   );
 }
