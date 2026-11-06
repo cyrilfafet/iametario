@@ -9,7 +9,7 @@ export async function GET(_req: NextRequest, props: { params: Promise<{ id: stri
 
   const { data: track, error } = await supabaseAdmin
     .from("shop_tracks")
-    .select("prix, nb_telechargements, fichier_wav_url")
+    .select("prix, nb_telechargements, fichier_wav_url, titre")
     .eq("id", id)
     .single();
 
@@ -27,9 +27,15 @@ export async function GET(_req: NextRequest, props: { params: Promise<{ id: stri
 
   // Extraire la clé R2 depuis l'URL publique stockée en base
   const r2Key = track.fichier_wav_url.split(".r2.dev/")[1];
+  const filename = `${(track.titre || "audio").replace(/[^a-zA-Z0-9 \-_]/g, "")}.wav`;
   const url = await getSignedUrl(
     r2,
-    new GetObjectCommand({ Bucket: R2_BUCKET, Key: r2Key }),
+    new GetObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: r2Key,
+      ResponseContentDisposition: `attachment; filename="${filename}"`,
+      ResponseContentType: "audio/wav",
+    }),
     { expiresIn: 300 }
   );
 
