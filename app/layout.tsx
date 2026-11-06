@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Syne } from "next/font/google";
+import { Geist, Geist_Mono, Syne, Cormorant_Garamond } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
 import Script from "next/script";
 import "./globals.css";
@@ -18,6 +18,13 @@ const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
   weight: ["400", "600", "700", "800"],
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata = {
@@ -45,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${syne.variable} h-full antialiased [overflow-x:clip]`}
+      className={`${geistSans.variable} ${geistMono.variable} ${syne.variable} ${cormorant.variable} h-full antialiased [overflow-x:clip]`}
     >
       <body className="min-h-full flex flex-col">
         <I18nProvider>{children}</I18nProvider>

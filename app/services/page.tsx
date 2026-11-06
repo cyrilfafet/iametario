@@ -173,8 +173,8 @@ function ServicesInner() {
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 100% at 50% 50%, #0D0B08 60%, transparent 100%)" }} />
 
         <div className="relative z-10 text-center max-w-xl mx-auto mb-14">
-          <p className="text-xs tracking-widest uppercase mb-4" style={{ color: "#B8936A", fontFamily: "var(--font-syne)" }}>Services Audio</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight" style={{ color: "#F5EFE4" }}>
+          <p className="text-xs tracking-widest uppercase mb-4" style={{ color: "#B8936A" }}>Services Audio</p>
+          <h1 className="text-4xl md:text-5xl mb-4 leading-tight" style={{ color: "#F5EFE4", fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(2.8rem, 6vw, 4.5rem)" }}>
             Le bon son,<br />sur mesure.
           </h1>
           <p style={{ color: "rgba(245,239,228,0.55)", fontSize: 15 }}>Production soignée · Livrée en 10 jours · 3 révisions incluses</p>
@@ -190,7 +190,7 @@ function ServicesInner() {
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(184,147,106,0.25)"; (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(255,255,255,0.03)"; }}
             >
               <span style={{ color: "#B8936A" }} className="mb-4 opacity-80 group-hover:opacity-100 transition-opacity">{s.icon}</span>
-              <h3 className="font-semibold text-sm mb-2" style={{ color: "#F5EFE4", fontFamily: "var(--font-syne)" }}>{s.title}</h3>
+              <h3 className="text-base mb-2" style={{ color: "#F5EFE4", fontFamily: "var(--font-cormorant)", fontWeight: 500, letterSpacing: "0.02em" }}>{s.title}</h3>
               <p className="text-xs leading-relaxed" style={{ color: "rgba(245,239,228,0.5)" }}>{s.desc}</p>
             </a>
           ))}
@@ -199,7 +199,7 @@ function ServicesInner() {
         <a
           href="#commander"
           className="relative z-10 mt-10 inline-block px-8 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
-          style={{ backgroundColor: "#B8936A", color: "#0D0B08", borderRadius: 2, fontFamily: "var(--font-syne)" }}
+          style={{ backgroundColor: "#B8936A", color: "#0D0B08", borderRadius: 2 }}
           onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#C9A96E"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#B8936A"; }}
         >
@@ -212,7 +212,7 @@ function ServicesInner() {
 
       {/* Démos — coverflow 1 carte centrée */}
       <section className="py-16">
-        <p className="text-xs tracking-widest uppercase mb-10 text-center px-8" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Exemples de réalisations</p>
+        <p className="text-xs tracking-widest uppercase mb-10 text-center px-8" style={{ color: "rgba(245,239,228,0.4)" }}>Exemples de réalisations</p>
 
         {/* Coverflow */}
         <div style={{ overflow: "hidden", perspective: "1100px", perspectiveOrigin: "50% 40%" }}>
@@ -354,7 +354,7 @@ function ServicesInner() {
             onClick={() => setShowFaq(!showFaq)}
             className="w-full flex items-center justify-between py-6"
           >
-            <p className="text-xs tracking-widest uppercase" style={{ color: "rgba(245,239,228,0.4)", fontFamily: "var(--font-syne)" }}>Questions fréquemment posées</p>
+            <p className="text-xs tracking-widest uppercase" style={{ color: "rgba(245,239,228,0.4)" }}>Questions fréquemment posées</p>
             <span className={`transition-all duration-200 text-lg leading-none ${showFaq ? "rotate-45" : ""}`} style={{ color: "#B8936A" }}>+</span>
           </button>
           {showFaq && (
@@ -391,8 +391,8 @@ function ServicesInner() {
       {/* Formulaire */}
       <section id="commander" className="px-8 py-24">
         <div className="max-w-xl mx-auto">
-          <p className="text-xs tracking-widest uppercase mb-4 text-center" style={{ color: "#B8936A", fontFamily: "var(--font-syne)" }}>Contact</p>
-          <h2 className="text-3xl font-bold mb-2 text-center" style={{ color: "#F5EFE4" }}>Un projet en tête ?</h2>
+          <p className="text-xs tracking-widest uppercase mb-4 text-center" style={{ color: "#B8936A" }}>Contact</p>
+          <h2 className="text-3xl mb-2 text-center" style={{ color: "#F5EFE4", fontFamily: "var(--font-cormorant)", fontWeight: 300, fontSize: "clamp(2rem, 4vw, 3rem)" }}>Un projet en tête ?</h2>
           <p className="text-center mb-2 text-sm" style={{ color: "rgba(245,239,228,0.5)" }}>Décrivez votre projet, je valide la faisabilité et vous envoie un lien pour un premier acompte de 30€ sous 48h.</p>
           <p className="text-center mb-12 text-xs" style={{ color: "rgba(245,239,228,0.35)" }}>Livraison sous 10 jours · 3 révisions incluses</p>
 
@@ -460,7 +460,7 @@ function ServicesInner() {
               <button
                 type="submit"
                 className="px-7 py-3 text-xs font-semibold tracking-widest uppercase transition-all"
-                style={{ border: "1px solid #B8936A", color: "#B8936A", fontFamily: "var(--font-syne)" }}
+                style={{ border: "1px solid #B8936A", color: "#B8936A" }}
                 onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "#B8936A"; b.style.color = "#0D0B08"; }}
                 onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.backgroundColor = "transparent"; b.style.color = "#B8936A"; }}
               >
