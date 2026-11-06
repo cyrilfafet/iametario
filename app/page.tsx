@@ -234,6 +234,7 @@ export default function Artist() {
               WebkitMaskRepeat: "no-repeat",
               maskRepeat: "no-repeat",
               filter: "grayscale(1)",
+              opacity: 0.5,
             }}
           >
             <video
@@ -259,6 +260,7 @@ export default function Artist() {
               WebkitMaskRepeat: "no-repeat",
               maskRepeat: "no-repeat",
               filter: "grayscale(1)",
+              opacity: 0.5,
             }}
           >
             <video
