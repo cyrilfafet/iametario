@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const { password, code, prenom, nom_projet, message, solde, email, fichier_wav_url: wavUrl } = await req.json();
 
   if (password !== process.env.ADMIN_PASSWORD) {

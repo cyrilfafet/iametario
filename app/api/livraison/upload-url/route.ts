@@ -25,11 +25,17 @@ export async function POST(req: NextRequest) {
   const contentType = contentTypeMap[type] ?? "application/octet-stream";
   const key = `livraisons/${code}/${filename}`;
 
-  const url = await getSignedUrl(
-    r2,
-    new PutObjectCommand({ Bucket: R2_BUCKET, Key: key, ContentType: contentType }),
-    { expiresIn: 3600 }
-  );
+  let url: string;
+  try {
+    url = await getSignedUrl(
+      r2,
+      new PutObjectCommand({ Bucket: R2_BUCKET, Key: key, ContentType: contentType }),
+      { expiresIn: 3600 }
+    );
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: `Signed URL generation failed: ${msg}` }, { status: 500 });
+  }
 
-  return NextResponse.json({ url });
+  return NextResponse.json({ url, contentType });
 }
