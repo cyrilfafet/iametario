@@ -212,7 +212,7 @@ export default function Artist() {
           "url(/jetty-bg.webp)",
         ].join(", "),
         backgroundSize: "100% 100%, cover",
-        backgroundPosition: "0 0, center 45%",
+        backgroundPosition: "0 0, center 70%",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#F5EFE4",
       }}>
