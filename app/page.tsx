@@ -208,14 +208,11 @@ export default function Artist() {
       {/* Hero */}
       <section className="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center relative" style={{
         backgroundImage: [
-          "radial-gradient(ellipse 90% 80% at 10% 15%, rgba(184,147,106,0.10) 0%, transparent 65%)",
-          "radial-gradient(ellipse 80% 90% at 90% 80%, rgba(201,169,110,0.08) 0%, transparent 65%)",
-          "radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224,213,197,0.25) 0%, transparent 55%)",
-          "linear-gradient(to bottom, rgba(245,239,228,0) 0%, rgba(245,239,228,0) 65%, rgba(245,239,228,1) 100%)",
-          "url(/bannieretest.jpg)",
+          "linear-gradient(to bottom, rgba(245,239,228,0) 0%, rgba(245,239,228,0) 55%, rgba(245,239,228,1) 100%)",
+          "url(/jetty-bg.webp)",
         ].join(", "),
-        backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 50vh, 100% 50vh",
-        backgroundPosition: "0 0, 0 0, 0 0, center top, center top",
+        backgroundSize: "100% 100%, cover",
+        backgroundPosition: "0 0, center 45%",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#F5EFE4",
       }}>
@@ -277,7 +274,12 @@ export default function Artist() {
 
         {/* Photo + Logo */}
         <div className="flex flex-col items-center">
-          <img src="/mainphotov4.jpg" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" />
+          <img src="/mainphotov5.webp" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" style={{
+            maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 6%, black 82%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 6%, black 82%, transparent 100%)",
+            maskComposite: "intersect",
+            WebkitMaskComposite: "destination-in",
+          }} />
           <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95 -mt-16 md:-mt-30" />
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F", marginTop: 10, textTransform: "uppercase" }}>
             Phlegmatic DJ &amp; Producer
