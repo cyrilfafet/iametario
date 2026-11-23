@@ -214,8 +214,8 @@ export default function Artist() {
           "linear-gradient(to bottom, rgba(245,239,228,0) 0%, rgba(245,239,228,0) 65%, rgba(245,239,228,1) 100%)",
           "url(/mainphotov4.jpg)",
         ].join(", "),
-        backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 50vh, cover",
-        backgroundPosition: "0 0, 0 0, 0 0, center top, center 30%",
+        backgroundSize: "100% 100%, 100% 100%, 100% 100%, 100% 100%, cover",
+        backgroundPosition: "0 0, 0 0, 0 0, center top, center 60%",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#F5EFE4",
       }}>
