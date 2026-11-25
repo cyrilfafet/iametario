@@ -274,7 +274,7 @@ export default function Artist() {
 
         {/* Photo + Logo */}
         <div className="flex flex-col items-center">
-          <img src="/mainphotov5.webp" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-20" style={{
+          <img src="/mainphotov5.webp" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-48" style={{
             maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 6%, black 82%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 6%, black 82%, transparent 100%)",
             maskComposite: "intersect",
