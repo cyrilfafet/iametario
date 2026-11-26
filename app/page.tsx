@@ -273,7 +273,7 @@ export default function Artist() {
         </div>
 
         {/* Photo plein-écran + Logo */}
-        <img src="/mainphotov5.webp" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{
+        <img src="/mainphotov5.webp" alt="" aria-hidden="true" className="absolute top-0 left-0 w-full h-screen object-contain object-top pointer-events-none" style={{
           maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 75%, transparent 100%)",
           WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 75%, transparent 100%)",
           maskComposite: "intersect",
