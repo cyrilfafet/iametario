@@ -272,15 +272,16 @@ export default function Artist() {
           <img src="/soireeibiza1.png" className="w-80 grayscale opacity-50 -mt-30 -mr-0" />
         </div>
 
-        {/* Photo + Logo */}
-        <div className="flex flex-col items-center">
-          <img src="/mainphotov5.webp" alt="E-Tario" className="w-36 md:w-130 -mt-10 md:-mt-36" style={{
-            maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 6%, black 82%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 6%, black 82%, transparent 100%)",
-            maskComposite: "intersect",
-            WebkitMaskComposite: "destination-in",
-          }} />
-          <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95 -mt-16 md:-mt-30" />
+        {/* Photo plein-écran + Logo */}
+        <img src="/mainphotov5.webp" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{
+          maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 75%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 75%, transparent 100%)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "destination-in",
+        }} />
+        <div className="flex flex-col items-center relative z-10">
+          <div className="h-32 md:h-64" />
+          <img src="/Logo _V1_black.png" alt="E-Tario" className="w-56 md:w-95" />
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".25em", color: "#7A6E5F", marginTop: 10, textTransform: "uppercase" }}>
             Phlegmatic DJ &amp; Producer
           </p>
